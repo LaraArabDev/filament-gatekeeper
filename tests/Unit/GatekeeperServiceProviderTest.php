@@ -108,4 +108,31 @@ class GatekeeperServiceProviderTest extends TestCase
 
         Event::dispatch('eloquent.deleted: ' . Permission::class);
     }
+
+    /** @test */
+    public function it_allows_super_admin_via_gate_before_callback(): void
+    {
+        config()->set('gatekeeper.super_admin.enabled', true);
+        config()->set('gatekeeper.super_admin.role', 'super-admin');
+
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        // Gate::allows uses Gate::before callback registered by service provider
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('any-arbitrary-permission'));
+    }
+
+    /** @test */
+    public function it_has_gate_before_callback_registered(): void
+    {
+        // Verify the app is booted and Gate policies can be checked
+        $this->assertTrue(app()->isBooted());
+
+        // The Gate before callback is registered during packageBooted
+        // We verify it works by checking a super admin can pass through
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('any-permission-whatsoever'));
+    }
 }

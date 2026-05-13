@@ -157,4 +157,12 @@ class ResourceStaticMethodsTest extends TestCase
     {
         $this->assertSame(PermissionResource::class, ListPermissions::getResource());
     }
+
+    /** @test */
+    public function permission_resource_returns_navigation_badge_count(): void
+    {
+        // No permissions → count = 0
+        $badge = PermissionResource::getNavigationBadge();
+        $this->assertSame('0', $badge);
+    }
 }
