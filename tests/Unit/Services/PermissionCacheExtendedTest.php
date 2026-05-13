@@ -198,4 +198,35 @@ class PermissionCacheExtendedTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    /** @test */
+    public function it_returns_empty_matrix_for_user_without_roles_method(): void
+    {
+        // Create a user that implements Authenticatable but has no roles() method
+        $simpleUser = new class implements \Illuminate\Contracts\Auth\Authenticatable {
+            public function getAuthIdentifierName(): string { return 'id'; }
+            public function getAuthIdentifier(): mixed { return 99999; }
+            public function getAuthPasswordName(): string { return 'password'; }
+            public function getAuthPassword(): string { return ''; }
+            public function getRememberToken(): string { return ''; }
+            public function setRememberToken(mixed $value): void {}
+            public function getRememberTokenName(): string { return 'remember_token'; }
+        };
+
+        $matrix = $this->cache->getPermissionMatrix($simpleUser);
+
+        $this->assertIsArray($matrix);
+        $this->assertSame([], $matrix);
+    }
+
+    /** @test */
+    public function it_can_flush_all_cache(): void
+    {
+        $user = $this->createUser();
+        $this->cache->warmCache($user);
+
+        $this->cache->flushAll();
+
+        $this->assertTrue(true); // Should not throw
+    }
 }

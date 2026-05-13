@@ -525,4 +525,33 @@ class GatekeeperTest extends TestCase
 
         $this->assertTrue($this->shieldManager->canViewRelation('User', 'posts'));
     }
+
+    /** @test */
+    public function it_detects_api_guard_from_bearer_token(): void
+    {
+        // Inject a request with a bearer token to trigger API guard detection
+        $request = \Illuminate\Http\Request::create('/some-route', 'GET');
+        $request->headers->set('Authorization', 'Bearer test-token');
+        app()->instance('request', $request);
+
+        $gatekeeper = new \LaraArabDev\FilamentGatekeeper\Gatekeeper(
+            new \LaraArabDev\FilamentGatekeeper\Services\PermissionCache()
+        );
+
+        $this->assertEquals('api', $gatekeeper->getGuard());
+    }
+
+    /** @test */
+    public function it_detects_api_guard_from_json_expectation(): void
+    {
+        $request = \Illuminate\Http\Request::create('/some-route', 'GET');
+        $request->headers->set('Accept', 'application/json');
+        app()->instance('request', $request);
+
+        $gatekeeper = new \LaraArabDev\FilamentGatekeeper\Gatekeeper(
+            new \LaraArabDev\FilamentGatekeeper\Services\PermissionCache()
+        );
+
+        $this->assertEquals('api', $gatekeeper->getGuard());
+    }
 }
