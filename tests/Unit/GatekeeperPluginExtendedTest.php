@@ -117,4 +117,40 @@ class GatekeeperPluginExtendedTest extends TestCase
         $this->assertTrue(GatekeeperPlugin::make()->isRelationPermissionsEnabled());
         $this->assertFalse(GatekeeperPlugin::make()->enableRelationPermissions(false)->isRelationPermissionsEnabled());
     }
+
+    /** @test */
+    public function it_can_set_modify_permission_resource_callback(): void
+    {
+        $callback = fn () => null;
+        $plugin = GatekeeperPlugin::make()->modifyPermissionResourceUsing($callback);
+        $this->assertSame($callback, $plugin->getModifyPermissionResourceUsing());
+    }
+
+    /** @test */
+    public function it_has_null_modify_permission_resource_callback_by_default(): void
+    {
+        $plugin = GatekeeperPlugin::make();
+        $this->assertNull($plugin->getModifyPermissionResourceUsing());
+    }
+
+    /** @test */
+    public function it_can_set_navigation_group(): void
+    {
+        $plugin = GatekeeperPlugin::make()->navigationGroup('Security');
+        $this->assertSame('Security', $plugin->getNavigationGroup());
+    }
+
+    /** @test */
+    public function it_can_set_navigation_sort(): void
+    {
+        $plugin = GatekeeperPlugin::make()->navigationSort(10);
+        $this->assertSame(10, $plugin->getNavigationSort());
+    }
+
+    /** @test */
+    public function it_can_set_super_admin_role(): void
+    {
+        $plugin = GatekeeperPlugin::make()->superAdminRole('admin');
+        $this->assertSame('admin', $plugin->getSuperAdminRole());
+    }
 }
