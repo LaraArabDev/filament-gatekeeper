@@ -87,7 +87,7 @@ php artisan vendor:publish --tag=gatekeeper-config
 ```
 
 ### Step 4: Publish and Run Migrations
-
+w
 ```bash
 php artisan vendor:publish --tag=gatekeeper-migrations
 php artisan migrate

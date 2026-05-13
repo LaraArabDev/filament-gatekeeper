@@ -17,7 +17,6 @@ use LaraArabDev\FilamentGatekeeper\Commands\SyncPermissionsCommand;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
-use Spatie\LaravelPackageTools\Commands\InstallCommand as PackageInstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -52,18 +51,7 @@ class GatekeeperServiceProvider extends PackageServiceProvider
                 'add_entity_to_permissions_table',
                 'add_field_permissions_to_roles_table',
             ])
-            ->hasCommands($this->getCommands())
-            ->hasInstallCommand(function (PackageInstallCommand $command) {
-                $command
-                    ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('laraarabdev/filament-gatekeeper')
-                    ->endWith(function (PackageInstallCommand $installCommand) {
-                        $installCommand->info('Gatekeeper installed successfully!');
-                        $installCommand->info('Run `php artisan gatekeeper:sync` to sync permissions.');
-                    });
-            });
+            ->hasCommands($this->getCommands());
     }
 
     /**
