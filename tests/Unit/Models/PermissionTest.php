@@ -420,7 +420,7 @@ class PermissionTest extends TestCase
     {
         $permission = Permission::factory()->create([
             'name' => 'x',
-            'type' => null,
+            'type' => Permission::TYPE_RESOURCE,
             'entity' => null,
         ]);
         // 'x' has no underscore so getModelName returns null → 'other'
