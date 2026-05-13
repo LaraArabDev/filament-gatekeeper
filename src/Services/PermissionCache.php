@@ -146,7 +146,7 @@ class PermissionCache
     }
 
     /**
-     * Invalidate all Shield Manager cache.
+     * Invalidate all Gatekeeper cache.
      */
     public function invalidateAll(): void
     {
@@ -232,7 +232,7 @@ class PermissionCache
     }
 
     /**
-     * Flush all Shield Manager cache.
+     * Flush all Gatekeeper cache.
      */
     public function flushAll(): void
     {

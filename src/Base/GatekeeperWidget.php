@@ -11,7 +11,7 @@ use LaraArabDev\FilamentGatekeeper\Concerns\HasWidgetPermissions;
  * Base Shield Widget
  *
  * Extend this class instead of Filament's Widget to automatically
- * include Shield Manager widget permission functionality.
+ * include Gatekeeper widget permission functionality.
  *
  * Example:
  * ```php

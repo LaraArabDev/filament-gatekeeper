@@ -22,15 +22,9 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 /**
- * Shield Manager Service Provider
- * This service provider is responsible for registering the Shield Manager package and its services.
- * It is used to register the Shield Manager singleton and the PermissionCache service.
- * It is also used to register the cache invalidation events.
- * It is also used to publish the stubs for customization.
- * It is also used to get the commands to register.
- * It is also used to register the cache invalidation events.
- * It is also used to publish the stubs for customization.
- * It is also used to get the commands to register.
+ * Gatekeeper Service Provider
+ * This service provider is responsible for registering the Gatekeeper package and its services.
+ * It is used to register the Gatekeeper singleton and the PermissionCache service.
  * It is also used to register the cache invalidation events.
  * It is also used to publish the stubs for customization.
  */
@@ -66,7 +60,7 @@ class GatekeeperServiceProvider extends PackageServiceProvider
                     ->askToRunMigrations()
                     ->askToStarRepoOnGitHub('laraarabdev/filament-gatekeeper')
                     ->endWith(function (PackageInstallCommand $installCommand) {
-                        $installCommand->info('Shield Manager installed successfully!');
+                        $installCommand->info('Gatekeeper installed successfully!');
                         $installCommand->info('Run `php artisan gatekeeper:sync` to sync permissions.');
                     });
             });
@@ -81,7 +75,7 @@ class GatekeeperServiceProvider extends PackageServiceProvider
     {
         parent::packageRegistered();
 
-        // Register the Shield Manager singleton
+        // Register the Gatekeeper singleton
         $this->app->singleton(Gatekeeper::class, function ($app) {
             return new Gatekeeper(
                 $app->make(PermissionCache::class)

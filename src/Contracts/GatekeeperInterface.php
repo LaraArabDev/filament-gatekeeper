@@ -7,10 +7,10 @@ namespace LaraArabDev\FilamentGatekeeper\Contracts;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
- * Interface for the core Shield Manager service.
+ * Interface for the core Gatekeeper service.
  *
  * This interface defines the contract for permission checking and
- * management operations within the Shield Manager package.
+ * management operations within the Filament Gatekeeper package.
  *
  * @package LaraArabDev\FilamentGatekeeper\Contracts
  */

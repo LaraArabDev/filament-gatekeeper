@@ -8,7 +8,7 @@ namespace LaraArabDev\FilamentGatekeeper\Contracts;
  * Interface for permission registration and synchronization services.
  *
  * This interface defines the contract for services that handle permission
- * discovery, creation, and synchronization within the Shield Manager package.
+ * discovery, creation, and synchronization within the Filament Gatekeeper package.
  *
  * @package LaraArabDev\FilamentGatekeeper\Contracts
  */

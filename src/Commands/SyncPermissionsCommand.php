@@ -27,7 +27,7 @@ class SyncPermissionsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Sync all Shield Manager permissions for resources, pages, widgets, fields, columns, actions, and relations.';
+    protected $description = 'Sync all Gatekeeper permissions for resources, pages, widgets, fields, columns, actions, and relations.';
 
     public function __construct(
         protected PermissionRegistrar $registrar,
@@ -41,7 +41,7 @@ class SyncPermissionsCommand extends Command
      */
     public function handle(): int
     {
-        $this->info('🛡️  Shield Manager - Permission Sync');
+        $this->info('🛡️  Filament Gatekeeper - Permission Sync');
         $this->newLine();
 
         // Reset permission cache first
@@ -75,7 +75,7 @@ class SyncPermissionsCommand extends Command
         $this->newLine();
         $this->info("✅ Sync completed in {$duration}ms");
 
-        // Clear Shield Manager cache
+        // Clear Gatekeeper cache
         if (! $dryRun) {
             $this->cache->invalidateAll();
             $this->info('🗑️  Permission cache cleared.');

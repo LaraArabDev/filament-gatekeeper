@@ -12,8 +12,8 @@ use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
 
 /**
- * Shield Manager Plugin
- * This class is responsible for registering the Shield Manager plugin and its resources.
+ * Gatekeeper Plugin
+ * This class is responsible for registering the Gatekeeper plugin and its resources.
  */
 class GatekeeperPlugin implements Plugin
 {
@@ -416,7 +416,7 @@ class GatekeeperPlugin implements Plugin
     }
 
     /**
-     * Set the panels to enable Shield Manager on.
+     * Set the panels to enable Gatekeeper on.
      * @param array<string> $panels
      */
     public function panels(array $panels): static

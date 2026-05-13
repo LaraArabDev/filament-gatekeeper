@@ -34,7 +34,7 @@ class DeletePermissionsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Delete Shield Manager permissions';
+    protected $description = 'Delete Gatekeeper permissions';
 
     /**
      * Execute the console command.

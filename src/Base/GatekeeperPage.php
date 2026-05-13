@@ -11,7 +11,7 @@ use LaraArabDev\FilamentGatekeeper\Concerns\HasPagePermissions;
  * Base Shield Page
  *
  * Extend this class instead of Filament's Page to automatically
- * include Shield Manager page permission functionality.
+ * include Gatekeeper page permission functionality.
  *
  * Example:
  * ```php

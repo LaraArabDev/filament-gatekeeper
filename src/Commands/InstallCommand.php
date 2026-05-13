@@ -26,14 +26,14 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Install Shield Manager package.';
+    protected $description = 'Install Filament Gatekeeper package.';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $this->info('🛡️  Shield Manager - Installation');
+        $this->info('🛡️  Filament Gatekeeper - Installation');
         $this->newLine();
 
         // Step 1: Publish config
@@ -46,7 +46,7 @@ class InstallCommand extends Command
         $this->runMigrations();
 
         // Step 4: Publish stubs (optional)
-        if (! $this->option('no-interaction') && $this->confirm('Do you want to publish Shield Manager stubs?', false)) {
+        if (! $this->option('no-interaction') && $this->confirm('Do you want to publish Gatekeeper stubs?', false)) {
             $this->publishStubs();
         }
 
@@ -56,7 +56,7 @@ class InstallCommand extends Command
         }
 
         $this->newLine();
-        $this->info('✅ Shield Manager installed successfully!');
+        $this->info('✅ Filament Gatekeeper installed successfully!');
         $this->newLine();
 
         $this->displayNextSteps();

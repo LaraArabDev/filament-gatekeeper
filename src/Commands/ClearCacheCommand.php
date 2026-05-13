@@ -23,7 +23,7 @@ class ClearCacheCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Clear Shield Manager permission cache.';
+    protected $description = 'Clear Gatekeeper permission cache.';
 
     public function __construct(
         protected PermissionCache $cache
@@ -38,7 +38,7 @@ class ClearCacheCommand extends Command
     {
         $userId = $this->option('user');
 
-        $this->info('🛡️  Shield Manager - Cache Clear');
+        $this->info('🛡️  Filament Gatekeeper - Cache Clear');
         $this->newLine();
 
         if ($userId) {
@@ -76,13 +76,13 @@ class ClearCacheCommand extends Command
     }
 
     /**
-     * Clear all Shield Manager cache.
+     * Clear all Gatekeeper cache.
      */
     protected function clearAllCache(): void
     {
-        // Clear Shield Manager cache
+        // Clear Gatekeeper cache
         $this->cache->invalidateAll();
-        $this->info('✅ Shield Manager cache cleared.');
+        $this->info('✅ Gatekeeper cache cleared.');
 
         // Also reset Spatie permission cache
         try {

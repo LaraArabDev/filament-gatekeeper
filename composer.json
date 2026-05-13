@@ -51,7 +51,7 @@
                 "LaraArabDev\\FilamentGatekeeper\\GatekeeperServiceProvider"
             ],
             "aliases": {
-                "Shield": "LaraArabDev\\FilamentGatekeeper\\Facades\\Shield"
+                "Gatekeeper": "LaraArabDev\\FilamentGatekeeper\\Facades\\Gatekeeper"
             }
         }
     },

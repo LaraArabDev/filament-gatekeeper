@@ -13,7 +13,7 @@ use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
 /**
- * Core permission management service for Shield Manager.
+ * Core permission management service for Filament Gatekeeper.
  *
  * This class provides the main interface for checking permissions, managing
  * guards, and handling permission-related operations throughout the application.
