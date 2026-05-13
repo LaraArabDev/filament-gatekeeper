@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     * Entity identifier (e.g. user, product) for grouping—follows same pattern as type column.
+     */
+    public function up(): void
+    {
+        Schema::table('permissions', function (Blueprint $table) {
+            if (! Schema::hasColumn('permissions', 'entity')) {
+                $table->string('entity')->nullable()->after('type');
+            }
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('permissions', function (Blueprint $table) {
+            if (Schema::hasColumn('permissions', 'entity')) {
+                $table->dropColumn('entity');
+            }
+        });
+    }
+};

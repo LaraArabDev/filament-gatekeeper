@@ -1,0 +1,72 @@
+{
+    "name": "laraarabdev/filament-gatekeeper",
+    "description": "Advanced Role and Permission management for Laravel Filament with Spatie Permission integration, multi-guard support, HMVC modules, and performance caching.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "filament",
+        "permissions",
+        "roles",
+        "spatie",
+        "rbac",
+        "access-control",
+        "shield"
+    ],
+    "authors": [
+        {
+            "name": "LaraArabDev",
+            "email": "dev@laraarab.dev"
+        }
+    ],
+    "homepage": "https://github.com/laraarabdev/filament-gatekeeper",
+    "autoload": {
+        "psr-4": {
+            "LaraArabDev\\FilamentGatekeeper\\": "src/",
+            "LaraArabDev\\FilamentGatekeeper\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaraArabDev\\FilamentGatekeeper\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^3.3",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "spatie/laravel-package-tools": "^1.15",
+        "spatie/laravel-permission": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0|^11.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "larastan/larastan": "^2.0|^3.0",
+        "laravel/pint": "^1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaraArabDev\\FilamentGatekeeper\\GatekeeperServiceProvider"
+            ],
+            "aliases": {
+                "Shield": "LaraArabDev\\FilamentGatekeeper\\Facades\\Shield"
+            }
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+{{ clusterImport }}use Filament\Pages\Page;
+use LaraArabDev\FilamentGatekeeper\Concerns\HasPagePermissions;
+
+class {{ class }} extends Page
+{
+    use HasPagePermissions;
+
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static string $view = '{{ view }}';{{ clusterAssignment }}
+
+    public function getTitle(): string
+    {
+        return __('{{ class }}');
+    }
+}
+

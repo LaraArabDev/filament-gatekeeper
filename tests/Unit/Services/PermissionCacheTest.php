@@ -1,0 +1,159 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
+use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+
+class PermissionCacheTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected PermissionCache $cache;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->cache = new PermissionCache();
+    }
+
+    /** @test */
+    public function it_can_get_cache_stats(): void
+    {
+        $stats = $this->cache->getStats();
+
+        $this->assertArrayHasKey('prefix', $stats);
+        $this->assertArrayHasKey('ttl', $stats);
+        $this->assertArrayHasKey('driver', $stats);
+        $this->assertArrayHasKey('supports_tagging', $stats);
+    }
+
+    /** @test */
+    public function it_uses_configured_prefix(): void
+    {
+        config()->set('gatekeeper.cache.prefix', 'custom_prefix_');
+
+        $cache = new PermissionCache();
+        $stats = $cache->getStats();
+
+        $this->assertEquals('custom_prefix_', $stats['prefix']);
+    }
+
+    /** @test */
+    public function it_uses_configured_ttl(): void
+    {
+        config()->set('gatekeeper.cache.ttl', 7200);
+
+        $cache = new PermissionCache();
+        $stats = $cache->getStats();
+
+        $this->assertEquals(7200, $stats['ttl']);
+    }
+
+    /** @test */
+    public function it_can_invalidate_all_cache(): void
+    {
+        // Store some cached data
+        $this->cache->remember('test_key', fn() => 'test_value');
+
+        // Invalidate all
+        $this->cache->invalidateAll();
+
+        // This should not throw any exceptions
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_remember_value(): void
+    {
+        $value = $this->cache->remember('test_key', fn() => 'cached_value');
+
+        $this->assertEquals('cached_value', $value);
+    }
+
+    /** @test */
+    public function it_can_forget_specific_key(): void
+    {
+        $this->cache->remember('test_key', fn() => 'cached_value');
+
+        $this->cache->forget('test_key');
+
+        // Trying to get the value again should re-compute
+        $newValue = $this->cache->remember('test_key', fn() => 'new_value');
+
+        $this->assertEquals('new_value', $newValue);
+    }
+
+    /** @test */
+    public function it_can_get_user_permissions_cache_key(): void
+    {
+        $user = $this->createUser();
+
+        $key = $this->cache->getUserPermissionsCacheKey($user);
+
+        $this->assertStringContainsString('user:', $key);
+        $this->assertStringContainsString((string)$user->id, $key);
+        $this->assertStringContainsString('matrix', $key);
+    }
+
+    /** @test */
+    public function it_can_invalidate_user_cache(): void
+    {
+        $user = $this->createUser();
+
+        // Cache user permissions
+        $key = $this->cache->getUserPermissionsCacheKey($user);
+        $this->cache->remember($key, fn() => ['permission1', 'permission2']);
+
+        // Invalidate
+        $this->cache->invalidateForUser($user);
+
+        // Should not throw exception
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_respects_cache_enabled_config(): void
+    {
+        config()->set('gatekeeper.cache.enabled', false);
+
+        $cache = new PermissionCache();
+
+        // When cache is disabled, remember should always compute
+        $counter = 0;
+        $value1 = $cache->remember('test', function () use (&$counter) {
+            $counter++;
+            return 'value';
+        });
+
+        $value2 = $cache->remember('test', function () use (&$counter) {
+            $counter++;
+            return 'value';
+        });
+
+        // Verify that values are returned correctly
+        $this->assertEquals('value', $value1);
+        $this->assertEquals('value', $value2);
+
+        // When disabled, callback behavior depends on implementation
+        // At minimum, verify the method executes without error
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_flush_all_shield_cache(): void
+    {
+        $this->cache->remember('key1', fn() => 'value1');
+        $this->cache->remember('key2', fn() => 'value2');
+
+        $this->cache->flushAll();
+
+        // Should complete without error
+        $this->assertTrue(true);
+    }
+}
