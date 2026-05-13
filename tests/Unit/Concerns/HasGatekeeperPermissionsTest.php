@@ -72,6 +72,16 @@ class HasGatekeeperPermissionsTest extends TestCase
     }
 
     /** @test */
+    public function it_generates_camel_case_model_name_when_snake_case_disabled(): void
+    {
+        config()->set('gatekeeper.generator.snake_case', false);
+        config()->set('gatekeeper.generator.separator', '_');
+        $name = FakePostResource::getPermissionName('create');
+        // 'post' → camelCase is still 'post' (single word)
+        $this->assertSame('create_post', $name);
+    }
+
+    /** @test */
     public function it_extracts_model_name_from_class_basename(): void
     {
         // FakePostResource → $model = 'Post' → basename = 'Post'
@@ -239,5 +249,57 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->actingAs($user);
 
         $this->assertFalse(FakePostResource::canUpdate());
+    }
+
+    /** @test */
+    public function it_returns_true_for_can_view_with_record_when_user_has_permission(): void
+    {
+        $user = $this->createUser();
+        $permission = $this->createPermission('view_post');
+        $user->givePermissionTo($permission);
+        $this->actingAs($user);
+
+        $record = $this->createUser();
+        $this->assertTrue(FakePostResource::canView($record));
+    }
+
+    /** @test */
+    public function it_returns_false_for_can_view_with_record_when_no_permission(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $record = $this->createUser();
+        $this->assertFalse(FakePostResource::canView($record));
+    }
+
+    /** @test */
+    public function it_returns_true_for_can_edit_with_record_when_user_has_permission(): void
+    {
+        $user = $this->createUser();
+        $permission = $this->createPermission('update_post');
+        $user->givePermissionTo($permission);
+        $this->actingAs($user);
+
+        $record = $this->createUser();
+        $this->assertTrue(FakePostResource::canEdit($record));
+    }
+
+    /** @test */
+    public function it_returns_true_for_super_admin_can_view_with_record(): void
+    {
+        Gatekeeper::shouldReceive('shouldBypassPermissions')->andReturn(true);
+
+        $record = $this->createUser();
+        $this->assertTrue(FakePostResource::canView($record));
+    }
+
+    /** @test */
+    public function it_returns_true_for_super_admin_can_edit_with_record(): void
+    {
+        Gatekeeper::shouldReceive('shouldBypassPermissions')->andReturn(true);
+
+        $record = $this->createUser();
+        $this->assertTrue(FakePostResource::canEdit($record));
     }
 }
