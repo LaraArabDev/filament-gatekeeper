@@ -11,7 +11,8 @@
         "spatie",
         "rbac",
         "access-control",
-        "shield"
+        "shield",
+        "gatekeeper"
     ],
     "authors": [
         {
@@ -42,9 +43,22 @@
         "phpunit/phpunit": "^10.0|^11.0",
         "orchestra/testbench": "^8.0|^9.0|^10.0",
         "pestphp/pest": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.0",
         "larastan/larastan": "^2.0|^3.0",
         "laravel/pint": "^1.0"
     },
+    "support": {
+        "issues": "https://github.com/laraarabdev/filament-gatekeeper/issues",
+        "source": "https://github.com/laraarabdev/filament-gatekeeper",
+        "docs": "https://github.com/laraarabdev/filament-gatekeeper#readme",
+        "security": "https://github.com/laraarabdev/filament-gatekeeper/security/policy"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/laraarabdev"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [
@@ -67,6 +81,6 @@
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
