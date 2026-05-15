@@ -11,7 +11,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 /**
  * Additional tests targeting uncovered branches in Permission model.
  */
-class PermissionScopesAndBranchesTest extends TestCase
+class PermissionEntityExtractionTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -13,7 +13,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
  * - clearUserCache() when user not found
  * - clearUserCache() when user model class doesn't exist
  */
-class ClearCacheCommandBranchTest extends TestCase
+class ClearCacheCommandUserHandlingTest extends TestCase
 {
     use RefreshDatabase;
 

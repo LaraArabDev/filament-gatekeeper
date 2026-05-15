@@ -15,7 +15,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
  * - cancelation branches
  * - model required error paths
  */
-class DeletePermissionsCommandBranchTest extends TestCase
+class DeletePermissionsCommandInteractiveTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -18,7 +18,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
  * - registerPermissionGates() exception handling
  * - Gate.before callback when super admin is disabled
  */
-class GatekeeperServiceProviderBranchTest extends TestCase
+class GatekeeperServiceProviderGateEventsTest extends TestCase
 {
     use RefreshDatabase;
 

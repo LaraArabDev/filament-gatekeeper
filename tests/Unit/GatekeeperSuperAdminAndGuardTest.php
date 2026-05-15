@@ -16,7 +16,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
  * Targets uncovered paths in detectGuardFromRequest, getGuardsToCheckForSuperAdmin,
  * checkSuperAdminViaDatabase, and userHasRole.
  */
-class GatekeeperBranchCoverageTest extends TestCase
+class GatekeeperSuperAdminAndGuardTest extends TestCase
 {
     use RefreshDatabase;
 
