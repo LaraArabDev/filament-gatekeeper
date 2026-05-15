@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![Total Downloads](https://img.shields.io/packagist/dt/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![License](https://img.shields.io/packagist/l/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
+[![codecov](https://codecov.io/gh/laraarabdev/filament-gatekeeper/branch/main/graph/badge.svg)](https://codecov.io/gh/laraarabdev/filament-gatekeeper)
 
 Advanced Role and Permission management for Laravel Filament 3.x with Spatie Permission integration. A comprehensive solution for managing access control across your entire application - from Filament admin panels to API endpoints.
 
@@ -88,7 +89,17 @@ php artisan vendor:publish --tag=gatekeeper-config
 
 ### Step 4: Publish and Run Migrations
 
+
+
+
+
+
+
+
+
 ```bash
+
+
 php artisan vendor:publish --tag=gatekeeper-migrations
 php artisan migrate
 ```
