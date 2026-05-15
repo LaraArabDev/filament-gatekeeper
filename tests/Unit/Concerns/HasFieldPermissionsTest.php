@@ -195,3 +195,161 @@ class TestModelForFields
 {
     //
 }
+
+// ---------------------------------------------------------------------------
+// Additional tests for uncovered methods
+// ---------------------------------------------------------------------------
+
+class HasFieldPermissionsExtendedTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** @test */
+    public function it_returns_true_for_is_field_disabled_when_no_update_permission(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $this->assertTrue(TestResourceWithFields::isFieldDisabled('email'));
+    }
+
+    /** @test */
+    public function it_returns_false_for_is_field_disabled_when_has_update_permission(): void
+    {
+        $user = $this->createUser();
+        Permission::factory()->field()->create(['name' => 'update_test_model_email_field']);
+        $user->givePermissionTo('update_test_model_email_field');
+        $this->actingAs($user);
+
+        $this->assertFalse(TestResourceWithFields::isFieldDisabled('email'));
+    }
+
+    /** @test */
+    public function it_returns_true_for_is_field_hidden_when_no_view_permission(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $this->assertTrue(TestResourceWithFields::isFieldHidden('email'));
+    }
+
+    /** @test */
+    public function it_returns_false_for_is_field_hidden_when_has_view_permission(): void
+    {
+        $user = $this->createUser();
+        Permission::factory()->field()->create(['name' => 'view_test_model_email_field']);
+        $user->givePermissionTo('view_test_model_email_field');
+        $this->actingAs($user);
+
+        $this->assertFalse(TestResourceWithFields::isFieldHidden('email'));
+    }
+
+    /** @test */
+    public function it_applies_field_permissions_to_objects_with_get_name_visible_and_disabled(): void
+    {
+        $user = $this->createUser();
+        Permission::factory()->field()->create(['name' => 'view_test_model_salary_field']);
+        Permission::factory()->field()->create(['name' => 'update_test_model_salary_field']);
+        $user->givePermissionTo(['view_test_model_salary_field', 'update_test_model_salary_field']);
+        $this->actingAs($user);
+
+        $component = new class {
+            public string $name = 'salary';
+            public mixed $visibleCallback = null;
+            public mixed $disabledCallback = null;
+
+            public function getName(): string { return $this->name; }
+            public function visible(callable $callback): static { $this->visibleCallback = $callback; return $this; }
+            public function disabled(callable $callback): static { $this->disabledCallback = $callback; return $this; }
+        };
+
+        $result = TestResourceWithFields::applyFieldPermissions([$component]);
+
+        $this->assertCount(1, $result);
+        $this->assertNotNull($component->visibleCallback);
+        $this->assertNotNull($component->disabledCallback);
+    }
+
+    /** @test */
+    public function it_applies_field_permissions_to_plain_objects_without_get_name(): void
+    {
+        $plainObject = new \stdClass();
+
+        $result = TestResourceWithFields::applyFieldPermissions([$plainObject]);
+
+        $this->assertCount(1, $result);
+        $this->assertSame($plainObject, $result[0]);
+    }
+
+    /** @test */
+    public function it_returns_all_configured_fields_for_super_admin_in_get_editable_fields(): void
+    {
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        config()->set('gatekeeper.field_permissions.TestModel', ['email', 'phone', 'salary']);
+
+        $editableFields = TestResourceWithFields::getEditableFields();
+
+        $this->assertContains('email', $editableFields);
+        $this->assertContains('phone', $editableFields);
+        $this->assertContains('salary', $editableFields);
+    }
+
+    /** @test */
+    public function it_returns_empty_array_for_get_editable_fields_when_no_fields_configured(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        config()->set('gatekeeper.field_permissions', []);
+
+        $editableFields = TestResourceWithFields::getEditableFields();
+
+        $this->assertEmpty($editableFields);
+    }
+
+    /** @test */
+    public function it_returns_all_configured_fields_for_super_admin_in_get_visible_fields(): void
+    {
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        config()->set('gatekeeper.field_permissions.TestModel', ['email', 'phone', 'salary']);
+
+        $visibleFields = TestResourceWithFields::getVisibleFields();
+
+        $this->assertContains('email', $visibleFields);
+        $this->assertContains('phone', $visibleFields);
+        $this->assertContains('salary', $visibleFields);
+    }
+
+    /** @test */
+    public function it_uses_model_property_for_field_permission_model_name_when_no_get_model_name(): void
+    {
+        $name = TestResourceFieldsWithModelProp::getFieldPermissionName('view', 'email');
+        $this->assertStringContainsString('test_model_for_fields_prop', $name);
+    }
+
+    /** @test */
+    public function it_falls_back_to_class_basename_for_field_permission_model_name(): void
+    {
+        $name = TestResourceFieldsNoModel::getFieldPermissionName('view', 'email');
+        $this->assertStringContainsString('test_resource_fields_no_model', $name);
+    }
+}
+
+class TestResourceFieldsWithModelProp
+{
+    use HasFieldPermissions;
+
+    protected static string $model = TestModelForFieldsProp::class;
+}
+
+class TestModelForFieldsProp {}
+
+class TestResourceFieldsNoModel
+{
+    use HasFieldPermissions;
+    // No $model property, no getModelName()
+}

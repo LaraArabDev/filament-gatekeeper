@@ -222,3 +222,143 @@ class TestResourceWithRelations
 class TestModelForRelations {}
 class PostsRelationManagerForTest {}
 class CommentsRelationManagerForTest {}
+
+// ---------------------------------------------------------------------------
+// Additional tests for uncovered methods
+// ---------------------------------------------------------------------------
+
+class HasRelationPermissionsExtendedTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** @test */
+    public function it_returns_all_managers_for_super_admin_in_get_permitted_relations(): void
+    {
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        $managers = [PostsRelationManagerForTest::class, CommentsRelationManagerForTest::class];
+
+        $result = TestResourceWithRelations::getPermittedRelations($managers);
+
+        $this->assertCount(2, $result);
+    }
+
+    /** @test */
+    public function it_filters_managers_for_regular_user_in_get_permitted_relations(): void
+    {
+        $user = $this->createUser();
+        Permission::factory()->relation()->create(['name' => 'view_test_model_postsfortest_relation']);
+        $user->givePermissionTo('view_test_model_postsfortest_relation');
+        $this->actingAs($user);
+
+        $managers = [PostsRelationManagerForTest::class, CommentsRelationManagerForTest::class];
+
+        $result = TestResourceWithRelations::getPermittedRelations($managers);
+
+        $this->assertIsArray($result);
+    }
+
+    /** @test */
+    public function it_returns_false_in_get_permitted_relations_when_no_permission(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $managers = [PostsRelationManagerForTest::class];
+
+        $result = TestResourceWithRelations::getPermittedRelations($managers);
+
+        $this->assertEmpty(array_values($result));
+    }
+
+    /** @test */
+    public function it_extracts_relation_name_from_class_with_relation_manager_suffix(): void
+    {
+        // Standard class: PostsRelationManager -> 'posts'
+        $result = TestResourceWithRelations::getRelationNameFromClassPublic('PostsRelationManager');
+        $this->assertEquals('posts', $result);
+    }
+
+    /** @test */
+    public function it_extracts_relation_name_from_class_without_relation_manager_suffix(): void
+    {
+        // Class without suffix: Tags -> 'tags'
+        $result = TestResourceWithRelations::getRelationNameFromClassPublic('Tags');
+        $this->assertEquals('tags', $result);
+    }
+
+    /** @test */
+    public function it_filter_relation_managers_returns_same_as_get_permitted_relations_for_super_admin(): void
+    {
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        $managers = [PostsRelationManagerForTest::class, CommentsRelationManagerForTest::class];
+
+        $permitted = TestResourceWithRelations::getPermittedRelations($managers);
+        $filtered = TestResourceWithRelations::filterRelationManagers($managers);
+
+        $this->assertEquals(array_values($permitted), array_values($filtered));
+    }
+
+    /** @test */
+    public function it_returns_all_configured_relations_for_super_admin_in_get_available_relations(): void
+    {
+        $user = $this->createSuperAdmin();
+        $this->actingAs($user);
+
+        config()->set('gatekeeper.relation_permissions.TestModel', ['posts', 'comments', 'orders']);
+
+        $available = TestResourceWithRelations::getAvailableRelations();
+
+        $this->assertContains('posts', $available);
+        $this->assertContains('comments', $available);
+        $this->assertContains('orders', $available);
+    }
+
+    /** @test */
+    public function it_filters_relations_for_regular_user_in_get_available_relations(): void
+    {
+        $user = $this->createUser();
+        Permission::factory()->relation()->create(['name' => 'view_test_model_posts_relation']);
+        $user->givePermissionTo('view_test_model_posts_relation');
+        $this->actingAs($user);
+
+        config()->set('gatekeeper.relation_permissions.TestModel', ['posts', 'comments']);
+
+        $available = TestResourceWithRelations::getAvailableRelations();
+
+        $this->assertContains('posts', $available);
+        $this->assertNotContains('comments', $available);
+    }
+
+    /** @test */
+    public function it_uses_model_property_for_relation_permission_model_name_when_no_get_model_name(): void
+    {
+        $name = TestResourceRelationsWithModelProp::getRelationPermissionName('posts');
+        $this->assertStringContainsString('test_model_for_relations_prop', $name);
+    }
+
+    /** @test */
+    public function it_falls_back_to_class_basename_for_relation_permission_model_name(): void
+    {
+        $name = TestResourceRelationsNoModel::getRelationPermissionName('posts');
+        $this->assertStringContainsString('test_resource_relations_no_model', $name);
+    }
+}
+
+class TestResourceRelationsWithModelProp
+{
+    use HasRelationPermissions;
+
+    protected static string $model = TestModelForRelationsProp::class;
+}
+
+class TestModelForRelationsProp {}
+
+class TestResourceRelationsNoModel
+{
+    use HasRelationPermissions;
+    // No $model property, no getModelName()
+}

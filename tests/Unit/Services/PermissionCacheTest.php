@@ -156,4 +156,89 @@ class PermissionCacheTest extends TestCase
         // Should complete without error
         $this->assertTrue(true);
     }
+
+    /** @test */
+    public function it_executes_callback_directly_when_cache_disabled_in_remember(): void
+    {
+        config()->set('gatekeeper.cache.enabled', false);
+
+        $cache = new PermissionCache();
+
+        $callCount = 0;
+        $value = $cache->remember('some_key', function () use (&$callCount) {
+            $callCount++;
+            return 'direct_value';
+        });
+
+        $this->assertEquals('direct_value', $value);
+        $this->assertEquals(1, $callCount);
+    }
+
+    /** @test */
+    public function it_calls_callback_every_time_when_cache_is_disabled(): void
+    {
+        config()->set('gatekeeper.cache.enabled', false);
+
+        $cache = new PermissionCache();
+
+        $callCount = 0;
+        $cache->remember('some_key', function () use (&$callCount) {
+            $callCount++;
+            return 'value';
+        });
+        $cache->remember('some_key', function () use (&$callCount) {
+            $callCount++;
+            return 'value';
+        });
+
+        // With cache disabled, callback should be called each time
+        $this->assertEquals(2, $callCount);
+    }
+
+    /** @test */
+    public function it_can_forget_a_key(): void
+    {
+        $this->cache->remember('forget_test_key', fn() => 'initial_value');
+
+        $result = $this->cache->forget('forget_test_key');
+
+        // forget() should return bool
+        $this->assertIsBool($result);
+    }
+
+    /** @test */
+    public function it_can_warm_cache_for_user(): void
+    {
+        $user = $this->createUser();
+
+        // warmCache should not throw
+        $this->cache->warmCache($user);
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function it_can_get_stats_with_all_required_keys(): void
+    {
+        $stats = $this->cache->getStats();
+
+        $this->assertArrayHasKey('prefix', $stats);
+        $this->assertArrayHasKey('ttl', $stats);
+        $this->assertArrayHasKey('driver', $stats);
+        $this->assertArrayHasKey('tags', $stats);
+        $this->assertArrayHasKey('supports_tagging', $stats);
+        $this->assertIsArray($stats['tags']);
+        $this->assertIsBool($stats['supports_tagging']);
+    }
+
+    /** @test */
+    public function it_invalidates_all_without_exception(): void
+    {
+        $this->cache->remember('key_for_invalidate', fn() => 'value');
+
+        // Should complete without throwing
+        $this->cache->invalidateAll();
+
+        $this->assertTrue(true);
+    }
 }

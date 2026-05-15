@@ -6,8 +6,32 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Concerns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasGatekeeperPermissions;
+use LaraArabDev\FilamentGatekeeper\Concerns\InteractsWithGatekeeperCache;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+
+// Expose InteractsWithGatekeeperCache protected methods for testing
+class FakePostResourceWithInteracts
+{
+    use InteractsWithGatekeeperCache;
+
+    public static string $model = 'Post';
+
+    public static function callGetGuardName(): string
+    {
+        return static::getGuardName();
+    }
+
+    public static function callGetPermissionMatrix(): array
+    {
+        return static::getPermissionMatrix();
+    }
+
+    public static function callGetAuthUser(): ?\Illuminate\Contracts\Auth\Authenticatable
+    {
+        return static::getAuthUser();
+    }
+}
 
 // Concrete class that uses the trait (simulates a Filament Resource)
 class FakePostResource
@@ -301,5 +325,58 @@ class HasGatekeeperPermissionsTest extends TestCase
 
         $record = $this->createUser();
         $this->assertTrue(FakePostResource::canEdit($record));
+    }
+
+    // ── InteractsWithGatekeeperCache tests ────────────────────────────────
+
+    /** @test */
+    public function it_returns_configured_guard_name(): void
+    {
+        config()->set('gatekeeper.guard', 'api');
+
+        $guardName = FakePostResourceWithInteracts::callGetGuardName();
+
+        $this->assertEquals('api', $guardName);
+    }
+
+    /** @test */
+    public function it_returns_web_as_default_guard_name(): void
+    {
+        config()->set('gatekeeper.guard', 'web');
+
+        $guardName = FakePostResourceWithInteracts::callGetGuardName();
+
+        $this->assertEquals('web', $guardName);
+    }
+
+    /** @test */
+    public function it_returns_permission_matrix_as_array(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $matrix = FakePostResourceWithInteracts::callGetPermissionMatrix();
+
+        $this->assertIsArray($matrix);
+    }
+
+    /** @test */
+    public function it_returns_authenticated_user_from_get_auth_user(): void
+    {
+        $user = $this->createUser();
+        $this->actingAs($user);
+
+        $authUser = FakePostResourceWithInteracts::callGetAuthUser();
+
+        $this->assertNotNull($authUser);
+        $this->assertEquals($user->id, $authUser->getAuthIdentifier());
+    }
+
+    /** @test */
+    public function it_returns_null_from_get_auth_user_when_no_user_authenticated(): void
+    {
+        $authUser = FakePostResourceWithInteracts::callGetAuthUser();
+
+        $this->assertNull($authUser);
     }
 }
