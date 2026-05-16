@@ -8,6 +8,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![License](https://img.shields.io/packagist/l/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![codecov](https://codecov.io/gh/laraarabdev/filament-gatekeeper/branch/main/graph/badge.svg)](https://codecov.io/gh/laraarabdev/filament-gatekeeper)
+[![Code Style](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/code-style.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/code-style.yml)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue?style=flat-square)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-10.x%20|%2011.x%20|%2012.x-red?style=flat-square)](https://laravel.com)
 [![Filament](https://img.shields.io/badge/Filament-3.x-orange?style=flat-square)](https://filamentphp.com)
