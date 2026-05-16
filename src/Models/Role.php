@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
+use LaraArabDev\FilamentGatekeeper\Database\Factories\RoleFactory;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
@@ -14,9 +17,9 @@ use Spatie\Permission\Models\Role as SpatieRole;
  * @property string $name
  * @property string $guard_name
  * @property array|null $field_permissions
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Permission> $permissions
  */
 class Role extends SpatieRole
 {
@@ -25,9 +28,9 @@ class Role extends SpatieRole
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \LaraArabDev\FilamentGatekeeper\Database\Factories\RoleFactory
+    protected static function newFactory(): RoleFactory
     {
-        return \LaraArabDev\FilamentGatekeeper\Database\Factories\RoleFactory::new();
+        return RoleFactory::new();
     }
 
     /**
@@ -273,10 +276,9 @@ class Role extends SpatieRole
     /**
      * Get permissions by type.
      *
-     * @param string $type
-     * @return \Illuminate\Database\Eloquent\Collection<int, Permission>
+     * @return Collection<int, Permission>
      */
-    public function getPermissionsByType(string $type): \Illuminate\Database\Eloquent\Collection
+    public function getPermissionsByType(string $type): Collection
     {
         return $this->permissions()
             ->where('type', $type)

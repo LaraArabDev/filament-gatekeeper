@@ -64,4 +64,3 @@ abstract class GatekeeperAuthenticatable extends Authenticatable
         return $this->hasRole($superAdminRole);
     }
 }
-

@@ -16,8 +16,6 @@ use ReflectionMethod;
  * Discovers fields from various sources for permission management.
  * Supports multiple detection strategies: model fillable, database schema,
  * and Filament resource forms.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class FieldDiscovery
 {
@@ -25,8 +23,11 @@ class FieldDiscovery
      * Detection source constants.
      */
     public const SOURCE_FILLABLE = 'fillable';
+
     public const SOURCE_DATABASE = 'database';
+
     public const SOURCE_RESOURCE = 'resource';
+
     public const SOURCE_CONFIG = 'config';
 
     /**
@@ -65,8 +66,8 @@ class FieldDiscovery
      * This method aggregates fields from multiple sources based on configuration.
      * It applies exclusions and returns a unique list of field names.
      *
-     * @param string $modelClass The fully qualified model class name
-     * @param array<string>|null $sources Detection sources to use (null = use config)
+     * @param  string  $modelClass  The fully qualified model class name
+     * @param  array<string>|null  $sources  Detection sources to use (null = use config)
      * @return array<string> List of discovered field names
      *
      * @example
@@ -110,7 +111,7 @@ class FieldDiscovery
      * This method uses reflection to access the model's fillable attributes
      * without instantiating the model.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return array<string> List of fillable field names
      *
      * @example
@@ -147,7 +148,7 @@ class FieldDiscovery
      * This method queries the database schema to get all column names
      * for the model's table.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return array<string> List of database column names
      *
      * @example
@@ -188,7 +189,7 @@ class FieldDiscovery
      * This method analyzes the form() method of a Filament resource
      * to extract field names defined in the schema.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return array<string> List of field names from the resource form
      *
      * @example
@@ -231,7 +232,7 @@ class FieldDiscovery
      * This method retrieves manually configured fields from the
      * gatekeeper config file.
      *
-     * @param string $modelName The model name (e.g., 'User')
+     * @param  string  $modelName  The model name (e.g., 'User')
      * @return array<string> List of configured field names
      *
      * @example
@@ -255,7 +256,7 @@ class FieldDiscovery
      * Searches through configured resource paths to find the corresponding
      * resource class for the given model.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return string|null The resource class name or null if not found
      */
     protected function findResourceForModel(string $modelClass): ?string
@@ -285,7 +286,7 @@ class FieldDiscovery
      *
      * Extracts field names from TextInput::make(), Select::make(), etc.
      *
-     * @param string $code The PHP source code to parse
+     * @param  string  $code  The PHP source code to parse
      * @return array<string> List of parsed field names
      */
     protected function parseFieldsFromCode(string $code): array
@@ -310,15 +311,15 @@ class FieldDiscovery
      *
      * Removes fields that are in the exclusion list (both default and configured).
      *
-     * @param string $modelName The model name
-     * @param array<string> $fields List of fields to filter
+     * @param  string  $modelName  The model name
+     * @param  array<string>  $fields  List of fields to filter
      * @return array<string> Filtered list of fields
      */
     protected function applyExclusions(string $modelName, array $fields): array
     {
         $excluded = $this->getExcludedFields($modelName);
 
-        return array_filter($fields, fn($field) => ! in_array($field, $excluded));
+        return array_filter($fields, fn ($field) => ! in_array($field, $excluded));
     }
 
     /**
@@ -327,7 +328,7 @@ class FieldDiscovery
      * Combines default exclusions with model-specific and global exclusions
      * from the configuration.
      *
-     * @param string $modelName The model name
+     * @param  string  $modelName  The model name
      * @return array<string> List of excluded field names
      */
     public function getExcludedFields(string $modelName): array
@@ -364,8 +365,7 @@ class FieldDiscovery
      *
      * Useful when configuration or model structure changes.
      *
-     * @param string|null $modelName Specific model to clear, or null for all
-     * @return void
+     * @param  string|null  $modelName  Specific model to clear, or null for all
      */
     public function clearCache(?string $modelName = null): void
     {
@@ -382,7 +382,7 @@ class FieldDiscovery
      * Sensitive fields are typically those containing passwords,
      * tokens, or personal identifiable information.
      *
-     * @param string $fieldName The field name to check
+     * @param  string  $fieldName  The field name to check
      * @return bool True if the field is considered sensitive
      */
     public function isSensitiveField(string $fieldName): bool

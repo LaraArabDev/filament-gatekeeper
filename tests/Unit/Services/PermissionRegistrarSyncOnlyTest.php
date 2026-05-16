@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 

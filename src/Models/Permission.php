@@ -6,6 +6,8 @@ namespace LaraArabDev\FilamentGatekeeper\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
+use LaraArabDev\FilamentGatekeeper\Database\Factories\PermissionFactory;
 use LaraArabDev\FilamentGatekeeper\Enums\PermissionType;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
@@ -15,8 +17,8 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
  * @property string $guard_name
  * @property string|null $type
  * @property string|null $entity
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class Permission extends SpatiePermission
 {
@@ -25,9 +27,9 @@ class Permission extends SpatiePermission
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \LaraArabDev\FilamentGatekeeper\Database\Factories\PermissionFactory
+    protected static function newFactory(): PermissionFactory
     {
-        return \LaraArabDev\FilamentGatekeeper\Database\Factories\PermissionFactory::new();
+        return PermissionFactory::new();
     }
 
     /**
@@ -55,12 +57,19 @@ class Permission extends SpatiePermission
      * Permission type constants (string values for DB/config). Use PermissionType enum for type-safe checks.
      */
     public const TYPE_RESOURCE = 'resource';
+
     public const TYPE_MODEL = 'model';
+
     public const TYPE_PAGE = 'page';
+
     public const TYPE_WIDGET = 'widget';
+
     public const TYPE_FIELD = 'field';
+
     public const TYPE_COLUMN = 'column';
+
     public const TYPE_ACTION = 'action';
+
     public const TYPE_RELATION = 'relation';
 
     /**
@@ -193,7 +202,6 @@ class Permission extends SpatiePermission
     /**
      * Get the grouping key for this permission (by entity).
      * Uses entity column when set, otherwise derives from name. Always returns snake_case lowercase.
-     * @return string
      */
     public function getEntityGroupKey(): string
     {
@@ -201,6 +209,7 @@ class Permission extends SpatiePermission
         if ($key === null || $key === '') {
             return 'other';
         }
+
         return str($key)->snake()->lower()->toString();
     }
 
@@ -233,6 +242,7 @@ class Permission extends SpatiePermission
             if (isset($this->entity) && $this->entity !== '') {
                 return str($this->entity)->studly()->toString();
             }
+
             // Parse from name: first segment after action is model (e.g. view_user_email_field → User)
             return str((string) $between[0])->studly()->toString();
         }
@@ -248,11 +258,12 @@ class Permission extends SpatiePermission
         foreach ($parts as $part) {
             if (in_array($part, $skipWords)) {
                 $foundAction = true;
+
                 continue;
             }
 
             // Once we've found an action, collect the remaining parts as model name
-            if ($foundAction || !in_array($part, $skipWords)) {
+            if ($foundAction || ! in_array($part, $skipWords)) {
                 $modelParts[] = $part;
             }
         }
@@ -303,6 +314,7 @@ class Permission extends SpatiePermission
             if (preg_match('/^view_(.+)$/', $pagePart, $pageMatches)) {
                 return str($pageMatches[1])->headline()->toString();
             }
+
             return str($pagePart)->headline()->toString();
         }
 
@@ -326,6 +338,7 @@ class Permission extends SpatiePermission
             if (preg_match('/^view_(.+)$/', $widgetPart, $widgetMatches)) {
                 return str($widgetMatches[1])->headline()->toString();
             }
+
             return str($widgetPart)->headline()->toString();
         }
 
@@ -339,7 +352,7 @@ class Permission extends SpatiePermission
     {
         // New format: action_entity_field (e.g. view_user_email_field)
         if (preg_match('/^(.+)_field$/', $name, $matches)) {
-            return str($matches[1])->replace('_', ' ')->headline()->toString() . ' (Field)';
+            return str($matches[1])->replace('_', ' ')->headline()->toString().' (Field)';
         }
 
         return $this->getModelName();
@@ -352,7 +365,7 @@ class Permission extends SpatiePermission
     {
         // New format: action_entity_column (e.g. view_user_email_column)
         if (preg_match('/^(.+)_column$/', $name, $matches)) {
-            return str($matches[1])->replace('_', ' ')->headline()->toString() . ' (Column)';
+            return str($matches[1])->replace('_', ' ')->headline()->toString().' (Column)';
         }
 
         return $this->getModelName();
@@ -365,7 +378,7 @@ class Permission extends SpatiePermission
     {
         // New format: action_entity_action (e.g. execute_product_publish_action)
         if (preg_match('/^(.+)_action$/', $name, $matches)) {
-            return str($matches[1])->replace('_', ' ')->headline()->toString() . ' (Action)';
+            return str($matches[1])->replace('_', ' ')->headline()->toString().' (Action)';
         }
 
         return $this->getModelName();
@@ -378,7 +391,7 @@ class Permission extends SpatiePermission
     {
         // New format: action_entity_relation (e.g. view_user_posts_relation)
         if (preg_match('/^(.+)_relation$/', $name, $matches)) {
-            return str($matches[1])->replace('_', ' ')->headline()->toString() . ' (Relation)';
+            return str($matches[1])->replace('_', ' ')->headline()->toString().' (Relation)';
         }
 
         return $this->getModelName();
@@ -414,7 +427,7 @@ class Permission extends SpatiePermission
         $name = $this->name;
         $entityKey = $this->getEntityGroupKey();
         if ($entityKey !== 'other') {
-            $name = preg_replace('/_' . preg_quote($entityKey, '/') . '$/', '', $name);
+            $name = preg_replace('/_'.preg_quote($entityKey, '/').'$/', '', $name);
         }
         $name = preg_replace('/^(page_|widget_|field_|column_|action_|relation_)/', '', $name);
 
@@ -423,13 +436,13 @@ class Permission extends SpatiePermission
 
     /**
      * Get entity display name for lists/badges. Uses entity column when set, else getEntityName().
-     * @return string|null
      */
     public function getEntityDisplayName(): ?string
     {
         if (isset($this->entity) && $this->entity !== '') {
             return str($this->entity)->headline()->toString();
         }
+
         return $this->getEntityName() ?? 'Other';
     }
 
@@ -446,17 +459,17 @@ class Permission extends SpatiePermission
             ->distinct()
             ->orderBy('entity')
             ->pluck('entity')
-            ->mapWithKeys(fn(string $e) => [$e => str($e)->headline()->toString()])
+            ->mapWithKeys(fn (string $e) => [$e => str($e)->headline()->toString()])
             ->toArray();
 
         $fromName = static::query()
             ->get()
-            ->map(fn(self $p) => $p->getEntityName())
+            ->map(fn (self $p) => $p->getEntityName())
             ->filter()
             ->unique()
             ->sort()
             ->values()
-            ->mapWithKeys(fn($name) => [strtolower(str_replace(' ', '_', (string) $name)) => (string) $name])
+            ->mapWithKeys(fn ($name) => [strtolower(str_replace(' ', '_', (string) $name)) => (string) $name])
             ->toArray();
 
         return array_merge($fromColumn, $fromName);

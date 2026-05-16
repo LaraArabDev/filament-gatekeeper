@@ -159,6 +159,6 @@ trait HasRelationPermissions
         }
 
         // Filter by permission
-        return array_filter($configuredRelations, fn($relation) => static::canViewRelation($relation));
+        return array_filter($configuredRelations, fn ($relation) => static::canViewRelation($relation));
     }
 }

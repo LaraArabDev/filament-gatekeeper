@@ -24,8 +24,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     case Relation = 'relation';
 
     /**
-     * @inheritdoc
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getLabel(): ?string
     {
@@ -42,8 +41,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     }
 
     /**
-     * @inheritdoc
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getColor(): ?string
     {
@@ -60,8 +58,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     }
 
     /**
-     * @inheritdoc
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getIcon(): ?string
     {
@@ -89,6 +86,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
         foreach (self::cases() as $case) {
             $out[$case->value] = $case->getLabel() ?? $case->value;
         }
+
         return $out;
     }
 }

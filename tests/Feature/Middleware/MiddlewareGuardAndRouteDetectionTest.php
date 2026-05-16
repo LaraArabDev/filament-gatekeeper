@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Middleware;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,14 +32,15 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     use RefreshDatabase;
 
     protected GatekeeperResourceMiddleware $resourceMiddleware;
+
     protected GatekeeperApiMiddleware $apiMiddleware;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->resourceMiddleware = new GatekeeperResourceMiddleware();
-        $this->apiMiddleware      = new GatekeeperApiMiddleware();
+        $this->resourceMiddleware = new GatekeeperResourceMiddleware;
+        $this->apiMiddleware = new GatekeeperApiMiddleware;
     }
 
     // ---------------------------------------------------------------------------
@@ -60,7 +62,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -84,7 +86,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -104,6 +106,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         $request->setRouteResolver(function () use ($request) {
             $route = new Route('GET', '/users/{user}', []);
             $route->bind($request);
+
             // Do NOT set any parameters so that parameters() returns []
             return $route;
         });
@@ -117,7 +120,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -146,7 +149,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -174,7 +177,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -204,7 +207,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -226,7 +229,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         // No actingAs → no user → 401 response expected (guard=api, no api user)
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user'
             // guard is null → detectGuard() is called
         );
@@ -245,7 +248,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user'
             // guard is null → detectGuard() is called → returns 'web'
         );
@@ -264,11 +267,11 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         // No user authenticated → AuthenticationException
         $request = Request::create('/api/something', 'GET');
 
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
         $this->apiMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'view_any_user'
             // guard is null → detectGuard() is invoked → returns 'api'
         );
@@ -281,11 +284,11 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         // No user → AuthenticationException
         $request = Request::create('/admin/dashboard', 'GET');
 
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
         $this->apiMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'view_any_user'
             // guard is null → detectGuard() → web
         );
@@ -306,7 +309,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         // Explicitly pass web guard to avoid detectGuard() switching to api
         $response = $this->apiMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'view_any_user_api_branch',
             'web'
         );
@@ -325,7 +328,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );
@@ -345,7 +348,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
 
         $response = $this->resourceMiddleware->handle(
             $request,
-            fn() => new Response('OK'),
+            fn () => new Response('OK'),
             'user',
             'web'
         );

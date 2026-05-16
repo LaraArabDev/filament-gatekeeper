@@ -87,7 +87,7 @@ class HasWidgetPermissionsTest extends TestCase
     }
 
     /** @test */
-    public function it_controls_visibility_via_shouldBeVisible(): void
+    public function it_controls_visibility_via_should_be_visible(): void
     {
         $user = $this->createUser();
 
@@ -102,7 +102,7 @@ class HasWidgetPermissionsTest extends TestCase
     }
 
     /** @test */
-    public function it_shouldBeVisible_matches_canView(): void
+    public function it_should_be_visible_matches_can_view(): void
     {
         $user = $this->createUser();
 

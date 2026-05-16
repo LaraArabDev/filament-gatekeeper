@@ -7,7 +7,10 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use LaraArabDev\FilamentGatekeeper\Gatekeeper;
+use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware;
+use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
@@ -45,7 +48,7 @@ class GatekeeperServiceProviderTest extends TestCase
 
         $this->assertArrayHasKey('gatekeeper.api', $middleware);
         $this->assertSame(
-            \LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware::class,
+            GatekeeperApiMiddleware::class,
             $middleware['gatekeeper.api']
         );
     }
@@ -58,7 +61,7 @@ class GatekeeperServiceProviderTest extends TestCase
 
         $this->assertArrayHasKey('gatekeeper.resource', $middleware);
         $this->assertSame(
-            \LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware::class,
+            GatekeeperResourceMiddleware::class,
             $middleware['gatekeeper.resource']
         );
     }
@@ -74,7 +77,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $this->app->instance(PermissionCache::class, $cacheMock);
 
         // Fire the event
-        Event::dispatch('eloquent.saved: ' . Role::class, $role);
+        Event::dispatch('eloquent.saved: '.Role::class, $role);
     }
 
     /** @test */
@@ -86,7 +89,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $cacheMock->shouldReceive('invalidateRole')->once()->with(\Mockery::type(Role::class));
         $this->app->instance(PermissionCache::class, $cacheMock);
 
-        Event::dispatch('eloquent.deleted: ' . Role::class, $role);
+        Event::dispatch('eloquent.deleted: '.Role::class, $role);
     }
 
     /** @test */
@@ -96,7 +99,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $cacheMock->shouldReceive('invalidateAll')->once();
         $this->app->instance(PermissionCache::class, $cacheMock);
 
-        Event::dispatch('eloquent.saved: ' . Permission::class);
+        Event::dispatch('eloquent.saved: '.Permission::class);
     }
 
     /** @test */
@@ -106,7 +109,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $cacheMock->shouldReceive('invalidateAll')->once();
         $this->app->instance(PermissionCache::class, $cacheMock);
 
-        Event::dispatch('eloquent.deleted: ' . Permission::class);
+        Event::dispatch('eloquent.deleted: '.Permission::class);
     }
 
     /** @test */
@@ -119,7 +122,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $this->actingAs($user);
 
         // Gate::allows uses Gate::before callback registered by service provider
-        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('any-arbitrary-permission'));
+        $this->assertTrue(Gate::allows('any-arbitrary-permission'));
     }
 
     /** @test */
@@ -133,6 +136,6 @@ class GatekeeperServiceProviderTest extends TestCase
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
 
-        $this->assertTrue(\Illuminate\Support\Facades\Gate::allows('any-permission-whatsoever'));
+        $this->assertTrue(Gate::allows('any-permission-whatsoever'));
     }
 }

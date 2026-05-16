@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Concerns;
 
+use Illuminate\Http\Resources\MissingValue;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 
 /**
@@ -57,8 +58,6 @@ trait HasResourcePermissions
     /**
      * Get the model name for permission checks.
      * Override this or set $shieldModel property.
-     *
-     * @return string
      */
     protected function getGatekeeperModel(): string
     {
@@ -77,8 +76,6 @@ trait HasResourcePermissions
 
     /**
      * Get the guard for permission checks.
-     *
-     * @return string
      */
     protected function getShieldGuard(): string
     {
@@ -91,8 +88,6 @@ trait HasResourcePermissions
 
     /**
      * Get the Shield instance with configured guard.
-     *
-     * @return \LaraArabDev\FilamentGatekeeper\Gatekeeper
      */
     protected function shield(): \LaraArabDev\FilamentGatekeeper\Gatekeeper
     {
@@ -102,10 +97,7 @@ trait HasResourcePermissions
     /**
      * Include field value only if user can view the field.
      *
-     * @param string $field
-     * @param mixed $value
-     * @param mixed $default
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
+     * @return MissingValue|mixed
      */
     protected function whenCanView(string $field, mixed $value, mixed $default = null)
     {
@@ -119,10 +111,7 @@ trait HasResourcePermissions
     /**
      * Include column value only if user can view the column.
      *
-     * @param string $column
-     * @param mixed $value
-     * @param mixed $default
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
+     * @return MissingValue|mixed
      */
     protected function whenCanViewColumn(string $column, mixed $value, mixed $default = null)
     {
@@ -136,9 +125,7 @@ trait HasResourcePermissions
     /**
      * Include relation only if user has permission.
      *
-     * @param string $relation
-     * @param mixed $value
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
+     * @return MissingValue|mixed
      */
     protected function whenCanViewRelation(string $relation, mixed $value)
     {
@@ -151,9 +138,7 @@ trait HasResourcePermissions
     /**
      * Include nested resource only if user can view the relation.
      *
-     * @param string $relation
-     * @param string $resourceClass
-     * @return \Illuminate\Http\Resources\MissingValue|mixed
+     * @return MissingValue|mixed
      */
     protected function whenCanLoadRelation(string $relation, string $resourceClass)
     {
@@ -175,7 +160,7 @@ trait HasResourcePermissions
     /**
      * Filter an array to only include permitted fields.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      */
     protected function filterByFieldPermissions(array $data): array
@@ -193,7 +178,7 @@ trait HasResourcePermissions
     /**
      * Get all model attributes filtered by permissions.
      *
-     * @param array<string> $except Fields to exclude regardless of permissions
+     * @param  array<string>  $except  Fields to exclude regardless of permissions
      * @return array<string, mixed>
      */
     protected function permittedAttributes(array $except = []): array
@@ -208,9 +193,6 @@ trait HasResourcePermissions
 
     /**
      * Check if user can view a specific field.
-     *
-     * @param string $field
-     * @return bool
      */
     protected function canViewField(string $field): bool
     {
@@ -219,9 +201,6 @@ trait HasResourcePermissions
 
     /**
      * Check if user can view a specific column.
-     *
-     * @param string $column
-     * @return bool
      */
     protected function canViewColumn(string $column): bool
     {
@@ -230,9 +209,6 @@ trait HasResourcePermissions
 
     /**
      * Check if user can view a specific relation.
-     *
-     * @param string $relation
-     * @return bool
      */
     protected function canViewRelation(string $relation): bool
     {

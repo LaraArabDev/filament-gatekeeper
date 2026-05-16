@@ -167,7 +167,7 @@ class HasRelationPermissionsTest extends TestCase
     }
 
     /** @test */
-    public function it_filterRelationManagers_delegates_to_getPermittedRelations(): void
+    public function it_filter_relation_managers_delegates_to_get_permitted_relations(): void
     {
         $user = $this->createUser();
 

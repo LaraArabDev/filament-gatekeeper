@@ -7,11 +7,11 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Resources;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
+use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource\Pages\ListPermissions;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\CreateRole;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\EditRole;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\ListRoles;
-use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource\Pages\ListPermissions;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 
 class ResourceStaticMethodsTest extends TestCase

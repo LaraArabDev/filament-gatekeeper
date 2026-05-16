@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Concerns;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasGatekeeperPermissions;
 use LaraArabDev\FilamentGatekeeper\Concerns\InteractsWithGatekeeperCache;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
+use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use Spatie\Permission\PermissionRegistrar;
 
 // Expose InteractsWithGatekeeperCache protected methods for testing
 class FakePostResourceWithInteracts
@@ -27,7 +31,7 @@ class FakePostResourceWithInteracts
         return static::getPermissionMatrix();
     }
 
-    public static function callGetAuthUser(): ?\Illuminate\Contracts\Auth\Authenticatable
+    public static function callGetAuthUser(): ?Authenticatable
     {
         return static::getAuthUser();
     }
@@ -55,6 +59,7 @@ class FakePostResource
         } else {
             $modelName = str($modelName)->camel()->toString();
         }
+
         return "{$action}{$separator}{$modelName}";
     }
 }
@@ -63,7 +68,7 @@ class FakeUserResource
 {
     use HasGatekeeperPermissions;
 
-    public static string $model = \LaraArabDev\FilamentGatekeeper\Tests\TestUser::class;
+    public static string $model = TestUser::class;
 }
 
 class HasGatekeeperPermissionsTest extends TestCase
@@ -230,7 +235,7 @@ class HasGatekeeperPermissionsTest extends TestCase
     public function it_can_check_custom_route_access(): void
     {
         $user = $this->createUser();
-        $permission = $this->createPermission('access_dashboard', \LaraArabDev\FilamentGatekeeper\Models\Permission::TYPE_RESOURCE);
+        $permission = $this->createPermission('access_dashboard', Permission::TYPE_RESOURCE);
         $user->givePermissionTo($permission);
         $this->actingAs($user);
 
@@ -249,7 +254,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         // With permission: both should be true
         $permission = $this->createPermission('view_any_post');
         $user->givePermissionTo($permission);
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $this->assertSame(FakePostResource::canViewAny(), FakePostResource::shouldRegisterNavigation());
     }

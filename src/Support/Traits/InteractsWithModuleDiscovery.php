@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\File;
  *
  * This trait handles discovery of classes within Laravel modules
  * (nwidart/laravel-modules) for multi-module applications.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Traits
  */
 trait InteractsWithModuleDiscovery
 {
@@ -22,7 +20,7 @@ trait InteractsWithModuleDiscovery
      * Scans all modules in the configured modules path and discovers
      * classes matching the provided path pattern.
      *
-     * @param string $modulePathPattern The path pattern within modules (e.g., '{module}/Models')
+     * @param  string  $modulePathPattern  The path pattern within modules (e.g., '{module}/Models')
      * @return array<string> Array of discovered class names or identifiers
      */
     protected function discoverFromModules(string $modulePathPattern): array
@@ -63,8 +61,8 @@ trait InteractsWithModuleDiscovery
      *
      * Must be implemented by the consuming class.
      *
-     * @param string $directory The directory path to scan
-     * @param string $pathPattern The original path pattern
+     * @param  string  $directory  The directory path to scan
+     * @param  string  $pathPattern  The original path pattern
      * @return array<string> Array of discovered class names or identifiers
      */
     abstract protected function scanDirectory(string $directory, string $pathPattern): array;

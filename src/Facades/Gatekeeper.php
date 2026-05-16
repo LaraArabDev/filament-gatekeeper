@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Gatekeeper as GatekeeperService;
+use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 
 /**
  * Shield Facade
  *
  * Guard Management:
+ *
  * @method static \LaraArabDev\FilamentGatekeeper\Gatekeeper guard(string $guardName)
  * @method static \LaraArabDev\FilamentGatekeeper\Gatekeeper api()
  * @method static \LaraArabDev\FilamentGatekeeper\Gatekeeper web()
@@ -50,7 +51,6 @@ class Gatekeeper extends Facade
 {
     /**
      * Get the facade accessor.
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {

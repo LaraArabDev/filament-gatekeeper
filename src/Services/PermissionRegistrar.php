@@ -21,57 +21,41 @@ use LaraArabDev\FilamentGatekeeper\Support\Discovery\WidgetDiscovery;
  * Handles the registration and synchronization of permissions
  * for all discovered entities including resources, pages, widgets,
  * fields, columns, actions, and relations.
- *
- * @package LaraArabDev\FilamentGatekeeper\Services
  */
 class PermissionRegistrar
 {
     /**
      * Resource discovery service.
-     *
-     * @var ResourceDiscovery
      */
     protected ResourceDiscovery $resourceDiscovery;
 
     /**
      * Page discovery service.
-     *
-     * @var PageDiscovery
      */
     protected PageDiscovery $pageDiscovery;
 
     /**
      * Widget discovery service.
-     *
-     * @var WidgetDiscovery
      */
     protected WidgetDiscovery $widgetDiscovery;
 
     /**
      * Module discovery service.
-     *
-     * @var ModuleDiscovery
      */
     protected ModuleDiscovery $moduleDiscovery;
 
     /**
      * Model discovery service.
-     *
-     * @var ModelDiscovery
      */
     protected ModelDiscovery $modelDiscovery;
 
     /**
      * Field discovery service.
-     *
-     * @var FieldDiscovery
      */
     protected FieldDiscovery $fieldDiscovery;
 
     /**
      * Column discovery service.
-     *
-     * @var ColumnDiscovery
      */
     protected ColumnDiscovery $columnDiscovery;
 
@@ -84,8 +68,6 @@ class PermissionRegistrar
 
     /**
      * Whether to run in dry-run mode.
-     *
-     * @var bool
      */
     protected bool $dryRun = false;
 
@@ -111,13 +93,13 @@ class PermissionRegistrar
      */
     public function __construct()
     {
-        $this->resourceDiscovery = new ResourceDiscovery();
-        $this->pageDiscovery = new PageDiscovery();
-        $this->widgetDiscovery = new WidgetDiscovery();
-        $this->moduleDiscovery = new ModuleDiscovery();
-        $this->modelDiscovery = new ModelDiscovery();
-        $this->fieldDiscovery = new FieldDiscovery();
-        $this->columnDiscovery = new ColumnDiscovery();
+        $this->resourceDiscovery = new ResourceDiscovery;
+        $this->pageDiscovery = new PageDiscovery;
+        $this->widgetDiscovery = new WidgetDiscovery;
+        $this->moduleDiscovery = new ModuleDiscovery;
+        $this->modelDiscovery = new ModelDiscovery;
+        $this->fieldDiscovery = new FieldDiscovery;
+        $this->columnDiscovery = new ColumnDiscovery;
         $this->guards = $this->resolveGuardsFromConfig();
     }
 
@@ -139,7 +121,7 @@ class PermissionRegistrar
 
         $guards = array_keys(array_filter(
             $guardsConfig,
-            fn($guard) => is_array($guard) ? ($guard['enabled'] ?? true) : true
+            fn ($guard) => is_array($guard) ? ($guard['enabled'] ?? true) : true
         ));
 
         return empty($guards) ? ['web'] : $guards;
@@ -151,8 +133,7 @@ class PermissionRegistrar
      * When enabled, no actual database changes are made.
      * Useful for previewing what would be synced.
      *
-     * @param bool $dryRun Whether to enable dry run mode
-     * @return static
+     * @param  bool  $dryRun  Whether to enable dry run mode
      */
     public function dryRun(bool $dryRun = true): static
     {
@@ -193,7 +174,7 @@ class PermissionRegistrar
     /**
      * Sync only specific type of permissions.
      *
-     * @param string $type The permission type to sync (resources, models, pages, widgets, fields, columns, actions, relations)
+     * @param  string  $type  The permission type to sync (resources, models, pages, widgets, fields, columns, actions, relations)
      * @return array<string, array<string>> Sync operation log
      */
     public function syncOnly(string $type): array
@@ -223,8 +204,6 @@ class PermissionRegistrar
      *
      * Creates permissions for all discovered Filament resources
      * using configured permission prefixes.
-     *
-     * @return void
      */
     public function syncResourcePermissions(): void
     {
@@ -248,8 +227,6 @@ class PermissionRegistrar
      *
      * Creates permissions with TYPE_MODEL for API/standalone usage.
      * Only runs if model discovery is enabled in configuration.
-     *
-     * @return void
      */
     public function syncModelPermissions(): void
     {
@@ -286,8 +263,6 @@ class PermissionRegistrar
      * Sync page permissions.
      *
      * Creates view permissions for all discovered Filament pages.
-     *
-     * @return void
      */
     public function syncPagePermissions(): void
     {
@@ -308,8 +283,6 @@ class PermissionRegistrar
      * Sync widget permissions.
      *
      * Creates view permissions for all discovered Filament widgets.
-     *
-     * @return void
      */
     public function syncWidgetPermissions(): void
     {
@@ -331,8 +304,6 @@ class PermissionRegistrar
      *
      * Creates view and update permissions for fields based on
      * configuration or auto-discovery settings.
-     *
-     * @return void
      */
     public function syncFieldPermissions(): void
     {
@@ -361,8 +332,6 @@ class PermissionRegistrar
      *
      * Creates view permissions for table columns based on
      * configuration or auto-discovery settings.
-     *
-     * @return void
      */
     public function syncColumnPermissions(): void
     {
@@ -390,8 +359,6 @@ class PermissionRegistrar
      * Sync action permissions.
      *
      * Creates execute permissions for custom actions defined in configuration.
-     *
-     * @return void
      */
     public function syncActionPermissions(): void
     {
@@ -418,8 +385,6 @@ class PermissionRegistrar
      * Sync relation permissions.
      *
      * Creates view permissions for relation managers defined in configuration.
-     *
-     * @return void
      */
     public function syncRelationPermissions(): void
     {
@@ -447,8 +412,6 @@ class PermissionRegistrar
      *
      * Creates the super admin role if it doesn't exist and
      * syncs all permissions to it.
-     *
-     * @return void
      */
     public function syncSuperAdminRole(): void
     {
@@ -566,10 +529,10 @@ class PermissionRegistrar
                 continue;
             }
 
-            $files = glob($fullPath . '/*.php');
+            $files = glob($fullPath.'/*.php');
 
             foreach ($files as $file) {
-                $className = 'App\\Models\\' . pathinfo($file, PATHINFO_FILENAME);
+                $className = 'App\\Models\\'.pathinfo($file, PATHINFO_FILENAME);
 
                 if (class_exists($className)) {
                     $models[] = $className;
@@ -597,9 +560,9 @@ class PermissionRegistrar
      *
      * Removes all field-related permissions for the given model.
      *
-     * @param string $modelName The model name (e.g., 'User')
-     * @param array<string>|null $fields Specific fields to delete, or null for all
-     * @param string|null $guard Specific guard, or null for all guards
+     * @param  string  $modelName  The model name (e.g., 'User')
+     * @param  array<string>|null  $fields  Specific fields to delete, or null for all
+     * @param  string|null  $guard  Specific guard, or null for all guards
      * @return int Number of deleted permissions
      *
      * @example
@@ -653,9 +616,9 @@ class PermissionRegistrar
      *
      * Removes all column-related permissions for the given model.
      *
-     * @param string $modelName The model name (e.g., 'User')
-     * @param array<string>|null $columns Specific columns to delete, or null for all
-     * @param string|null $guard Specific guard, or null for all guards
+     * @param  string  $modelName  The model name (e.g., 'User')
+     * @param  array<string>|null  $columns  Specific columns to delete, or null for all
+     * @param  string|null  $guard  Specific guard, or null for all guards
      * @return int Number of deleted permissions
      *
      * @example
@@ -710,8 +673,8 @@ class PermissionRegistrar
      * Removes all permission types (resource, field, column, action, relation)
      * for the given model.
      *
-     * @param string $modelName The model name (e.g., 'User')
-     * @param string|null $guard Specific guard, or null for all guards
+     * @param  string  $modelName  The model name (e.g., 'User')
+     * @param  string|null  $guard  Specific guard, or null for all guards
      * @return int Total number of deleted permissions
      */
     public function deleteModelPermissions(string $modelName, ?string $guard = null): int
@@ -796,11 +759,10 @@ class PermissionRegistrar
     /**
      * Create or update a permission.
      *
-     * @param string $name Permission name
-     * @param string $guard Guard name
-     * @param string $type Permission type
-     * @param string|null $entity Entity identifier (e.g. user, product) for grouping
-     * @return void
+     * @param  string  $name  Permission name
+     * @param  string  $guard  Guard name
+     * @param  string  $type  Permission type
+     * @param  string|null  $entity  Entity identifier (e.g. user, product) for grouping
      */
     public function createOrUpdatePermission(string $name, string $guard, string $type, ?string $entity = null): void
     {
@@ -821,8 +783,8 @@ class PermissionRegistrar
     /**
      * Generate permission name.
      *
-     * @param string $prefix Permission prefix
-     * @param string $model Model name
+     * @param  string  $prefix  Permission prefix
+     * @param  string  $model  Model name
      * @return string Generated permission name
      */
     protected function generatePermissionName(string $prefix, string $model): string
@@ -836,7 +798,7 @@ class PermissionRegistrar
     /**
      * Convert string to snake_case.
      *
-     * @param string $value Value to convert
+     * @param  string  $value  Value to convert
      * @return string Snake case value
      */
     protected function toSnakeCase(string $value): string
@@ -851,9 +813,8 @@ class PermissionRegistrar
     /**
      * Log a sync action.
      *
-     * @param string $type Log category
-     * @param string $message Log message
-     * @return void
+     * @param  string  $type  Log category
+     * @param  string  $message  Log message
      */
     protected function log(string $type, string $message): void
     {
@@ -877,7 +838,7 @@ class PermissionRegistrar
     /**
      * Get permission prefixes for a specific type.
      *
-     * @param string $type Permission type
+     * @param  string  $type  Permission type
      * @return array<string> List of prefixes
      */
     public function getPermissionPrefixes(string $type): array
@@ -887,8 +848,6 @@ class PermissionRegistrar
 
     /**
      * Get the field discovery service.
-     *
-     * @return FieldDiscovery
      */
     public function getFieldDiscovery(): FieldDiscovery
     {
@@ -897,8 +856,6 @@ class PermissionRegistrar
 
     /**
      * Get the column discovery service.
-     *
-     * @return ColumnDiscovery
      */
     public function getColumnDiscovery(): ColumnDiscovery
     {

@@ -253,14 +253,32 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $user->givePermissionTo(['view_test_model_salary_field', 'update_test_model_salary_field']);
         $this->actingAs($user);
 
-        $component = new class {
+        $component = new class
+        {
             public string $name = 'salary';
+
             public mixed $visibleCallback = null;
+
             public mixed $disabledCallback = null;
 
-            public function getName(): string { return $this->name; }
-            public function visible(callable $callback): static { $this->visibleCallback = $callback; return $this; }
-            public function disabled(callable $callback): static { $this->disabledCallback = $callback; return $this; }
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function visible(callable $callback): static
+            {
+                $this->visibleCallback = $callback;
+
+                return $this;
+            }
+
+            public function disabled(callable $callback): static
+            {
+                $this->disabledCallback = $callback;
+
+                return $this;
+            }
         };
 
         $result = TestResourceWithFields::applyFieldPermissions([$component]);
@@ -273,7 +291,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_applies_field_permissions_to_plain_objects_without_get_name(): void
     {
-        $plainObject = new \stdClass();
+        $plainObject = new \stdClass;
 
         $result = TestResourceWithFields::applyFieldPermissions([$plainObject]);
 

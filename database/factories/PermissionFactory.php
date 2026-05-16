@@ -53,6 +53,7 @@ class PermissionFactory extends Factory
         if (empty($modelParts)) {
             $modelParts = [end($parts)];
         }
+
         return implode('_', array_map('strtolower', $modelParts));
     }
 
@@ -73,63 +74,63 @@ class PermissionFactory extends Factory
 
     public function resource(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_RESOURCE,
         ]);
     }
 
     public function page(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_PAGE,
         ]);
     }
 
     public function widget(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_WIDGET,
         ]);
     }
 
     public function field(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_FIELD,
         ]);
     }
 
     public function column(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_COLUMN,
         ]);
     }
 
     public function action(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_ACTION,
         ]);
     }
 
     public function relation(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_RELATION,
         ]);
     }
 
     public function model(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => Permission::TYPE_MODEL,
         ]);
     }
 
     public function forGuard(string $guard): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'guard_name' => $guard,
         ]);
     }
@@ -139,7 +140,7 @@ class PermissionFactory extends Factory
      */
     public function forEntity(string $entity): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'entity' => str($entity)->snake()->toString(),
         ]);
     }

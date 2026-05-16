@@ -51,4 +51,3 @@ interface Gatekeeperable
      */
     public static function shouldRegisterNavigation(): bool;
 }
-

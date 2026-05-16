@@ -60,4 +60,3 @@ trait InteractsWithGatekeeperCache
         return $user->can($permission);
     }
 }
-

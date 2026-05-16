@@ -52,4 +52,3 @@ abstract class GatekeeperModel extends Model
         return $this->guard_name;
     }
 }
-

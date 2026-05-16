@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Discovery;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
@@ -30,7 +31,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new ColumnDiscovery();
+        $this->discovery = new ColumnDiscovery;
     }
 
     // ---------------------------------------------------------------------------
@@ -139,7 +140,7 @@ class ColumnDiscoverySourcesTest extends TestCase
             'ModelB' => ['col_b'],
         ]);
 
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
 
         // Populate cache for two models
         $discovery->discoverForModel('App\\Models\\ModelA', [ColumnDiscovery::SOURCE_CONFIG]);
@@ -163,7 +164,7 @@ class ColumnDiscoverySourcesTest extends TestCase
             'ModelX' => ['col_x'],
         ]);
 
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
 
         $discovery->discoverForModel('App\\Models\\ModelX', [ColumnDiscovery::SOURCE_CONFIG]);
 
@@ -188,7 +189,7 @@ class ColumnDiscoverySourcesTest extends TestCase
             'CachedModel' => ['cached_col'],
         ]);
 
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
         $discovery->clearCache();
 
         // First call – discovers and populates cache
@@ -215,8 +216,9 @@ class ColumnDiscoverySourcesTest extends TestCase
     public function discover_from_database_returns_empty_when_table_does_not_exist(): void
     {
         // Create an anonymous subclass of Model with a non-existent table
-        $tempClass = new class extends \Illuminate\Database\Eloquent\Model {
-            protected $table = 'non_existent_table_xyz_' . PHP_INT_MAX;
+        $tempClass = new class extends Model
+        {
+            protected $table = 'non_existent_table_xyz_'.PHP_INT_MAX;
         };
 
         $columns = $this->discovery->discoverFromDatabase(get_class($tempClass));

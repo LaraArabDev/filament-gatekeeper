@@ -180,12 +180,23 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('view_test_model_email_column');
         $this->actingAs($user);
 
-        $column = new class {
+        $column = new class
+        {
             public string $name = 'email';
+
             public mixed $visibleCallback = null;
 
-            public function getName(): string { return $this->name; }
-            public function visible(callable $callback): static { $this->visibleCallback = $callback; return $this; }
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function visible(callable $callback): static
+            {
+                $this->visibleCallback = $callback;
+
+                return $this;
+            }
         };
 
         $result = TestResourceWithColumns::applyColumnPermissions([$column]);
@@ -197,7 +208,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_applies_column_permissions_to_plain_objects_without_get_name(): void
     {
-        $plainObject = new \stdClass();
+        $plainObject = new \stdClass;
 
         $result = TestResourceWithColumns::applyColumnPermissions([$plainObject]);
 
@@ -213,11 +224,19 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('view_test_model_email_column');
         $this->actingAs($user);
 
-        $allowedColumn = new class {
-            public function getName(): string { return 'email'; }
+        $allowedColumn = new class
+        {
+            public function getName(): string
+            {
+                return 'email';
+            }
         };
-        $deniedColumn = new class {
-            public function getName(): string { return 'salary'; }
+        $deniedColumn = new class
+        {
+            public function getName(): string
+            {
+                return 'salary';
+            }
         };
 
         $result = TestResourceWithColumns::filterColumns([$allowedColumn, $deniedColumn]);
@@ -232,7 +251,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user);
 
-        $plainObject = new \stdClass();
+        $plainObject = new \stdClass;
 
         $result = TestResourceWithColumns::filterColumns([$plainObject]);
 

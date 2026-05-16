@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Concerns;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Facades\DB;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasResourcePermissions as HasApiResourcePermissions;
-use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
@@ -236,7 +235,7 @@ class TestApiResourceClass
      */
     protected function when($condition, $value, $default = null)
     {
-        return $condition ? $value : ($default ?? new \Illuminate\Http\Resources\MissingValue);
+        return $condition ? $value : ($default ?? new MissingValue);
     }
 
     /**

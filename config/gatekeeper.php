@@ -1,5 +1,11 @@
 <?php
 
+use LaraArabDev\FilamentGatekeeper\Base\GatekeeperAuthenticatable;
+use LaraArabDev\FilamentGatekeeper\Base\GatekeeperModel;
+use LaraArabDev\FilamentGatekeeper\Base\GatekeeperPage;
+use LaraArabDev\FilamentGatekeeper\Base\GatekeeperResource;
+use LaraArabDev\FilamentGatekeeper\Base\GatekeeperWidget;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -434,11 +440,11 @@ return [
     |
     */
     'base_classes' => [
-        'resource' => \LaraArabDev\FilamentGatekeeper\Base\GatekeeperResource::class,
-        'page' => \LaraArabDev\FilamentGatekeeper\Base\GatekeeperPage::class,
-        'widget' => \LaraArabDev\FilamentGatekeeper\Base\GatekeeperWidget::class,
-        'model' => \LaraArabDev\FilamentGatekeeper\Base\GatekeeperModel::class,
-        'authenticatable' => \LaraArabDev\FilamentGatekeeper\Base\GatekeeperAuthenticatable::class,
+        'resource' => GatekeeperResource::class,
+        'page' => GatekeeperPage::class,
+        'widget' => GatekeeperWidget::class,
+        'model' => GatekeeperModel::class,
+        'authenticatable' => GatekeeperAuthenticatable::class,
     ],
 
     /*

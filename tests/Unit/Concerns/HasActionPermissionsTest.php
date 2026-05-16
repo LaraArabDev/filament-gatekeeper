@@ -214,12 +214,23 @@ class HasActionPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('execute_test_model_export_action');
         $this->actingAs($user);
 
-        $action = new class {
+        $action = new class
+        {
             public string $name = 'export';
+
             public mixed $visibleCallback = null;
 
-            public function getName(): string { return $this->name; }
-            public function visible(callable $callback): static { $this->visibleCallback = $callback; return $this; }
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function visible(callable $callback): static
+            {
+                $this->visibleCallback = $callback;
+
+                return $this;
+            }
         };
 
         $result = TestResourceWithActions::applyActionPermissions([$action]);
@@ -231,7 +242,7 @@ class HasActionPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_applies_action_permissions_to_plain_objects_without_get_name(): void
     {
-        $plainObject = new \stdClass();
+        $plainObject = new \stdClass;
 
         $result = TestResourceWithActions::applyActionPermissions([$plainObject]);
 
@@ -247,11 +258,19 @@ class HasActionPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('execute_test_model_export_action');
         $this->actingAs($user);
 
-        $allowedAction = new class {
-            public function getName(): string { return 'export'; }
+        $allowedAction = new class
+        {
+            public function getName(): string
+            {
+                return 'export';
+            }
         };
-        $deniedAction = new class {
-            public function getName(): string { return 'import'; }
+        $deniedAction = new class
+        {
+            public function getName(): string
+            {
+                return 'import';
+            }
         };
 
         $result = TestResourceWithActions::filterActions([$allowedAction, $deniedAction]);
@@ -266,7 +285,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user);
 
-        $plainObject = new \stdClass();
+        $plainObject = new \stdClass;
 
         $result = TestResourceWithActions::filterActions([$plainObject]);
 

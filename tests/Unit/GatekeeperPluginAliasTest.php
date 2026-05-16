@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 
+use Filament\Panel;
 use LaraArabDev\FilamentGatekeeper\GatekeeperPlugin;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 
@@ -72,7 +73,7 @@ class GatekeeperPluginAliasTest extends TestCase
     public function boot_method_does_not_throw(): void
     {
         $plugin = GatekeeperPlugin::make();
-        $panel = new \Filament\Panel();
+        $panel = new Panel;
         $plugin->boot($panel);
         $this->assertTrue(true);
     }

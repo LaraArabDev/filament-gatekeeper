@@ -34,7 +34,7 @@ class InteractsWithExclusionsTest extends TestCase
     /** @test */
     public function it_returns_all_items_when_exclusion_list_is_empty(): void
     {
-        $obj = new ConcreteExclusionClass();
+        $obj = new ConcreteExclusionClass;
         $items = ['UserResource', 'PostResource', 'CommentResource'];
 
         $result = $obj->filter($items);
@@ -45,7 +45,7 @@ class InteractsWithExclusionsTest extends TestCase
     /** @test */
     public function it_filters_out_items_matching_exclusion(): void
     {
-        $obj = new ConcreteExclusionClass();
+        $obj = new ConcreteExclusionClass;
         $obj->setExclusions(['App\Filament\Resources\PostResource']);
         $items = ['UserResource', 'PostResource', 'CommentResource'];
 
@@ -59,7 +59,7 @@ class InteractsWithExclusionsTest extends TestCase
     /** @test */
     public function it_filters_multiple_exclusions(): void
     {
-        $obj = new ConcreteExclusionClass();
+        $obj = new ConcreteExclusionClass;
         $obj->setExclusions([
             'App\Filament\Resources\PostResource',
             'App\Filament\Resources\CommentResource',
@@ -74,7 +74,7 @@ class InteractsWithExclusionsTest extends TestCase
     /** @test */
     public function it_returns_empty_array_when_all_items_excluded(): void
     {
-        $obj = new ConcreteExclusionClass();
+        $obj = new ConcreteExclusionClass;
         $obj->setExclusions(['App\Resources\UserResource']);
         $items = ['UserResource'];
 
@@ -86,7 +86,7 @@ class InteractsWithExclusionsTest extends TestCase
     /** @test */
     public function it_returns_empty_array_when_given_empty_items(): void
     {
-        $obj = new ConcreteExclusionClass();
+        $obj = new ConcreteExclusionClass;
         $obj->setExclusions(['SomeResource']);
 
         $result = $obj->filter([]);

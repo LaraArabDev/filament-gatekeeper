@@ -101,6 +101,7 @@ class InstallCommand extends Command
     {
         if ($this->option('skip-migrations')) {
             $this->info('⏭️  Skipping migrations...');
+
             return;
         }
 

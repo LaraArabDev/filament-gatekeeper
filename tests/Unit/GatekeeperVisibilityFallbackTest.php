@@ -39,7 +39,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
         // Define a Gate that returns true for this permission
         // (permission does NOT exist in DB, so hasPermissionTo will throw PermissionDoesNotExist)
-        Gate::define('view_user_email_column', fn() => true);
+        Gate::define('view_user_email_column', fn () => true);
 
         $columns = $this->gatekeeper->getVisibleColumns('User');
 
@@ -47,7 +47,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_excludes_column_when_both_hasPermissionTo_fails_and_can_returns_false(): void
+    public function it_excludes_column_when_both_has_permission_to_fails_and_can_returns_false(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -71,7 +71,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         config()->set('gatekeeper.field_permissions.User', ['name']);
 
         // Define Gate directly
-        Gate::define('view_user_name_field', fn() => true);
+        Gate::define('view_user_name_field', fn () => true);
 
         $fields = $this->gatekeeper->getVisibleFields('User');
 
@@ -97,7 +97,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     // ── canViewField matrix fallback ──────────────────────────────────────
 
     /** @test */
-    public function it_falls_back_to_matrix_when_can_returns_false_for_canViewField(): void
+    public function it_falls_back_to_matrix_when_can_returns_false_for_can_view_field(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -109,13 +109,13 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_true_for_canViewField_when_gate_allows(): void
+    public function it_returns_true_for_can_view_field_when_gate_allows(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
 
         // Define Gate to return true
-        Gate::define('view_user_name_field', fn() => true);
+        Gate::define('view_user_name_field', fn () => true);
 
         $result = $this->gatekeeper->canViewField('User', 'name');
 
@@ -123,14 +123,14 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_true_for_canUpdateField_when_gate_allows(): void
+    public function it_returns_true_for_can_update_field_when_gate_allows(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
 
         // Get prefix for update
         config()->set('gatekeeper.permission_prefixes.field', ['view', 'update']);
-        Gate::define('view_user_email_field', fn() => true);
+        Gate::define('view_user_email_field', fn () => true);
 
         $result = $this->gatekeeper->canViewField('User', 'email');
 
@@ -140,14 +140,14 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     // ── canUpdateField via Gate ───────────────────────────────────────────
 
     /** @test */
-    public function it_returns_true_for_canUpdateField_via_gate(): void
+    public function it_returns_true_for_can_update_field_via_gate(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
 
         config()->set('gatekeeper.permission_prefixes.field', ['view', 'update']);
         // 'update' is index 1
-        Gate::define('update_user_salary_field', fn() => true);
+        Gate::define('update_user_salary_field', fn () => true);
 
         $result = $this->gatekeeper->canUpdateField('User', 'salary');
 
@@ -155,7 +155,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_falls_back_to_matrix_for_canUpdateField_when_can_returns_false(): void
+    public function it_falls_back_to_matrix_for_can_update_field_when_can_returns_false(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -169,13 +169,13 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     // ── canViewRelation via Gate ──────────────────────────────────────────
 
     /** @test */
-    public function it_returns_true_for_canViewRelation_via_gate_fallback(): void
+    public function it_returns_true_for_can_view_relation_via_gate_fallback(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
 
         // Permission not in DB → hasPermissionTo throws → can() fallback
-        Gate::define('view_user_posts_relation', fn() => true);
+        Gate::define('view_user_posts_relation', fn () => true);
 
         $result = $this->gatekeeper->canViewRelation('User', 'posts');
 
@@ -183,7 +183,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_falls_back_to_matrix_for_canViewRelation(): void
+    public function it_falls_back_to_matrix_for_can_view_relation(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -197,12 +197,12 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     // ── canExecuteAction via Gate ─────────────────────────────────────────
 
     /** @test */
-    public function it_returns_true_for_canExecuteAction_via_gate(): void
+    public function it_returns_true_for_can_execute_action_via_gate(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
 
-        Gate::define('execute_user_export_action', fn() => true);
+        Gate::define('execute_user_export_action', fn () => true);
 
         $result = $this->gatekeeper->canExecuteAction('User', 'export');
 
@@ -210,7 +210,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
     }
 
     /** @test */
-    public function it_falls_back_to_matrix_for_canExecuteAction(): void
+    public function it_falls_back_to_matrix_for_can_execute_action(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);

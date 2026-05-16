@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Middleware;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Route;
 use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
@@ -21,7 +22,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
     {
         parent::setUp();
 
-        $this->middleware = new GatekeeperResourceMiddleware();
+        $this->middleware = new GatekeeperResourceMiddleware;
     }
 
     /** @test */
@@ -64,9 +65,10 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         // Request with an ID in the route
         $request = Request::create('/users/1', 'GET');
         $request->setRouteResolver(function () {
-            $route = new \Illuminate\Routing\Route('GET', '/users/{user}', []);
+            $route = new Route('GET', '/users/{user}', []);
             $route->bind(Request::create('/users/1', 'GET'));
             $route->setParameter('user', 1);
+
             return $route;
         });
 
@@ -167,9 +169,10 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $request = Request::create('/users/1', 'DELETE');
         // Set route with parameter to ensure delete_user (not delete_any_user) is used
         $request->setRouteResolver(function () use ($request) {
-            $route = new \Illuminate\Routing\Route('DELETE', '/users/{user}', []);
+            $route = new Route('DELETE', '/users/{user}', []);
             // Bind the route properly
             $route->bind($request);
+
             return $route;
         });
 

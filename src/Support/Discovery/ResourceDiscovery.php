@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\File;
  * This class scans configured resource paths to discover all Filament resource
  * classes, supports module-based discovery for HMVC applications, and provides
  * utilities for extracting model names from resource class names.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class ResourceDiscovery
 {
@@ -60,7 +58,7 @@ class ResourceDiscovery
      *
      * Handles both glob patterns and direct directory paths.
      *
-     * @param string $pathPattern The path pattern to scan (supports glob patterns)
+     * @param  string  $pathPattern  The path pattern to scan (supports glob patterns)
      * @return array<string> Array of discovered model names (extracted from resource files)
      */
     protected function scanPath(string $pathPattern): array
@@ -86,7 +84,7 @@ class ResourceDiscovery
      * Scans a directory for PHP files ending with 'Resource' suffix,
      * extracts the model name by removing the 'Resource' suffix.
      *
-     * @param string $directory The directory path to scan
+     * @param  string  $directory  The directory path to scan
      * @return array<string> Array of model names extracted from resource file names
      */
     protected function scanDirectory(string $directory): array
@@ -150,7 +148,7 @@ class ResourceDiscovery
      * Extracts the model name by removing the 'Resource' suffix from
      * the resource class basename.
      *
-     * @param string $resourceClass The fully qualified resource class name
+     * @param  string  $resourceClass  The fully qualified resource class name
      * @return string The model name (e.g., 'User' from 'App\Filament\Resources\UserResource')
      */
     public function getModelFromResource(string $resourceClass): string
@@ -166,7 +164,7 @@ class ResourceDiscovery
      * Extracts the model name from the resource class and converts it
      * to snake_case format suitable for permission names.
      *
-     * @param string $resourceClass The fully qualified resource class name
+     * @param  string  $resourceClass  The fully qualified resource class name
      * @return string The permission model name in snake_case (e.g., 'user' from 'UserResource')
      */
     public function getPermissionName(string $resourceClass): string

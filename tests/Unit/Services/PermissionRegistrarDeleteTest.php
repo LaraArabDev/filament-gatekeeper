@@ -6,6 +6,8 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
+use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
+use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 
 /**
@@ -19,7 +21,7 @@ class PermissionRegistrarDeleteTest extends TestCase
     {
         parent::setUp();
 
-        $this->registrar = new PermissionRegistrar();
+        $this->registrar = new PermissionRegistrar;
         $this->createTestPermissions();
     }
 
@@ -218,7 +220,7 @@ class PermissionRegistrarDeleteTest extends TestCase
     {
         $fieldDiscovery = $this->registrar->getFieldDiscovery();
 
-        expect($fieldDiscovery)->toBeInstanceOf(\LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery::class);
+        expect($fieldDiscovery)->toBeInstanceOf(FieldDiscovery::class);
     }
 
     /** @test */
@@ -226,6 +228,6 @@ class PermissionRegistrarDeleteTest extends TestCase
     {
         $columnDiscovery = $this->registrar->getColumnDiscovery();
 
-        expect($columnDiscovery)->toBeInstanceOf(\LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery::class);
+        expect($columnDiscovery)->toBeInstanceOf(ColumnDiscovery::class);
     }
 }

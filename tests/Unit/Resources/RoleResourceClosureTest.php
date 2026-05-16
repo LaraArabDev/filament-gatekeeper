@@ -53,7 +53,7 @@ class RoleResourceClosureTest extends TestCase
     // ── afterStateUpdated toggle closure ──────────────────────────────────
 
     /** @test */
-    public function it_afterStateUpdated_when_state_is_true_sets_all_permission_ids(): void
+    public function it_after_state_updated_when_state_is_true_sets_all_permission_ids(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
         Permission::factory()->resource()->create(['name' => 'create_user']);
@@ -80,7 +80,7 @@ class RoleResourceClosureTest extends TestCase
     }
 
     /** @test */
-    public function it_afterStateUpdated_when_state_is_false_clears_permissions(): void
+    public function it_after_state_updated_when_state_is_false_clears_permissions(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
 
@@ -119,7 +119,7 @@ class RoleResourceClosureTest extends TestCase
     /** @test */
     public function it_permission_description_closure_falls_back_to_type_string_when_no_enum(): void
     {
-        $permission = new Permission();
+        $permission = new Permission;
         $permission->type = 'unknown_type';
 
         $result = $permission->getTypeEnum()?->getLabel() ?? (string) $permission->type;

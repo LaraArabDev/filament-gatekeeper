@@ -8,8 +8,8 @@ use Filament\Resources\Resource;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasActionPermissions;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasColumnPermissions;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasFieldPermissions;
-use LaraArabDev\FilamentGatekeeper\Concerns\HasRelationPermissions;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasGatekeeperPermissions;
+use LaraArabDev\FilamentGatekeeper\Concerns\HasRelationPermissions;
 
 /**
  * Base Shield Filament Resource
@@ -35,9 +35,9 @@ use LaraArabDev\FilamentGatekeeper\Concerns\HasGatekeeperPermissions;
  */
 abstract class GatekeeperResource extends Resource
 {
-    use HasGatekeeperPermissions;
-    use HasFieldPermissions;
-    use HasColumnPermissions;
     use HasActionPermissions;
+    use HasColumnPermissions;
+    use HasFieldPermissions;
+    use HasGatekeeperPermissions;
     use HasRelationPermissions;
 }

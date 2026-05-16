@@ -14,7 +14,7 @@ class ModuleDiscoveryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = new ModuleDiscovery();
+        $this->discovery = new ModuleDiscovery;
     }
 
     /** @test */
@@ -53,9 +53,9 @@ class ModuleDiscoveryTest extends TestCase
     /** @test */
     public function it_discovers_modules_from_directory(): void
     {
-        $tmpDir = sys_get_temp_dir() . '/gatekeeper_modules_test_' . uniqid();
-        mkdir($tmpDir . '/Blog', 0755, true);
-        mkdir($tmpDir . '/Shop', 0755, true);
+        $tmpDir = sys_get_temp_dir().'/gatekeeper_modules_test_'.uniqid();
+        mkdir($tmpDir.'/Blog', 0755, true);
+        mkdir($tmpDir.'/Shop', 0755, true);
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $tmpDir);
@@ -66,8 +66,8 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertContains('Shop', $modules);
 
         // Cleanup
-        rmdir($tmpDir . '/Blog');
-        rmdir($tmpDir . '/Shop');
+        rmdir($tmpDir.'/Blog');
+        rmdir($tmpDir.'/Shop');
         rmdir($tmpDir);
     }
 

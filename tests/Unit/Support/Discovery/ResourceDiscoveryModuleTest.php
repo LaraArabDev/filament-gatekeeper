@@ -26,7 +26,7 @@ class ResourceDiscoveryModuleTest extends TestCase
     {
         parent::setUp();
 
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_modules_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_modules_'.uniqid();
     }
 
     protected function tearDown(): void
@@ -44,9 +44,9 @@ class ResourceDiscoveryModuleTest extends TestCase
     public function resource_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
-        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_' . uniqid());
+        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_'.uniqid());
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertIsArray($result);
@@ -56,12 +56,12 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_from_modules_returns_empty_when_module_has_no_resources_dir(): void
     {
-        mkdir($this->tempDir . '/Blog', 0755, true);
+        mkdir($this->tempDir.'/Blog', 0755, true);
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertIsArray($result);
@@ -71,15 +71,15 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_from_modules_discovers_resource_files(): void
     {
-        $resourcesDir = $this->tempDir . '/Blog/Filament/Resources';
+        $resourcesDir = $this->tempDir.'/Blog/Filament/Resources';
         mkdir($resourcesDir, 0755, true);
-        file_put_contents($resourcesDir . '/PostResource.php', '<?php class PostResource {}');
-        file_put_contents($resourcesDir . '/CategoryResource.php', '<?php class CategoryResource {}');
+        file_put_contents($resourcesDir.'/PostResource.php', '<?php class PostResource {}');
+        file_put_contents($resourcesDir.'/CategoryResource.php', '<?php class CategoryResource {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertIsArray($result);
@@ -90,15 +90,15 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_from_modules_skips_non_resource_files(): void
     {
-        $resourcesDir = $this->tempDir . '/Blog/Filament/Resources';
+        $resourcesDir = $this->tempDir.'/Blog/Filament/Resources';
         mkdir($resourcesDir, 0755, true);
-        file_put_contents($resourcesDir . '/PostResource.php', '<?php class PostResource {}');
-        file_put_contents($resourcesDir . '/helpers.php', '<?php function helper() {}');
+        file_put_contents($resourcesDir.'/PostResource.php', '<?php class PostResource {}');
+        file_put_contents($resourcesDir.'/helpers.php', '<?php function helper() {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertContains('Post', $result);
@@ -108,15 +108,15 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_from_modules_uses_custom_discovery_path(): void
     {
-        $resourcesDir = $this->tempDir . '/Blog/Http/Resources';
+        $resourcesDir = $this->tempDir.'/Blog/Http/Resources';
         mkdir($resourcesDir, 0755, true);
-        file_put_contents($resourcesDir . '/ArticleResource.php', '<?php class ArticleResource {}');
+        file_put_contents($resourcesDir.'/ArticleResource.php', '<?php class ArticleResource {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.modules.discovery_paths.resources', '{module}/Http/Resources');
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertContains('Article', $result);
@@ -125,15 +125,15 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_includes_module_resources_when_modules_enabled(): void
     {
-        $resourcesDir = $this->tempDir . '/Shop/Filament/Resources';
+        $resourcesDir = $this->tempDir.'/Shop/Filament/Resources';
         mkdir($resourcesDir, 0755, true);
-        file_put_contents($resourcesDir . '/ProductResource.php', '<?php class ProductResource {}');
+        file_put_contents($resourcesDir.'/ProductResource.php', '<?php class ProductResource {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.resources', []);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('Product', $result);
@@ -142,16 +142,16 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function resource_discover_with_multiple_modules(): void
     {
-        mkdir($this->tempDir . '/Blog/Filament/Resources', 0755, true);
-        mkdir($this->tempDir . '/Shop/Filament/Resources', 0755, true);
+        mkdir($this->tempDir.'/Blog/Filament/Resources', 0755, true);
+        mkdir($this->tempDir.'/Shop/Filament/Resources', 0755, true);
 
-        file_put_contents($this->tempDir . '/Blog/Filament/Resources/PostResource.php', '<?php class PostResource {}');
-        file_put_contents($this->tempDir . '/Shop/Filament/Resources/ProductResource.php', '<?php class ProductResource {}');
+        file_put_contents($this->tempDir.'/Blog/Filament/Resources/PostResource.php', '<?php class PostResource {}');
+        file_put_contents($this->tempDir.'/Shop/Filament/Resources/ProductResource.php', '<?php class ProductResource {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $result = $discovery->discoverFromModules();
 
         $this->assertContains('Post', $result);
@@ -166,9 +166,9 @@ class ResourceDiscoveryModuleTest extends TestCase
     public function page_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
-        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_' . uniqid());
+        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_'.uniqid());
 
-        $discovery = new PageDiscovery();
+        $discovery = new PageDiscovery;
         $result = $discovery->discover();
 
         $this->assertIsArray($result);
@@ -177,13 +177,13 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function page_discover_from_modules_returns_empty_when_module_has_no_pages_dir(): void
     {
-        mkdir($this->tempDir . '/Blog', 0755, true);
+        mkdir($this->tempDir.'/Blog', 0755, true);
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.pages', []);
 
-        $discovery = new PageDiscovery();
+        $discovery = new PageDiscovery;
         $result = $discovery->discover();
 
         $this->assertIsArray($result);
@@ -193,16 +193,16 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function page_discover_from_modules_discovers_page_files(): void
     {
-        $pagesDir = $this->tempDir . '/Blog/Filament/Pages';
+        $pagesDir = $this->tempDir.'/Blog/Filament/Pages';
         mkdir($pagesDir, 0755, true);
-        file_put_contents($pagesDir . '/Dashboard.php', '<?php class Dashboard {}');
-        file_put_contents($pagesDir . '/Settings.php', '<?php class Settings {}');
+        file_put_contents($pagesDir.'/Dashboard.php', '<?php class Dashboard {}');
+        file_put_contents($pagesDir.'/Settings.php', '<?php class Settings {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.pages', []);
 
-        $discovery = new PageDiscovery();
+        $discovery = new PageDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('Dashboard', $result);
@@ -212,18 +212,18 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function page_discover_from_modules_skips_resource_page_files(): void
     {
-        $pagesDir = $this->tempDir . '/Blog/Filament/Pages';
+        $pagesDir = $this->tempDir.'/Blog/Filament/Pages';
         mkdir($pagesDir, 0755, true);
-        file_put_contents($pagesDir . '/Dashboard.php', '<?php class Dashboard {}');
-        file_put_contents($pagesDir . '/CreatePost.php', '<?php class CreatePost {}');
-        file_put_contents($pagesDir . '/EditPost.php', '<?php class EditPost {}');
-        file_put_contents($pagesDir . '/ListPosts.php', '<?php class ListPosts {}');
+        file_put_contents($pagesDir.'/Dashboard.php', '<?php class Dashboard {}');
+        file_put_contents($pagesDir.'/CreatePost.php', '<?php class CreatePost {}');
+        file_put_contents($pagesDir.'/EditPost.php', '<?php class EditPost {}');
+        file_put_contents($pagesDir.'/ListPosts.php', '<?php class ListPosts {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.pages', []);
 
-        $discovery = new PageDiscovery();
+        $discovery = new PageDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('Dashboard', $result);
@@ -235,16 +235,16 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function page_discover_from_modules_uses_custom_discovery_path(): void
     {
-        $pagesDir = $this->tempDir . '/Blog/Pages';
+        $pagesDir = $this->tempDir.'/Blog/Pages';
         mkdir($pagesDir, 0755, true);
-        file_put_contents($pagesDir . '/Analytics.php', '<?php class Analytics {}');
+        file_put_contents($pagesDir.'/Analytics.php', '<?php class Analytics {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.modules.discovery_paths.pages', '{module}/Pages');
         config()->set('gatekeeper.discovery.pages', []);
 
-        $discovery = new PageDiscovery();
+        $discovery = new PageDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('Analytics', $result);
@@ -258,9 +258,9 @@ class ResourceDiscoveryModuleTest extends TestCase
     public function widget_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
-        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_' . uniqid());
+        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_'.uniqid());
 
-        $discovery = new WidgetDiscovery();
+        $discovery = new WidgetDiscovery;
         $result = $discovery->discover();
 
         $this->assertIsArray($result);
@@ -269,13 +269,13 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function widget_discover_from_modules_returns_empty_when_module_has_no_widgets_dir(): void
     {
-        mkdir($this->tempDir . '/Blog', 0755, true);
+        mkdir($this->tempDir.'/Blog', 0755, true);
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.widgets', []);
 
-        $discovery = new WidgetDiscovery();
+        $discovery = new WidgetDiscovery;
         $result = $discovery->discover();
 
         $this->assertIsArray($result);
@@ -285,16 +285,16 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function widget_discover_from_modules_discovers_widget_files(): void
     {
-        $widgetsDir = $this->tempDir . '/Blog/Filament/Widgets';
+        $widgetsDir = $this->tempDir.'/Blog/Filament/Widgets';
         mkdir($widgetsDir, 0755, true);
-        file_put_contents($widgetsDir . '/StatsWidget.php', '<?php class StatsWidget {}');
-        file_put_contents($widgetsDir . '/RecentPostsWidget.php', '<?php class RecentPostsWidget {}');
+        file_put_contents($widgetsDir.'/StatsWidget.php', '<?php class StatsWidget {}');
+        file_put_contents($widgetsDir.'/RecentPostsWidget.php', '<?php class RecentPostsWidget {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.widgets', []);
 
-        $discovery = new WidgetDiscovery();
+        $discovery = new WidgetDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('StatsWidget', $result);
@@ -304,16 +304,16 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function widget_discover_from_modules_uses_custom_discovery_path(): void
     {
-        $widgetsDir = $this->tempDir . '/Blog/Widgets';
+        $widgetsDir = $this->tempDir.'/Blog/Widgets';
         mkdir($widgetsDir, 0755, true);
-        file_put_contents($widgetsDir . '/CustomWidget.php', '<?php class CustomWidget {}');
+        file_put_contents($widgetsDir.'/CustomWidget.php', '<?php class CustomWidget {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.modules.discovery_paths.widgets', '{module}/Widgets');
         config()->set('gatekeeper.discovery.widgets', []);
 
-        $discovery = new WidgetDiscovery();
+        $discovery = new WidgetDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('CustomWidget', $result);
@@ -322,17 +322,17 @@ class ResourceDiscoveryModuleTest extends TestCase
     /** @test */
     public function widget_discover_with_multiple_modules(): void
     {
-        mkdir($this->tempDir . '/Blog/Filament/Widgets', 0755, true);
-        mkdir($this->tempDir . '/Shop/Filament/Widgets', 0755, true);
+        mkdir($this->tempDir.'/Blog/Filament/Widgets', 0755, true);
+        mkdir($this->tempDir.'/Shop/Filament/Widgets', 0755, true);
 
-        file_put_contents($this->tempDir . '/Blog/Filament/Widgets/BlogWidget.php', '<?php class BlogWidget {}');
-        file_put_contents($this->tempDir . '/Shop/Filament/Widgets/ShopWidget.php', '<?php class ShopWidget {}');
+        file_put_contents($this->tempDir.'/Blog/Filament/Widgets/BlogWidget.php', '<?php class BlogWidget {}');
+        file_put_contents($this->tempDir.'/Shop/Filament/Widgets/ShopWidget.php', '<?php class ShopWidget {}');
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
         config()->set('gatekeeper.discovery.widgets', []);
 
-        $discovery = new WidgetDiscovery();
+        $discovery = new WidgetDiscovery;
         $result = $discovery->discover();
 
         $this->assertContains('BlogWidget', $result);
@@ -352,7 +352,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $files = array_diff(scandir($dir) ?: [], ['.', '..']);
 
         foreach ($files as $file) {
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            $path = $dir.DIRECTORY_SEPARATOR.$file;
 
             is_dir($path) ? $this->removeDirectory($path) : unlink($path);
         }

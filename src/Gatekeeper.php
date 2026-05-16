@@ -19,22 +19,18 @@ use Spatie\Permission\Exceptions\PermissionDoesNotExist;
  * guards, and handling permission-related operations throughout the application.
  * It integrates with Spatie Laravel Permission and provides additional
  * functionality for field, column, action, and relation permissions.
- *
- * @package LaraArabDev\FilamentGatekeeper
  */
 class Gatekeeper
 {
     /**
      * The current guard name for permission checks.
-     *
-     * @var string|null
      */
     protected ?string $guardName = null;
 
     /**
      * Create a new Gatekeeper instance.
      *
-     * @param PermissionCache $cache The permission cache service instance
+     * @param  PermissionCache  $cache  The permission cache service instance
      */
     public function __construct(
         protected PermissionCache $cache
@@ -43,7 +39,7 @@ class Gatekeeper
     /**
      * Set the guard for permission checks.
      *
-     * @param string $guardName The guard name to use for permission checks
+     * @param  string  $guardName  The guard name to use for permission checks
      * @return static Returns self for method chaining
      */
     public function guard(string $guardName): static
@@ -104,8 +100,6 @@ class Gatekeeper
 
     /**
      * Use web guard explicitly.
-     *
-     * @return static
      */
     public function web(): static
     {
@@ -114,7 +108,6 @@ class Gatekeeper
 
     /**
      * Get the current authenticated user.
-     * @return Authenticatable|null
      */
     public function user(): ?Authenticatable
     {
@@ -127,8 +120,8 @@ class Gatekeeper
      * Supports OR logic: 'permission1|permission2' will return true if user
      * has any of the specified permissions.
      *
-     * @param string $permission Permission name or pipe-separated permissions (e.g., 'view_any_user|create_user')
-     * @param mixed $record Optional record for context
+     * @param  string  $permission  Permission name or pipe-separated permissions (e.g., 'view_any_user|create_user')
+     * @param  mixed  $record  Optional record for context
      * @return bool True if user has the permission(s), false otherwise
      */
     public function can(string $permission, mixed $record = null): bool
@@ -161,8 +154,8 @@ class Gatekeeper
     /**
      * Check if user has a single permission.
      *
-     * @param Authenticatable $user The user to check
-     * @param string $permission The permission name to check
+     * @param  Authenticatable  $user  The user to check
+     * @param  string  $permission  The permission name to check
      * @return bool True if user has the permission, false otherwise
      */
     protected function checkSinglePermission(Authenticatable $user, string $permission): bool
@@ -186,9 +179,6 @@ class Gatekeeper
 
     /**
      * Authorize a permission (throws exception if unauthorized).
-     * @param string $permission
-     * @param mixed $record
-     * @return void
      */
     public function authorize(string $permission, mixed $record = null): void
     {
@@ -199,6 +189,7 @@ class Gatekeeper
 
     /**
      * Check if the current user is a super admin.
+     *
      * @return bool True if user is super admin, false otherwise
      */
     public function isSuperAdmin(): bool
@@ -208,7 +199,6 @@ class Gatekeeper
 
     /**
      * Clear the permission cache.
-     * @return void
      */
     public function clearCache(): void
     {
@@ -223,7 +213,7 @@ class Gatekeeper
      * 1. First trying to use hasRole() method if available (Spatie Permission trait)
      * 2. Falling back to direct database check if hasRole is not available
      *
-     * @param Authenticatable|null $user The user to check (defaults to current authenticated user)
+     * @param  Authenticatable|null  $user  The user to check (defaults to current authenticated user)
      * @return bool True if user should bypass permissions, false otherwise
      */
     public function shouldBypassPermissions(?Authenticatable $user = null): bool
@@ -256,7 +246,7 @@ class Gatekeeper
      * 2. User's default guard (if different)
      * 3. Default 'web' guard as fallback
      *
-     * @param Authenticatable $user The user to check guards for
+     * @param  Authenticatable  $user  The user to check guards for
      * @return array<string> List of guard names to check
      */
     protected function getGuardsToCheckForSuperAdmin(Authenticatable $user): array
@@ -283,9 +273,9 @@ class Gatekeeper
      * Safely checks if the user has the role using hasRole() method,
      * catching any exceptions that might occur during the check.
      *
-     * @param Authenticatable $user The user to check (must have hasRole method)
-     * @param string $roleName The role name to check
-     * @param string|null $guard The guard to check (null uses user's default)
+     * @param  Authenticatable  $user  The user to check (must have hasRole method)
+     * @param  string  $roleName  The role name to check
+     * @param  string|null  $guard  The guard to check (null uses user's default)
      * @return bool True if user has the role, false otherwise
      */
     protected function userHasRole(Authenticatable $user, string $roleName, ?string $guard = null): bool
@@ -299,7 +289,7 @@ class Gatekeeper
             return $guard !== null
                 ? $user->hasRole($roleName, $guard)
                 : $user->hasRole($roleName);
-        } catch (GuardDoesNotMatch | \Exception) {
+        } catch (GuardDoesNotMatch|\Exception) {
             return false;
         }
     }
@@ -311,9 +301,9 @@ class Gatekeeper
      * Spatie's HasRoles trait. It directly queries the database to
      * check if the user has the super admin role.
      *
-     * @param Authenticatable $user The user to check
-     * @param string $superAdminRole The super admin role name
-     * @param array<string> $guards List of guards to check
+     * @param  Authenticatable  $user  The user to check
+     * @param  string  $superAdminRole  The super admin role name
+     * @param  array<string>  $guards  List of guards to check
      * @return bool True if user has super admin role, false otherwise
      */
     protected function checkSuperAdminViaDatabase(
@@ -346,7 +336,6 @@ class Gatekeeper
 
     /**
      * Get the permission cache instance.
-     * @return PermissionCache
      */
     public function cache(): PermissionCache
     {
@@ -355,8 +344,6 @@ class Gatekeeper
 
     /**
      * Get the permission matrix for a user.
-     * @param Authenticatable|null $user
-     * @return array
      */
     public function getPermissionMatrix(?Authenticatable $user = null): array
     {
@@ -371,9 +358,6 @@ class Gatekeeper
 
     /**
      * Check if user can view a specific field.
-     * @param string $modelName
-     * @param string $field
-     * @return bool
      */
     public function canViewField(string $modelName, string $field): bool
     {
@@ -406,9 +390,6 @@ class Gatekeeper
 
     /**
      * Check if user can update a specific field.
-     * @param string $modelName
-     * @param string $field
-     * @return bool
      */
     public function canUpdateField(string $modelName, string $field): bool
     {
@@ -441,9 +422,6 @@ class Gatekeeper
 
     /**
      * Check if user can view a specific column.
-     * @param string $modelName
-     * @param string $column
-     * @return bool
      */
     public function canViewColumn(string $modelName, string $column): bool
     {
@@ -487,9 +465,6 @@ class Gatekeeper
 
     /**
      * Check if user can execute a specific action.
-     * @param string $modelName
-     * @param string $action
-     * @return bool
      */
     public function canExecuteAction(string $modelName, string $action): bool
     {
@@ -522,9 +497,6 @@ class Gatekeeper
 
     /**
      * Check if user can view a specific relation.
-     * @param string $modelName
-     * @param string $relation
-     * @return bool
      */
     public function canViewRelation(string $modelName, string $relation): bool
     {
@@ -568,8 +540,6 @@ class Gatekeeper
 
     /**
      * Get all visible fields for a model.
-     * @param string $modelName
-     * @return array
      */
     public function getVisibleFields(string $modelName): array
     {
@@ -578,6 +548,7 @@ class Gatekeeper
                 config('gatekeeper.field_permissions.*', []),
                 config("gatekeeper.field_permissions.{$modelName}", [])
             );
+
             return $configuredFields;
         }
 
@@ -615,7 +586,7 @@ class Gatekeeper
         if (empty($visibleFields)) {
             $matrix = $this->getPermissionMatrix();
             $fields = $matrix[$modelName]['fields'] ?? [];
-            $visibleFields = array_keys(array_filter($fields, fn($perms) => $perms['view'] ?? false));
+            $visibleFields = array_keys(array_filter($fields, fn ($perms) => $perms['view'] ?? false));
         }
 
         return $visibleFields;
@@ -623,8 +594,6 @@ class Gatekeeper
 
     /**
      * Get all visible columns for a model.
-     * @param string $modelName
-     * @return array
      */
     public function getVisibleColumns(string $modelName): array
     {
@@ -633,6 +602,7 @@ class Gatekeeper
                 config('gatekeeper.column_permissions.*', []),
                 config("gatekeeper.column_permissions.{$modelName}", [])
             );
+
             return $configuredColumns;
         }
 
@@ -665,6 +635,7 @@ class Gatekeeper
                     /** @phpstan-ignore-next-line */
                     if ($user->hasPermissionTo($permissionName, $guard)) {
                         $visibleColumns[] = $column;
+
                         continue;
                     }
                 } catch (PermissionDoesNotExist) {
@@ -682,7 +653,7 @@ class Gatekeeper
         if (empty($visibleColumns)) {
             $matrix = $this->getPermissionMatrix();
             $columns = $matrix[$modelName]['columns'] ?? [];
-            $visibleColumns = array_keys(array_filter($columns, fn($value) => $value === true));
+            $visibleColumns = array_keys(array_filter($columns, fn ($value) => $value === true));
         }
 
         return $visibleColumns;

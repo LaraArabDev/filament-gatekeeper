@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Concerns;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasApiPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
@@ -21,7 +22,7 @@ class HasApiPermissionsFilterTest extends TestCase
     // ── filterByPermissions with real Model ───────────────────────────────
 
     /** @test */
-    public function it_filterByPermissions_returns_all_fields_when_no_visible_fields(): void
+    public function it_filter_by_permissions_returns_all_fields_when_no_visible_fields(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -30,7 +31,7 @@ class HasApiPermissionsFilterTest extends TestCase
         config()->set('gatekeeper.field_permissions', []);
 
         $model = $user; // TestUser is an Eloquent Model
-        $controller = new FilterTestController();
+        $controller = new FilterTestController;
 
         $result = $controller->callFilterByPermissions($model);
 
@@ -40,7 +41,7 @@ class HasApiPermissionsFilterTest extends TestCase
     }
 
     /** @test */
-    public function it_filterByPermissions_returns_only_visible_fields(): void
+    public function it_filter_by_permissions_returns_only_visible_fields(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -51,7 +52,7 @@ class HasApiPermissionsFilterTest extends TestCase
         $user->givePermissionTo('view_user_email_field');
 
         $model = $this->createUser(['name' => 'Target', 'email' => 'target@example.com']);
-        $controller = new FilterTestController();
+        $controller = new FilterTestController;
 
         $result = $controller->callFilterByPermissions($model);
 
@@ -66,9 +67,14 @@ class HasApiPermissionsFilterTest extends TestCase
     /** @test */
     public function it_extracts_model_name_by_removing_controller_and_api_suffixes(): void
     {
-        $controller = new class {
+        $controller = new class
+        {
             use HasApiPermissions;
-            public function callGetModel(): string { return $this->getGatekeeperModel(); }
+
+            public function callGetModel(): string
+            {
+                return $this->getGatekeeperModel();
+            }
         };
 
         // Anonymous class has empty basename, so str() converts to empty string
@@ -77,12 +83,18 @@ class HasApiPermissionsFilterTest extends TestCase
     }
 
     /** @test */
-    public function it_uses_permissionModel_property_when_available(): void
+    public function it_uses_permission_model_property_when_available(): void
     {
-        $controller = new class {
+        $controller = new class
+        {
             use HasApiPermissions;
+
             protected string $permissionModel = 'Product';
-            public function callGetModel(): string { return $this->getGatekeeperModel(); }
+
+            public function callGetModel(): string
+            {
+                return $this->getGatekeeperModel();
+            }
         };
 
         $this->assertSame('Product', $controller->callGetModel());
@@ -94,9 +106,10 @@ class FilterTestController
     use HasApiPermissions;
 
     protected string $permissionModel = 'User';
+
     protected string $shieldGuard = 'web';
 
-    public function callFilterByPermissions(\Illuminate\Database\Eloquent\Model $model): array
+    public function callFilterByPermissions(Model $model): array
     {
         return $this->filterByPermissions($model);
     }

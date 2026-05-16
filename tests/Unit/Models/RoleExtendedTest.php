@@ -239,7 +239,7 @@ class RoleExtendedTest extends TestCase
     /** @test */
     public function it_has_description_fillable(): void
     {
-        $role = new Role();
+        $role = new Role;
 
         $this->assertTrue(in_array('description', $role->getFillable()));
     }

@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait HasApiPermissions
@@ -69,7 +70,7 @@ trait HasApiPermissions
     /**
      * Authorize a resource action.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     protected function authorizeResource(string $action, ?Model $model = null): void
     {

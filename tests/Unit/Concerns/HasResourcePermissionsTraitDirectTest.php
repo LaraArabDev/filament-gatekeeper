@@ -27,22 +27,37 @@ class FakeProfileResource
 
 function makeTraitResource(mixed $data = []): object
 {
-    return new class ($data) {
+    return new class($data)
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected string $shieldGuard = 'web';
+
         protected mixed $resource;
 
         public function __construct(mixed $resource = [])
         {
             if (is_array($resource)) {
-                $this->resource = new class ($resource) {
+                $this->resource = new class($resource)
+                {
                     public function __construct(private array $attrs) {}
 
-                    public function attributesToArray(): array { return $this->attrs; }
-                    public function __get(string $key): mixed { return $this->attrs[$key] ?? null; }
-                    public function __isset(string $key): bool { return isset($this->attrs[$key]); }
+                    public function attributesToArray(): array
+                    {
+                        return $this->attrs;
+                    }
+
+                    public function __get(string $key): mixed
+                    {
+                        return $this->attrs[$key] ?? null;
+                    }
+
+                    public function __isset(string $key): bool
+                    {
+                        return isset($this->attrs[$key]);
+                    }
                 };
             } else {
                 $this->resource = $resource;
@@ -53,12 +68,12 @@ function makeTraitResource(mixed $data = []): object
         protected function when(mixed $condition, mixed $value, mixed $default = null): mixed
         {
             if (! $condition) {
-                $resolved = $default instanceof \Closure ? $default() : $default;
+                $resolved = $default instanceof Closure ? $default() : $default;
 
                 return $resolved ?? new MissingValue;
             }
 
-            return $value instanceof \Closure ? $value() : $value;
+            return $value instanceof Closure ? $value() : $value;
         }
 
         /** Mimic Laravel's JsonResource::whenLoaded() */
@@ -68,21 +83,60 @@ function makeTraitResource(mixed $data = []): object
                 return new MissingValue;
             }
 
-            return $value instanceof \Closure ? $value() : $value;
+            return $value instanceof Closure ? $value() : $value;
         }
 
         // Expose protected API for testing --------------------------------
 
-        public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
-        public function callGetShieldGuard(): string { return $this->getShieldGuard(); }
-        public function callWhenCanView(string $field, mixed $value, mixed $default = null): mixed { return $this->whenCanView($field, $value, $default); }
-        public function callWhenCanViewColumn(string $column, mixed $value, mixed $default = null): mixed { return $this->whenCanViewColumn($column, $value, $default); }
-        public function callWhenCanViewRelation(string $relation, mixed $value): mixed { return $this->whenCanViewRelation($relation, $value); }
-        public function callCanViewField(string $field): bool { return $this->canViewField($field); }
-        public function callCanViewColumn(string $column): bool { return $this->canViewColumn($column); }
-        public function callCanViewRelation(string $relation): bool { return $this->canViewRelation($relation); }
-        public function callFilterByFieldPermissions(array $data): array { return $this->filterByFieldPermissions($data); }
-        public function callPermittedAttributes(array $except = []): array { return $this->permittedAttributes($except); }
+        public function callGetGatekeeperModel(): string
+        {
+            return $this->getGatekeeperModel();
+        }
+
+        public function callGetShieldGuard(): string
+        {
+            return $this->getShieldGuard();
+        }
+
+        public function callWhenCanView(string $field, mixed $value, mixed $default = null): mixed
+        {
+            return $this->whenCanView($field, $value, $default);
+        }
+
+        public function callWhenCanViewColumn(string $column, mixed $value, mixed $default = null): mixed
+        {
+            return $this->whenCanViewColumn($column, $value, $default);
+        }
+
+        public function callWhenCanViewRelation(string $relation, mixed $value): mixed
+        {
+            return $this->whenCanViewRelation($relation, $value);
+        }
+
+        public function callCanViewField(string $field): bool
+        {
+            return $this->canViewField($field);
+        }
+
+        public function callCanViewColumn(string $column): bool
+        {
+            return $this->canViewColumn($column);
+        }
+
+        public function callCanViewRelation(string $relation): bool
+        {
+            return $this->canViewRelation($relation);
+        }
+
+        public function callFilterByFieldPermissions(array $data): array
+        {
+            return $this->filterByFieldPermissions($data);
+        }
+
+        public function callPermittedAttributes(array $except = []): array
+        {
+            return $this->permittedAttributes($except);
+        }
     };
 }
 
@@ -96,7 +150,8 @@ it('getGatekeeperModel returns shieldModel property', function () {
 });
 
 it('getGatekeeperModel derives from class name when no shieldModel', function () {
-    $resource = new class ([]) {
+    $resource = new class([])
+    {
         use HasResourcePermissions;
 
         protected mixed $resource;
@@ -116,7 +171,10 @@ it('getGatekeeperModel derives from class name when no shieldModel', function ()
             return $value ?? new MissingValue;
         }
 
-        public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
+        public function callGetGatekeeperModel(): string
+        {
+            return $this->getGatekeeperModel();
+        }
     };
 
     // No $shieldModel property; class name is "class@anonymous" -> falls back to str manipulation
@@ -133,10 +191,12 @@ it('getShieldGuard returns configured guard', function () {
 });
 
 it('getShieldGuard defaults to api when no shieldGuard property', function () {
-    $resource = new class ([]) {
+    $resource = new class([])
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected mixed $resource;
 
         public function __construct(mixed $resource = [])
@@ -154,7 +214,10 @@ it('getShieldGuard defaults to api when no shieldGuard property', function () {
             return $value ?? new MissingValue;
         }
 
-        public function callGetShieldGuard(): string { return $this->getShieldGuard(); }
+        public function callGetShieldGuard(): string
+        {
+            return $this->getShieldGuard();
+        }
     };
 
     expect($resource->callGetShieldGuard())->toBe('api');
@@ -368,30 +431,48 @@ it('whenCanLoadRelation returns MissingValue when user does not have relation pe
     $user = test()->createUser();
     test()->actingAs($user);
 
-    $resource = new class ([]) {
+    $resource = new class([])
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected string $shieldGuard = 'web';
+
         protected mixed $resource;
 
         public function __construct(mixed $resource = [])
         {
-            $this->resource = new class ([]) {
+            $this->resource = new class([])
+            {
                 public function __construct(private array $attrs = []) {}
-                public function attributesToArray(): array { return $this->attrs; }
-                public function __get(string $key): mixed { return $this->attrs[$key] ?? null; }
-                public function __isset(string $key): bool { return isset($this->attrs[$key]); }
+
+                public function attributesToArray(): array
+                {
+                    return $this->attrs;
+                }
+
+                public function __get(string $key): mixed
+                {
+                    return $this->attrs[$key] ?? null;
+                }
+
+                public function __isset(string $key): bool
+                {
+                    return isset($this->attrs[$key]);
+                }
             };
         }
 
         protected function when(mixed $condition, mixed $value, mixed $default = null): mixed
         {
             if (! $condition) {
-                $resolved = $default instanceof \Closure ? $default() : $default;
+                $resolved = $default instanceof Closure ? $default() : $default;
+
                 return $resolved ?? new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         protected function whenLoaded(string $relation, mixed $value = null): mixed
@@ -399,7 +480,8 @@ it('whenCanLoadRelation returns MissingValue when user does not have relation pe
             if ($value === null) {
                 return new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         public function callWhenCanLoadRelation(string $relation, string $resourceClass): mixed
@@ -420,45 +502,70 @@ it('whenCanLoadRelation returns resource collection when user has permission and
     test()->actingAs($user);
 
     // Create a fake resource class that can be used as collection
-    $fakeResourceClass = new class {
+    $fakeResourceClass = new class
+    {
         public static function collection(iterable $items): array
         {
-            return iterator_to_array($items instanceof \Traversable ? $items : new \ArrayIterator((array) $items));
+            return iterator_to_array($items instanceof Traversable ? $items : new ArrayIterator((array) $items));
         }
     };
     $fakeResourceClassName = get_class($fakeResourceClass);
 
     $postsData = [['id' => 1], ['id' => 2]];
 
-    $resource = new class ($postsData, $fakeResourceClassName) {
+    $resource = new class($postsData, $fakeResourceClassName)
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected string $shieldGuard = 'web';
+
         protected mixed $resource;
+
         private string $resourceClass;
+
         private array $postsData;
 
         public function __construct(array $postsData, string $resourceClass)
         {
             $this->postsData = $postsData;
             $this->resourceClass = $resourceClass;
-            $this->resource = new class ($postsData) {
+            $this->resource = new class($postsData)
+            {
                 public array $posts;
-                public function __construct(array $posts) { $this->posts = $posts; }
-                public function attributesToArray(): array { return []; }
-                public function __get(string $key): mixed { return $this->{$key} ?? null; }
-                public function __isset(string $key): bool { return isset($this->{$key}); }
+
+                public function __construct(array $posts)
+                {
+                    $this->posts = $posts;
+                }
+
+                public function attributesToArray(): array
+                {
+                    return [];
+                }
+
+                public function __get(string $key): mixed
+                {
+                    return $this->{$key} ?? null;
+                }
+
+                public function __isset(string $key): bool
+                {
+                    return isset($this->{$key});
+                }
             };
         }
 
         protected function when(mixed $condition, mixed $value, mixed $default = null): mixed
         {
             if (! $condition) {
-                $resolved = $default instanceof \Closure ? $default() : $default;
+                $resolved = $default instanceof Closure ? $default() : $default;
+
                 return $resolved ?? new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         protected function whenLoaded(string $relation, mixed $value = null): mixed
@@ -466,7 +573,8 @@ it('whenCanLoadRelation returns resource collection when user has permission and
             if ($value === null) {
                 return new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         public function callWhenCanLoadRelation(string $relation, string $resourceClass): mixed
@@ -492,35 +600,59 @@ it('whenCanLoadRelation returns single resource when user has permission and rel
     // A resource wrapper class that accepts a single arg in its constructor
     $fakeResourceClassName = FakeProfileResource::class;
 
-    $resource = new class ($profileData, $fakeResourceClassName) {
+    $resource = new class($profileData, $fakeResourceClassName)
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected string $shieldGuard = 'web';
+
         protected mixed $resource;
+
         private string $resourceClass;
+
         private mixed $profileData;
 
         public function __construct(mixed $profileData, string $resourceClass)
         {
             $this->profileData = $profileData;
             $this->resourceClass = $resourceClass;
-            $this->resource = new class ($profileData) {
+            $this->resource = new class($profileData)
+            {
                 public mixed $profile;
-                public function __construct(mixed $profile) { $this->profile = $profile; }
-                public function attributesToArray(): array { return []; }
-                public function __get(string $key): mixed { return $this->{$key} ?? null; }
-                public function __isset(string $key): bool { return isset($this->{$key}); }
+
+                public function __construct(mixed $profile)
+                {
+                    $this->profile = $profile;
+                }
+
+                public function attributesToArray(): array
+                {
+                    return [];
+                }
+
+                public function __get(string $key): mixed
+                {
+                    return $this->{$key} ?? null;
+                }
+
+                public function __isset(string $key): bool
+                {
+                    return isset($this->{$key});
+                }
             };
         }
 
         protected function when(mixed $condition, mixed $value, mixed $default = null): mixed
         {
             if (! $condition) {
-                $resolved = $default instanceof \Closure ? $default() : $default;
+                $resolved = $default instanceof Closure ? $default() : $default;
+
                 return $resolved ?? new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         protected function whenLoaded(string $relation, mixed $value = null): mixed
@@ -528,7 +660,8 @@ it('whenCanLoadRelation returns single resource when user has permission and rel
             if ($value === null) {
                 return new MissingValue;
             }
-            return $value instanceof \Closure ? $value() : $value;
+
+            return $value instanceof Closure ? $value() : $value;
         }
 
         public function callWhenCanLoadRelation(string $relation, string $resourceClass): mixed
@@ -548,7 +681,8 @@ it('whenCanLoadRelation returns single resource when user has permission and rel
 // ---------------------------------------------------------------------------
 
 it('getGatekeeperModel strips Resource suffix from class name', function () {
-    $resource = new class ([]) {
+    $resource = new class([])
+    {
         use HasResourcePermissions;
 
         protected mixed $resource;
@@ -568,7 +702,10 @@ it('getGatekeeperModel strips Resource suffix from class name', function () {
             return $value ?? new MissingValue;
         }
 
-        public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
+        public function callGetGatekeeperModel(): string
+        {
+            return $this->getGatekeeperModel();
+        }
     };
 
     // No $shieldModel property; class is anonymous, falls back to str manipulation
@@ -581,11 +718,14 @@ it('getGatekeeperModel strips Resource suffix from class name', function () {
 // ---------------------------------------------------------------------------
 
 it('getShieldGuard returns custom guard from shieldGuard property', function () {
-    $resource = new class ([]) {
+    $resource = new class([])
+    {
         use HasResourcePermissions;
 
         protected string $shieldModel = 'User';
+
         protected string $shieldGuard = 'sanctum';
+
         protected mixed $resource;
 
         public function __construct(mixed $resource = [])
@@ -603,7 +743,10 @@ it('getShieldGuard returns custom guard from shieldGuard property', function () 
             return $value ?? new MissingValue;
         }
 
-        public function callGetShieldGuard(): string { return $this->getShieldGuard(); }
+        public function callGetShieldGuard(): string
+        {
+            return $this->getShieldGuard();
+        }
     };
 
     expect($resource->callGetShieldGuard())->toBe('sanctum');

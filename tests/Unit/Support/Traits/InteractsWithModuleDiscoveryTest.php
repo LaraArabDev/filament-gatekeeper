@@ -35,7 +35,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discoverer = new ConcreteModuleDiscoverer();
+        $this->discoverer = new ConcreteModuleDiscoverer;
     }
 
     /** @test */
@@ -67,10 +67,10 @@ class InteractsWithModuleDiscoveryTest extends TestCase
     /** @test */
     public function it_discovers_from_module_directories(): void
     {
-        $tmpDir = sys_get_temp_dir() . '/gatekeeper_module_disc_' . uniqid();
+        $tmpDir = sys_get_temp_dir().'/gatekeeper_module_disc_'.uniqid();
         // Create module dirs with a Models subdirectory so scanDirectory is called
-        mkdir($tmpDir . '/Blog/Models', 0755, true);
-        mkdir($tmpDir . '/Shop/Models', 0755, true);
+        mkdir($tmpDir.'/Blog/Models', 0755, true);
+        mkdir($tmpDir.'/Shop/Models', 0755, true);
 
         config()->set('gatekeeper.modules.path', $tmpDir);
 
@@ -83,19 +83,19 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->assertContains('Models', $result);
 
         // Cleanup
-        rmdir($tmpDir . '/Blog/Models');
-        rmdir($tmpDir . '/Blog');
-        rmdir($tmpDir . '/Shop/Models');
-        rmdir($tmpDir . '/Shop');
+        rmdir($tmpDir.'/Blog/Models');
+        rmdir($tmpDir.'/Blog');
+        rmdir($tmpDir.'/Shop/Models');
+        rmdir($tmpDir.'/Shop');
         rmdir($tmpDir);
     }
 
     /** @test */
     public function it_skips_non_existent_sub_directories(): void
     {
-        $tmpDir = sys_get_temp_dir() . '/gatekeeper_module_disc2_' . uniqid();
-        mkdir($tmpDir . '/Blog', 0755, true);
-        mkdir($tmpDir . '/Shop', 0755, true);
+        $tmpDir = sys_get_temp_dir().'/gatekeeper_module_disc2_'.uniqid();
+        mkdir($tmpDir.'/Blog', 0755, true);
+        mkdir($tmpDir.'/Shop', 0755, true);
 
         config()->set('gatekeeper.modules.path', $tmpDir);
 
@@ -105,8 +105,8 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->assertSame([], $result);
 
         // Cleanup
-        rmdir($tmpDir . '/Blog');
-        rmdir($tmpDir . '/Shop');
+        rmdir($tmpDir.'/Blog');
+        rmdir($tmpDir.'/Shop');
         rmdir($tmpDir);
     }
 }

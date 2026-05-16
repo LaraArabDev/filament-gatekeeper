@@ -20,7 +20,7 @@ class ColumnDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new ColumnDiscovery();
+        $this->discovery = new ColumnDiscovery;
     }
 
     /** @test */
@@ -166,7 +166,7 @@ class ColumnDiscoveryTest extends TestCase
         ]);
 
         // Create a new instance to get fresh config
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
         $discovery->clearCache();
 
         $columns = $discovery->discoverForModel('App\\Models\\User', [ColumnDiscovery::SOURCE_CONFIG]);
@@ -184,7 +184,7 @@ class ColumnDiscoveryTest extends TestCase
         ]);
         Config::set('gatekeeper.column_discovery.sources', [ColumnDiscovery::SOURCE_CONFIG]);
 
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
         $discovery->clearCache();
 
         $columns = $discovery->discoverForModel('App\\Models\\User');
@@ -202,7 +202,7 @@ class ColumnDiscoveryTest extends TestCase
             'CacheTestModel' => ['col1', 'col2'],
         ]);
 
-        $discovery = new ColumnDiscovery();
+        $discovery = new ColumnDiscovery;
         $discovery->clearCache();
 
         // First call - should discover

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasApiPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HasApiPermissionsTest extends TestCase
 {
@@ -26,7 +27,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         // Should not throw exception
         $controller->authorizeIndex();
@@ -40,10 +41,10 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         // Gatekeeper throws HttpException, not AuthorizationException
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->expectException(HttpException::class);
         $controller->authorizeIndex();
     }
 
@@ -60,7 +61,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeShow();
         $this->assertTrue(true);
@@ -79,7 +80,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeStore();
         $this->assertTrue(true);
@@ -98,7 +99,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeUpdate();
         $this->assertTrue(true);
@@ -117,7 +118,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeDestroy();
         $this->assertTrue(true);
@@ -136,7 +137,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeRestore();
         $this->assertTrue(true);
@@ -155,7 +156,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizeForceDelete();
         $this->assertTrue(true);
@@ -168,7 +169,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         // All should pass without specific permissions
         $controller->authorizeIndex();
@@ -195,7 +196,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $controller->authorizePermission('export_user');
         $this->assertTrue(true);
@@ -214,7 +215,7 @@ class HasApiPermissionsTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new TestApiController();
+        $controller = new TestApiController;
 
         $this->assertTrue($controller->canIndex());
         $this->assertFalse($controller->canStore());
@@ -226,6 +227,7 @@ class TestApiController
     use HasApiPermissions;
 
     protected string $permissionModel = 'user';
+
     protected string $shieldGuard = 'web';
 }
 
@@ -240,12 +242,16 @@ class HasApiPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_returns_shield_model_property_when_set(): void
     {
-        $controller = new class {
+        $controller = new class
+        {
             use HasApiPermissions;
 
             public string $shieldModel = 'Product';
 
-            public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
+            public function callGetGatekeeperModel(): string
+            {
+                return $this->getGatekeeperModel();
+            }
         };
 
         $this->assertEquals('Product', $controller->callGetGatekeeperModel());
@@ -254,13 +260,18 @@ class HasApiPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_prefers_shield_model_over_permission_model(): void
     {
-        $controller = new class {
+        $controller = new class
+        {
             use HasApiPermissions;
 
             public string $shieldModel = 'Product';
+
             public string $permissionModel = 'OtherModel';
 
-            public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
+            public function callGetGatekeeperModel(): string
+            {
+                return $this->getGatekeeperModel();
+            }
         };
 
         $this->assertEquals('Product', $controller->callGetGatekeeperModel());
@@ -269,7 +280,7 @@ class HasApiPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_extracts_model_name_from_controller_class_name_when_no_properties(): void
     {
-        $controller = new TestUserApiController();
+        $controller = new TestUserApiController;
         $model = $controller->callGetGatekeeperModel();
 
         // TestUserApiController -> strips 'Controller' -> 'TestUserApi' -> strips 'Api' -> 'TestUser'
@@ -279,12 +290,16 @@ class HasApiPermissionsExtendedTest extends TestCase
     /** @test */
     public function it_returns_api_guard_by_default_when_no_shield_guard_property(): void
     {
-        $controller = new class {
+        $controller = new class
+        {
             use HasApiPermissions;
 
             public string $permissionModel = 'user';
 
-            public function callGetShieldGuard(): string { return $this->getShieldGuard(); }
+            public function callGetShieldGuard(): string
+            {
+                return $this->getShieldGuard();
+            }
         };
 
         $this->assertEquals('api', $controller->callGetShieldGuard());
@@ -298,7 +313,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('view_user_email_field');
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $this->assertTrue($controller->callCanViewField('email'));
     }
@@ -309,7 +324,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user = $this->createUser();
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $this->assertFalse($controller->callCanViewField('salary'));
     }
@@ -322,7 +337,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('update_user_email_field');
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $this->assertTrue($controller->callCanUpdateField('email'));
     }
@@ -335,7 +350,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('view_user_name_column');
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $this->assertTrue($controller->callCanViewColumn('name'));
     }
@@ -348,7 +363,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('execute_user_export_action');
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $this->assertTrue($controller->callCanExecuteAction('export'));
     }
@@ -363,7 +378,7 @@ class HasApiPermissionsExtendedTest extends TestCase
 
         config()->set('gatekeeper.field_permissions.user', ['email', 'phone']);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $visibleFields = $controller->callGetVisibleFields();
 
@@ -378,7 +393,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $user->givePermissionTo('view_user_name_column');
         $this->actingAs($user);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         $visibleColumns = $controller->callGetVisibleColumns();
 
@@ -393,7 +408,7 @@ class HasApiPermissionsExtendedTest extends TestCase
 
         config()->set('gatekeeper.field_permissions', []);
 
-        $controller = new TestApiControllerWithExposedMethods();
+        $controller = new TestApiControllerWithExposedMethods;
 
         // Use the array-based helper that simulates filterByPermissions behavior
         $result = $controller->callFilterByPermissionsArray(['name' => 'Test', 'email' => 'test@example.com']);
@@ -406,7 +421,10 @@ class TestUserApiController
 {
     use HasApiPermissions;
 
-    public function callGetGatekeeperModel(): string { return $this->getGatekeeperModel(); }
+    public function callGetGatekeeperModel(): string
+    {
+        return $this->getGatekeeperModel();
+    }
 }
 
 class TestApiControllerWithExposedMethods
@@ -414,14 +432,38 @@ class TestApiControllerWithExposedMethods
     use HasApiPermissions;
 
     protected string $permissionModel = 'user';
+
     protected string $shieldGuard = 'web';
 
-    public function callCanViewField(string $field): bool { return $this->canViewField($field); }
-    public function callCanUpdateField(string $field): bool { return $this->canUpdateField($field); }
-    public function callCanViewColumn(string $column): bool { return $this->canViewColumn($column); }
-    public function callCanExecuteAction(string $action): bool { return $this->canExecuteAction($action); }
-    public function callGetVisibleFields(): array { return $this->getVisibleFields(); }
-    public function callGetVisibleColumns(): array { return $this->getVisibleColumns(); }
+    public function callCanViewField(string $field): bool
+    {
+        return $this->canViewField($field);
+    }
+
+    public function callCanUpdateField(string $field): bool
+    {
+        return $this->canUpdateField($field);
+    }
+
+    public function callCanViewColumn(string $column): bool
+    {
+        return $this->canViewColumn($column);
+    }
+
+    public function callCanExecuteAction(string $action): bool
+    {
+        return $this->canExecuteAction($action);
+    }
+
+    public function callGetVisibleFields(): array
+    {
+        return $this->getVisibleFields();
+    }
+
+    public function callGetVisibleColumns(): array
+    {
+        return $this->getVisibleColumns();
+    }
 
     // Simulate filterByPermissions but accepting an array (avoids needing a real Model)
     public function callFilterByPermissionsArray(array $data): array

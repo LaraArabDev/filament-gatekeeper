@@ -318,7 +318,7 @@ class PermissionTest extends TestCase
     /** @test */
     public function it_has_fillable_attributes(): void
     {
-        $permission = new Permission();
+        $permission = new Permission;
 
         $this->assertTrue(in_array('name', $permission->getFillable()));
         $this->assertTrue(in_array('guard_name', $permission->getFillable()));
@@ -326,21 +326,21 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getTypeEnum_returns_null_for_null_type(): void
+    public function it_get_type_enum_returns_null_for_null_type(): void
     {
         $permission = new Permission(['name' => 'test_perm_null', 'type' => null]);
         $this->assertNull($permission->getTypeEnum());
     }
 
     /** @test */
-    public function it_getTypeEnum_returns_null_for_empty_type(): void
+    public function it_get_type_enum_returns_null_for_empty_type(): void
     {
         $permission = new Permission(['name' => 'test_perm_empty', 'type' => '']);
         $this->assertNull($permission->getTypeEnum());
     }
 
     /** @test */
-    public function it_getEntityName_for_page_type_with_suffix(): void
+    public function it_get_entity_name_for_page_type_with_suffix(): void
     {
         $permission = Permission::factory()->page()->create([
             'name' => 'view_settings_page',
@@ -351,7 +351,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityName_for_widget_type(): void
+    public function it_get_entity_name_for_widget_type(): void
     {
         $permission = Permission::factory()->widget()->create([
             'name' => 'view_stats_overview_widget',
@@ -362,7 +362,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityName_for_field_type(): void
+    public function it_get_entity_name_for_field_type(): void
     {
         $permission = Permission::factory()->field()->create([
             'name' => 'view_user_email_field',
@@ -373,7 +373,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityName_for_column_type(): void
+    public function it_get_entity_name_for_column_type(): void
     {
         $permission = Permission::factory()->column()->create([
             'name' => 'view_user_salary_column',
@@ -384,7 +384,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityName_for_action_type(): void
+    public function it_get_entity_name_for_action_type(): void
     {
         $permission = Permission::factory()->action()->create([
             'name' => 'execute_user_export_action',
@@ -395,7 +395,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityName_for_relation_type(): void
+    public function it_get_entity_name_for_relation_type(): void
     {
         $permission = Permission::factory()->relation()->create([
             'name' => 'view_user_posts_relation',
@@ -406,7 +406,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityGroupKey_uses_entity_column_when_set(): void
+    public function it_get_entity_group_key_uses_entity_column_when_set(): void
     {
         $permission = Permission::factory()->resource()->create([
             'name' => 'view_any_user',
@@ -416,7 +416,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityGroupKey_returns_other_for_empty_model(): void
+    public function it_get_entity_group_key_returns_other_for_empty_model(): void
     {
         $permission = Permission::factory()->create([
             'name' => 'x',
@@ -428,7 +428,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityDisplayName_uses_entity_column(): void
+    public function it_get_entity_display_name_uses_entity_column(): void
     {
         $permission = Permission::factory()->resource()->create([
             'name' => 'view_any_user',
@@ -438,7 +438,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getEntityDisplayName_falls_back_to_getEntityName(): void
+    public function it_get_entity_display_name_falls_back_to_get_entity_name(): void
     {
         $permission = Permission::factory()->resource()->create([
             'name' => 'view_any_user',
@@ -450,14 +450,14 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getAction_returns_null_for_single_part_name(): void
+    public function it_get_action_returns_null_for_single_part_name(): void
     {
         $permission = new Permission(['name' => 'admin', 'type' => null]);
         $this->assertNull($permission->getAction());
     }
 
     /** @test */
-    public function it_getAction_returns_prefix_for_resource_permission(): void
+    public function it_get_action_returns_prefix_for_resource_permission(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'view_any_user']);
         $result = $permission->getAction();
@@ -466,7 +466,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getActionLabel_for_field_type_is_headline(): void
+    public function it_get_action_label_for_field_type_is_headline(): void
     {
         $permission = Permission::factory()->field()->create([
             'name' => 'view_user_email_field',
@@ -477,7 +477,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getActionLabel_for_resource_type(): void
+    public function it_get_action_label_for_resource_type(): void
     {
         $permission = Permission::factory()->resource()->create([
             'name' => 'view_any_user',
@@ -488,21 +488,21 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getTypeIcon_returns_default_for_null_type(): void
+    public function it_get_type_icon_returns_default_for_null_type(): void
     {
         $permission = new Permission(['name' => 'test_icon_null', 'type' => null]);
         $this->assertEquals('heroicon-o-shield-check', $permission->getTypeIcon());
     }
 
     /** @test */
-    public function it_getTypeColor_returns_default_for_null_type(): void
+    public function it_get_type_color_returns_default_for_null_type(): void
     {
         $permission = new Permission(['name' => 'test_color_null', 'type' => null]);
         $this->assertEquals('gray', $permission->getTypeColor());
     }
 
     /** @test */
-    public function it_scopeMatching_filters_by_pattern(): void
+    public function it_scope_matching_filters_by_pattern(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
         Permission::factory()->resource()->create(['name' => 'create_user']);
@@ -516,7 +516,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_scopeForEntity_filters_by_entity(): void
+    public function it_scope_for_entity_filters_by_entity(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user', 'entity' => 'user']);
         Permission::factory()->resource()->create(['name' => 'create_user', 'entity' => 'user']);
@@ -525,11 +525,11 @@ class PermissionTest extends TestCase
         $results = Permission::forEntity('user')->get();
 
         $this->assertEquals(2, $results->count());
-        $this->assertTrue($results->every(fn($p) => $p->entity === 'user'));
+        $this->assertTrue($results->every(fn ($p) => $p->entity === 'user'));
     }
 
     /** @test */
-    public function it_getDistinctEntityOptionsForFilter_returns_array(): void
+    public function it_get_distinct_entity_options_for_filter_returns_array(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user', 'entity' => 'user']);
         Permission::factory()->resource()->create(['name' => 'view_any_post', 'entity' => 'post']);
@@ -542,7 +542,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_getModelName_handles_snake_case_multi_word(): void
+    public function it_get_model_name_handles_snake_case_multi_word(): void
     {
         $permission = Permission::factory()->resource()->create([
             'name' => 'view_any_blog_post',
@@ -553,7 +553,7 @@ class PermissionTest extends TestCase
     }
 
     /** @test */
-    public function it_scopeForGuard_filters_by_guard(): void
+    public function it_scope_for_guard_filters_by_guard(): void
     {
         Permission::factory()->forGuard('web')->resource()->create(['name' => 'view_any_user_web_only']);
         Permission::factory()->forGuard('api')->resource()->create(['name' => 'view_any_user_api_only']);
@@ -561,7 +561,7 @@ class PermissionTest extends TestCase
         $webPerms = Permission::forGuard('web')->get();
         $apiPerms = Permission::forGuard('api')->get();
 
-        $this->assertTrue($webPerms->every(fn($p) => $p->guard_name === 'web'));
-        $this->assertTrue($apiPerms->every(fn($p) => $p->guard_name === 'api'));
+        $this->assertTrue($webPerms->every(fn ($p) => $p->guard_name === 'web'));
+        $this->assertTrue($apiPerms->every(fn ($p) => $p->guard_name === 'api'));
     }
 }

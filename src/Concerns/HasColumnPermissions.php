@@ -12,8 +12,6 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
  * This trait enables granular control over table column visibility based
  * on user permissions. It integrates with Gatekeeper to check column-level
  * permissions defined in the configuration.
- *
- * @package LaraArabDev\FilamentGatekeeper\Concerns
  */
 trait HasColumnPermissions
 {
@@ -22,7 +20,7 @@ trait HasColumnPermissions
     /**
      * Check if the current user can view a specific column.
      *
-     * @param string $column The column name to check
+     * @param  string  $column  The column name to check
      * @return bool True if the user can view the column, false otherwise
      */
     public static function canViewColumn(string $column): bool
@@ -41,7 +39,7 @@ trait HasColumnPermissions
      *
      * A column is hidden if the user cannot view it.
      *
-     * @param string $column The column name to check
+     * @param  string  $column  The column name to check
      * @return bool True if the column should be hidden, false otherwise
      */
     public static function isColumnHidden(string $column): bool
@@ -77,7 +75,7 @@ trait HasColumnPermissions
      * Generates a permission name in the format: {action}_{model}_{column}_column
      * (Action + Entity + Type) which matches the format used by PermissionRegistrar.
      *
-     * @param string $column The column name
+     * @param  string  $column  The column name
      * @return string The generated permission name
      */
     public static function getColumnPermissionName(string $column): string
@@ -123,7 +121,7 @@ trait HasColumnPermissions
             $modelName = static::getColumnPermissionModelName();
 
             return array_merge(
-                config("gatekeeper.column_permissions.*", []),
+                config('gatekeeper.column_permissions.*', []),
                 config("gatekeeper.column_permissions.{$modelName}", [])
             );
         }
@@ -146,7 +144,7 @@ trait HasColumnPermissions
                 $columnName = $column->getName();
 
                 if (method_exists($column, 'visible')) {
-                    $column->visible(fn() => static::canViewColumn($columnName));
+                    $column->visible(fn () => static::canViewColumn($columnName));
                 }
             }
 

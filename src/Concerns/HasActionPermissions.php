@@ -12,8 +12,6 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
  * This trait enables granular control over custom action visibility and
  * executability based on user permissions. It integrates with Gatekeeper
  * to check action-level permissions defined in the configuration.
- *
- * @package LaraArabDev\FilamentGatekeeper\Concerns
  */
 trait HasActionPermissions
 {
@@ -22,7 +20,7 @@ trait HasActionPermissions
     /**
      * Check if the current user can execute a specific action.
      *
-     * @param string $action The action name to check
+     * @param  string  $action  The action name to check
      * @return bool True if the user can execute the action, false otherwise
      */
     public static function canExecuteAction(string $action): bool
@@ -41,7 +39,7 @@ trait HasActionPermissions
      *
      * An action is hidden if the user cannot execute it.
      *
-     * @param string $action The action name to check
+     * @param  string  $action  The action name to check
      * @return bool True if the action should be hidden, false otherwise
      */
     public static function isActionHidden(string $action): bool
@@ -77,7 +75,7 @@ trait HasActionPermissions
      * Generates a permission name in the format: {action}_{model}_{action_name}_action
      * (Action + Entity + Type) which matches the format used by PermissionRegistrar.
      *
-     * @param string $action The action name
+     * @param  string  $action  The action name
      * @return string The generated permission name
      */
     public static function getActionPermissionName(string $action): string
@@ -109,7 +107,7 @@ trait HasActionPermissions
             return $configuredActions;
         }
 
-        return array_filter($configuredActions, fn($action) => static::canExecuteAction($action));
+        return array_filter($configuredActions, fn ($action) => static::canExecuteAction($action));
     }
 
     /**
@@ -150,7 +148,7 @@ trait HasActionPermissions
             return $configuredActions;
         }
 
-        return array_filter($configuredActions, fn($action) => static::canExecuteAction($action));
+        return array_filter($configuredActions, fn ($action) => static::canExecuteAction($action));
     }
 
     /**
@@ -166,7 +164,7 @@ trait HasActionPermissions
                 $actionName = $action->getName();
 
                 if (method_exists($action, 'visible')) {
-                    $action->visible(fn() => static::canExecuteAction($actionName));
+                    $action->visible(fn () => static::canExecuteAction($actionName));
                 }
             }
 

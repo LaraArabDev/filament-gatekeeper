@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper as GatekeeperFacade;
+use LaraArabDev\FilamentGatekeeper\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
-use LaraArabDev\FilamentGatekeeper\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use Spatie\Permission\PermissionRegistrar;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GatekeeperTest extends TestCase
 {
@@ -22,7 +25,7 @@ class GatekeeperTest extends TestCase
     {
         parent::setUp();
 
-        $this->shieldManager = new Gatekeeper(new PermissionCache());
+        $this->shieldManager = new Gatekeeper(new PermissionCache);
     }
 
     /** @test */
@@ -68,7 +71,7 @@ class GatekeeperTest extends TestCase
         $this->actingAs($user);
 
         // Gatekeeper::authorize() throws HttpException (via abort(403))
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->expectException(HttpException::class);
         $this->shieldManager->authorize('view_any_user');
     }
 
@@ -145,7 +148,7 @@ class GatekeeperTest extends TestCase
         ]);
 
         // Clear permission cache to ensure fresh check
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $this->actingAs($apiUser, 'api');
 
@@ -372,53 +375,53 @@ class GatekeeperTest extends TestCase
     /** @test */
     public function it_can_access_cache_instance(): void
     {
-        $this->assertInstanceOf(\LaraArabDev\FilamentGatekeeper\Services\PermissionCache::class, $this->shieldManager->cache());
+        $this->assertInstanceOf(PermissionCache::class, $this->shieldManager->cache());
     }
 
     /** @test */
-    public function it_canViewField_returns_false_when_no_user(): void
+    public function it_can_view_field_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewField('User', 'email'));
     }
 
     /** @test */
-    public function it_canUpdateField_returns_false_when_no_user(): void
+    public function it_can_update_field_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canUpdateField('User', 'email'));
     }
 
     /** @test */
-    public function it_canViewColumn_returns_false_when_no_user(): void
+    public function it_can_view_column_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewColumn('User', 'email'));
     }
 
     /** @test */
-    public function it_canExecuteAction_returns_false_when_no_user(): void
+    public function it_can_execute_action_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canExecuteAction('User', 'export'));
     }
 
     /** @test */
-    public function it_canViewRelation_returns_false_when_no_user(): void
+    public function it_can_view_relation_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewRelation('User', 'posts'));
     }
 
     /** @test */
-    public function it_getVisibleFields_returns_empty_when_no_user(): void
+    public function it_get_visible_fields_returns_empty_when_no_user(): void
     {
         $this->assertEmpty($this->shieldManager->getVisibleFields('User'));
     }
 
     /** @test */
-    public function it_getVisibleColumns_returns_empty_when_no_user(): void
+    public function it_get_visible_columns_returns_empty_when_no_user(): void
     {
         $this->assertEmpty($this->shieldManager->getVisibleColumns('User'));
     }
 
     /** @test */
-    public function it_getVisibleFields_returns_all_fields_for_super_admin(): void
+    public function it_get_visible_fields_returns_all_fields_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -433,7 +436,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_getVisibleColumns_returns_all_columns_for_super_admin(): void
+    public function it_get_visible_columns_returns_all_columns_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -448,7 +451,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_getVisibleFields_returns_empty_when_no_config(): void
+    public function it_get_visible_fields_returns_empty_when_no_config(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -460,7 +463,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_getVisibleColumns_returns_empty_when_no_config(): void
+    public function it_get_visible_columns_returns_empty_when_no_config(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -472,7 +475,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_shouldBypassPermissions_returns_false_when_super_admin_disabled(): void
+    public function it_should_bypass_permissions_returns_false_when_super_admin_disabled(): void
     {
         // Create super admin first (createSuperAdmin sets enabled=true internally)
         $user = $this->createSuperAdmin();
@@ -484,13 +487,13 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_shouldBypassPermissions_returns_false_with_no_user(): void
+    public function it_should_bypass_permissions_returns_false_with_no_user(): void
     {
         $this->assertFalse($this->shieldManager->shouldBypassPermissions());
     }
 
     /** @test */
-    public function it_canViewField_bypasses_for_super_admin(): void
+    public function it_can_view_field_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -500,7 +503,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_canViewColumn_bypasses_for_super_admin(): void
+    public function it_can_view_column_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -509,7 +512,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_canExecuteAction_bypasses_for_super_admin(): void
+    public function it_can_execute_action_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -518,7 +521,7 @@ class GatekeeperTest extends TestCase
     }
 
     /** @test */
-    public function it_canViewRelation_bypasses_for_super_admin(): void
+    public function it_can_view_relation_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
         $this->actingAs($user);
@@ -530,12 +533,12 @@ class GatekeeperTest extends TestCase
     public function it_detects_api_guard_from_bearer_token(): void
     {
         // Inject a request with a bearer token to trigger API guard detection
-        $request = \Illuminate\Http\Request::create('/some-route', 'GET');
+        $request = Request::create('/some-route', 'GET');
         $request->headers->set('Authorization', 'Bearer test-token');
         app()->instance('request', $request);
 
-        $gatekeeper = new \LaraArabDev\FilamentGatekeeper\Gatekeeper(
-            new \LaraArabDev\FilamentGatekeeper\Services\PermissionCache()
+        $gatekeeper = new Gatekeeper(
+            new PermissionCache
         );
 
         $this->assertEquals('api', $gatekeeper->getGuard());
@@ -544,12 +547,12 @@ class GatekeeperTest extends TestCase
     /** @test */
     public function it_detects_api_guard_from_json_expectation(): void
     {
-        $request = \Illuminate\Http\Request::create('/some-route', 'GET');
+        $request = Request::create('/some-route', 'GET');
         $request->headers->set('Accept', 'application/json');
         app()->instance('request', $request);
 
-        $gatekeeper = new \LaraArabDev\FilamentGatekeeper\Gatekeeper(
-            new \LaraArabDev\FilamentGatekeeper\Services\PermissionCache()
+        $gatekeeper = new Gatekeeper(
+            new PermissionCache
         );
 
         $this->assertEquals('api', $gatekeeper->getGuard());

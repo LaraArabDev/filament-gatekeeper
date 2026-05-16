@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
+use LaraArabDev\FilamentGatekeeper\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
 
 /**
  * Branch coverage tests for GatekeeperServiceProvider.
@@ -40,7 +43,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
     public function it_gate_before_returns_null_when_super_admin_disabled(): void
     {
         // Create user with super-admin role but THEN disable the config
-        $role = \LaraArabDev\FilamentGatekeeper\Models\Role::factory()->create([
+        $role = Role::factory()->create([
             'name' => 'super-admin',
             'guard_name' => 'web',
         ]);
@@ -57,13 +60,13 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
     }
 
     /** @test */
-    public function it_gate_before_returns_null_when_user_has_no_hasRole_method(): void
+    public function it_gate_before_returns_null_when_user_has_no_has_role_method(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
         config()->set('gatekeeper.super_admin.role', 'super-admin');
 
         // Create a user that doesn't have hasRole method
-        $user = new \LaraArabDev\FilamentGatekeeper\Tests\TestUser([
+        $user = new TestUser([
             'name' => 'Test',
             'email' => 'no-has-role@test.com',
             'password' => 'secret',
@@ -80,7 +83,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
     /** @test */
     public function it_registers_middleware_aliases_in_provider(): void
     {
-        $router = app(\Illuminate\Routing\Router::class);
+        $router = app(Router::class);
         $middleware = $router->getMiddleware();
 
         $this->assertArrayHasKey('gatekeeper.api', $middleware);
@@ -115,8 +118,8 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
     /** @test */
     public function it_resolves_gatekeeper_singleton_correctly(): void
     {
-        $gatekeeper = app(\LaraArabDev\FilamentGatekeeper\Gatekeeper::class);
-        $this->assertInstanceOf(\LaraArabDev\FilamentGatekeeper\Gatekeeper::class, $gatekeeper);
+        $gatekeeper = app(Gatekeeper::class);
+        $this->assertInstanceOf(Gatekeeper::class, $gatekeeper);
     }
 
     /** @test */

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
-
 /*
 |--------------------------------------------------------------------------
 | Test Case

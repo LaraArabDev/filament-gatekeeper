@@ -18,7 +18,7 @@ class ResourceDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new ResourceDiscovery();
+        $this->discovery = new ResourceDiscovery;
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class ResourceDiscoveryTest extends TestCase
             app_path('Filament/Resources'),
         ]);
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $resources = $discovery->discover();
 
         $this->assertIsArray($resources);
@@ -78,7 +78,7 @@ class ResourceDiscoveryTest extends TestCase
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', base_path('Modules'));
 
-        $discovery = new ResourceDiscovery();
+        $discovery = new ResourceDiscovery;
         $resources = $discovery->discoverFromModules();
 
         $this->assertIsArray($resources);

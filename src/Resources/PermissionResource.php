@@ -94,7 +94,7 @@ class PermissionResource extends Resource
 
             Forms\Components\Placeholder::make('entity')
                 ->label(__('gatekeeper::messages.labels.entity'))
-                ->content(fn(?Permission $record): string => $record?->getEntityDisplayName() ?? '—'),
+                ->content(fn (?Permission $record): string => $record?->getEntityDisplayName() ?? '—'),
         ];
     }
 
@@ -104,9 +104,10 @@ class PermissionResource extends Resource
     protected static function getGuardOptions(): array
     {
         $guards = config('gatekeeper.guards', ['web' => ['enabled' => true]]);
+
         return collect($guards)
-            ->filter(fn($guard) => $guard['enabled'] ?? true)
-            ->mapWithKeys(fn($guard, $name) => [$name => ucfirst($name)])
+            ->filter(fn ($guard) => $guard['enabled'] ?? true)
+            ->mapWithKeys(fn ($guard, $name) => [$name => ucfirst($name)])
             ->toArray();
     }
 
@@ -159,33 +160,33 @@ class PermissionResource extends Resource
                 ->weight('medium')
                 ->copyable()
                 ->copyMessage(__('gatekeeper::messages.notifications.copied'))
-                ->description(fn(Permission $record): string => $record->getTypeEnum()?->getLabel() ?? (string) $record->type),
+                ->description(fn (Permission $record): string => $record->getTypeEnum()?->getLabel() ?? (string) $record->type),
 
             TextColumn::make('entity_name')
                 ->label(__('gatekeeper::messages.labels.entity'))
-                ->state(fn(Permission $record): ?string => $record->getEntityDisplayName())
+                ->state(fn (Permission $record): ?string => $record->getEntityDisplayName())
                 ->badge()
-                ->color(fn(Permission $record): string => $record->getTypeColor())
-                ->searchable(query: fn(Builder $query, string $search): Builder => $query->where('name', 'like', "%{$search}%")),
+                ->color(fn (Permission $record): string => $record->getTypeColor())
+                ->searchable(query: fn (Builder $query, string $search): Builder => $query->where('name', 'like', "%{$search}%")),
 
             TextColumn::make('action')
                 ->label(__('gatekeeper::messages.labels.action'))
-                ->state(fn(Permission $record): string => $record->getActionLabel())
+                ->state(fn (Permission $record): string => $record->getActionLabel())
                 ->color('success')
                 ->badge(),
 
             TextColumn::make('type')
                 ->label(__('gatekeeper::messages.labels.type'))
                 ->badge()
-                ->icon(fn(Permission $record): ?string => $record->getTypeEnum()?->getIcon())
-                ->color(fn(Permission $record): string => $record->getTypeColor())
-                ->formatStateUsing(fn(Permission $record): string => $record->getTypeEnum()?->getLabel() ?? (string) $record->type),
+                ->icon(fn (Permission $record): ?string => $record->getTypeEnum()?->getIcon())
+                ->color(fn (Permission $record): string => $record->getTypeColor())
+                ->formatStateUsing(fn (Permission $record): string => $record->getTypeEnum()?->getLabel() ?? (string) $record->type),
 
             TextColumn::make('guard_name')
                 ->label(__('gatekeeper::messages.labels.guard'))
                 ->badge()
                 ->icon('heroicon-o-shield-check')
-                ->color(fn(string $state): string => static::getGuardBadgeColor($state)),
+                ->color(fn (string $state): string => static::getGuardBadgeColor($state)),
 
             TextColumn::make('roles_count')
                 ->label(__('gatekeeper::messages.labels.roles'))
@@ -222,21 +223,22 @@ class PermissionResource extends Resource
 
             Tables\Filters\SelectFilter::make('entity')
                 ->label(__('gatekeeper::messages.labels.entity'))
-                ->options(fn() => Permission::getDistinctEntityOptionsForFilter())
+                ->options(fn () => Permission::getDistinctEntityOptionsForFilter())
                 ->query(function (Builder $query, array $data): Builder {
                     $value = $data['value'] ?? null;
                     if ($value === null || $value === '') {
                         return $query;
                     }
+
                     return $query->where(function (Builder $q) use ($value): void {
-                        $q->where('entity', $value)->orWhere('name', 'like', '%' . $value . '%');
+                        $q->where('entity', $value)->orWhere('name', 'like', '%'.$value.'%');
                     });
                 })
                 ->searchable(),
 
             Tables\Filters\Filter::make('unused')
                 ->label(__('gatekeeper::messages.filters.unused_permissions'))
-                ->query(fn(Builder $query): Builder => $query->doesntHave('roles'))
+                ->query(fn (Builder $query): Builder => $query->doesntHave('roles'))
                 ->toggle(),
         ];
     }

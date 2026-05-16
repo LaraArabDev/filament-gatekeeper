@@ -56,12 +56,9 @@ trait HasWidgetPermissions
 
     /**
      * Determine if the widget should be visible.
-     *
-     * @return bool
      */
     public static function shouldBeVisible(): bool
     {
         return static::canView();
     }
 }
-

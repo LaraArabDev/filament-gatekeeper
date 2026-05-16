@@ -27,7 +27,7 @@ class PermissionCacheDriverTest extends TestCase
         config()->set('cache.default', 'array');
         config()->set('gatekeeper.cache.driver', null);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertTrue($stats['supports_tagging']);
@@ -39,7 +39,7 @@ class PermissionCacheDriverTest extends TestCase
         config()->set('cache.default', 'file');
         config()->set('gatekeeper.cache.driver', null);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertFalse($stats['supports_tagging']);
@@ -51,7 +51,7 @@ class PermissionCacheDriverTest extends TestCase
         config()->set('cache.default', 'database');
         config()->set('gatekeeper.cache.driver', null);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertFalse($stats['supports_tagging']);
@@ -63,7 +63,7 @@ class PermissionCacheDriverTest extends TestCase
         // When driver is explicitly set, it uses that for supportsTagging check
         config()->set('gatekeeper.cache.driver', 'array');
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         // array driver supports tagging
@@ -75,7 +75,7 @@ class PermissionCacheDriverTest extends TestCase
     {
         config()->set('gatekeeper.cache.driver', 'file');
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertFalse($stats['supports_tagging']);
@@ -89,7 +89,7 @@ class PermissionCacheDriverTest extends TestCase
         $user = $this->createUser();
 
         // User with no roles → empty matrix
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $matrix = $cache->getPermissionMatrix($user);
 
         $this->assertIsArray($matrix);
@@ -114,7 +114,7 @@ class PermissionCacheDriverTest extends TestCase
 
         $user->assignRole($role);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $matrix = $cache->getPermissionMatrix($user);
 
         $this->assertArrayHasKey('Order', $matrix);
@@ -156,7 +156,7 @@ class PermissionCacheDriverTest extends TestCase
 
         $user->assignRole([$role1, $role2]);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $matrix = $cache->getPermissionMatrix($user);
 
         $relations = $matrix['User']['relations']['posts'] ?? [];
@@ -191,7 +191,7 @@ class PermissionCacheDriverTest extends TestCase
 
         $user->assignRole([$role1, $role2]);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $matrix = $cache->getPermissionMatrix($user);
 
         // OR logic: false || true = true
@@ -223,7 +223,7 @@ class PermissionCacheDriverTest extends TestCase
 
         $user->assignRole([$role1, $role2]);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $matrix = $cache->getPermissionMatrix($user);
 
         // OR logic applies: false || true = true
@@ -232,12 +232,12 @@ class PermissionCacheDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_getPermissionMatrix_with_cache_enabled_caches_result(): void
+    public function it_get_permission_matrix_with_cache_enabled_caches_result(): void
     {
         config()->set('gatekeeper.cache.enabled', true);
 
         $user = $this->createUser();
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
 
         // First call builds and caches
         $matrix1 = $cache->getPermissionMatrix($user);
@@ -248,10 +248,10 @@ class PermissionCacheDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_invalidateUser_clears_user_specific_cache(): void
+    public function it_invalidate_user_clears_user_specific_cache(): void
     {
         $user = $this->createUser();
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
 
         $cache->getPermissionMatrix($user);
         $cache->invalidateUser($user);

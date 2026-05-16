@@ -175,4 +175,3 @@ class ModuleDiscovery
         return $widgets;
     }
 }
-

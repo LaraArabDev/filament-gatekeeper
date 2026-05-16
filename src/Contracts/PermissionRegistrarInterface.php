@@ -9,8 +9,6 @@ namespace LaraArabDev\FilamentGatekeeper\Contracts;
  *
  * This interface defines the contract for services that handle permission
  * discovery, creation, and synchronization within the Filament Gatekeeper package.
- *
- * @package LaraArabDev\FilamentGatekeeper\Contracts
  */
 interface PermissionRegistrarInterface
 {
@@ -29,7 +27,7 @@ interface PermissionRegistrarInterface
      *
      * When enabled, no actual database changes are made.
      *
-     * @param bool $dryRun Whether to enable dry run mode
+     * @param  bool  $dryRun  Whether to enable dry run mode
      * @return static Returns self for method chaining
      */
     public function dryRun(bool $dryRun = true): static;

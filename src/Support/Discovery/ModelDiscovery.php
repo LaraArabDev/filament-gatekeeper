@@ -14,8 +14,6 @@ use ReflectionClass;
  * This class scans configured model paths to discover all Eloquent models,
  * supports module-based discovery for HMVC applications, and provides
  * utilities for model name extraction and validation.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class ModelDiscovery
 {
@@ -62,7 +60,7 @@ class ModelDiscovery
      *
      * Handles both glob patterns and direct directory paths.
      *
-     * @param string $pathPattern The path pattern to scan (supports glob patterns)
+     * @param  string  $pathPattern  The path pattern to scan (supports glob patterns)
      * @return array<string> Array of discovered model names
      */
     protected function scanPath(string $pathPattern): array
@@ -88,8 +86,8 @@ class ModelDiscovery
      * Recursively scans a directory for PHP files, extracts class names,
      * validates they are Eloquent models, and returns their basenames.
      *
-     * @param string $directory The directory path to scan
-     * @param string $pathPattern The original path pattern (for namespace resolution)
+     * @param  string  $directory  The directory path to scan
+     * @param  string  $pathPattern  The original path pattern (for namespace resolution)
      * @return array<string> Array of discovered model names (class basenames)
      */
     protected function scanDirectory(string $directory, string $pathPattern): array
@@ -123,8 +121,8 @@ class ModelDiscovery
      *
      * Extracts namespace and class name from PHP source code using regex.
      *
-     * @param string $filePath The full path to the PHP file
-     * @param string $pathPattern The path pattern (unused, kept for compatibility)
+     * @param  string  $filePath  The full path to the PHP file
+     * @param  string  $pathPattern  The path pattern (unused, kept for compatibility)
      * @return string|null The fully qualified class name or null if not found
      */
     protected function getClassFromFile(string $filePath, string $pathPattern): ?string
@@ -158,7 +156,7 @@ class ModelDiscovery
      * Validates that the class exists, is concrete (not abstract/interface/trait),
      * and extends Illuminate\Database\Eloquent\Model.
      *
-     * @param string $className The fully qualified class name to check
+     * @param  string  $className  The fully qualified class name to check
      * @return bool True if the class is a valid Eloquent model, false otherwise
      */
     protected function isEloquentModel(string $className): bool
@@ -218,7 +216,7 @@ class ModelDiscovery
      * Compares all discovered models against models that have Filament Resources
      * and returns the difference.
      *
-     * @param array<string> $resourceModels Models that have Filament Resources
+     * @param  array<string>  $resourceModels  Models that have Filament Resources
      * @return array<string> Array of model names without corresponding resources
      */
     public function getModelsWithoutResources(array $resourceModels): array
@@ -231,7 +229,7 @@ class ModelDiscovery
     /**
      * Get the model name from a fully qualified class name.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return string The model name (e.g., 'User' from 'App\Models\User')
      */
     public function getModelName(string $modelClass): string
@@ -242,7 +240,7 @@ class ModelDiscovery
     /**
      * Get the permission model name (snake_case) from a fully qualified class name.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return string The permission model name in snake_case (e.g., 'user' from 'App\Models\User')
      */
     public function getPermissionModelName(string $modelClass): string

@@ -30,7 +30,7 @@ class GatekeeperResourceMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next, string $model, ?string $guard = null): Response
     {
@@ -61,10 +61,6 @@ class GatekeeperResourceMiddleware
 
     /**
      * Resolve the permission based on HTTP method and route.
-     *
-     * @param Request $request
-     * @param string $model
-     * @return ?string
      */
     protected function resolvePermission(Request $request, string $model): ?string
     {
@@ -85,9 +81,6 @@ class GatekeeperResourceMiddleware
 
     /**
      * Check if route has a resource parameter (e.g., /users/{user}).
-     *
-     * @param Request $request
-     * @return bool
      */
     protected function hasResourceParameter(Request $request): bool
     {
@@ -95,6 +88,7 @@ class GatekeeperResourceMiddleware
 
         if (! $route) {
             $path = $request->path();
+
             return (bool) preg_match('/\/\d+(\/|$)/', $path);
         }
 
@@ -102,6 +96,7 @@ class GatekeeperResourceMiddleware
 
         if (empty($parameters)) {
             $uri = $route->uri();
+
             return (bool) preg_match('/\{[^}]+\}/', $uri);
         }
 
@@ -110,9 +105,6 @@ class GatekeeperResourceMiddleware
 
     /**
      * Detect the guard from the request.
-     *
-     * @param Request $request
-     * @return string
      */
     protected function detectGuard(Request $request): string
     {

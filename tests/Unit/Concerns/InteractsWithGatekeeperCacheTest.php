@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Concerns;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\InteractsWithGatekeeperCache;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
@@ -23,7 +24,7 @@ class ExposedCacheInteractor
         return static::shouldBypassPermissions();
     }
 
-    public static function publicGetAuthUser(): ?\Illuminate\Contracts\Auth\Authenticatable
+    public static function publicGetAuthUser(): ?Authenticatable
     {
         return static::getAuthUser();
     }

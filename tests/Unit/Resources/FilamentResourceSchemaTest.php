@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Resources;
 
+use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Tables\Contracts\HasTable;
@@ -14,12 +15,14 @@ use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use Mockery;
+use Spatie\Permission\PermissionRegistrar;
 
 class FilamentResourceSchemaTest extends TestCase
 {
     use RefreshDatabase;
 
     protected HasForms $mockForms;
+
     protected HasTable $mockTable;
 
     protected function setUp(): void
@@ -165,7 +168,7 @@ class FilamentResourceSchemaTest extends TestCase
         Permission::factory()->resource()->create(['name' => 'create_post', 'entity' => 'post']);
         Permission::factory()->resource()->create(['name' => 'view_any_user', 'entity' => 'user']);
 
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $method = new \ReflectionMethod(RoleResource::class, 'getGroupedPermissionsSection');
         $method->setAccessible(true);
@@ -182,7 +185,7 @@ class FilamentResourceSchemaTest extends TestCase
         $method->setAccessible(true);
         $section = $method->invoke(null);
 
-        $this->assertInstanceOf(\Filament\Forms\Components\Section::class, $section);
+        $this->assertInstanceOf(Section::class, $section);
     }
 
     /** @test */
@@ -292,7 +295,7 @@ class FilamentResourceSchemaTest extends TestCase
             4
         );
 
-        $this->assertInstanceOf(\Filament\Forms\Components\Section::class, $section);
+        $this->assertInstanceOf(Section::class, $section);
     }
 
     /** @test */
@@ -313,7 +316,7 @@ class FilamentResourceSchemaTest extends TestCase
             2
         );
 
-        $this->assertInstanceOf(\Filament\Forms\Components\Section::class, $section);
+        $this->assertInstanceOf(Section::class, $section);
     }
 
     // ── PermissionResource protected methods via reflection ───────────────────
@@ -387,6 +390,7 @@ class FilamentResourceSchemaTest extends TestCase
     private function makePermissionWithAction(string $name, string $expectedAction): Permission
     {
         $permission = Permission::factory()->resource()->create(['name' => $name]);
+
         // Force entity to test getPermissionDescriptions
         return $permission;
     }

@@ -17,7 +17,7 @@ class PageDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new PageDiscovery();
+        $this->discovery = new PageDiscovery;
     }
 
     /** @test */
@@ -49,11 +49,11 @@ class PageDiscoveryTest extends TestCase
     /** @test */
     public function it_discovers_pages_from_directory(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_pages_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/SettingsPage.php', '<?php class SettingsPage {}');
-        file_put_contents($tempDir . '/ReportsPage.php', '<?php class ReportsPage {}');
+        file_put_contents($tempDir.'/SettingsPage.php', '<?php class SettingsPage {}');
+        file_put_contents($tempDir.'/ReportsPage.php', '<?php class ReportsPage {}');
 
         Config::set('gatekeeper.discovery.pages', []);
         Config::set('gatekeeper.excluded_pages', []);
@@ -75,18 +75,18 @@ class PageDiscoveryTest extends TestCase
     /** @test */
     public function it_excludes_resource_page_files(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_pages_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
         // These should be excluded (resource page prefixes)
-        file_put_contents($tempDir . '/CreateUser.php', '<?php class CreateUser {}');
-        file_put_contents($tempDir . '/EditUser.php', '<?php class EditUser {}');
-        file_put_contents($tempDir . '/ListUsers.php', '<?php class ListUsers {}');
-        file_put_contents($tempDir . '/ViewUser.php', '<?php class ViewUser {}');
-        file_put_contents($tempDir . '/ManageUsers.php', '<?php class ManageUsers {}');
+        file_put_contents($tempDir.'/CreateUser.php', '<?php class CreateUser {}');
+        file_put_contents($tempDir.'/EditUser.php', '<?php class EditUser {}');
+        file_put_contents($tempDir.'/ListUsers.php', '<?php class ListUsers {}');
+        file_put_contents($tempDir.'/ViewUser.php', '<?php class ViewUser {}');
+        file_put_contents($tempDir.'/ManageUsers.php', '<?php class ManageUsers {}');
 
         // This should be included
-        file_put_contents($tempDir . '/SettingsPage.php', '<?php class SettingsPage {}');
+        file_put_contents($tempDir.'/SettingsPage.php', '<?php class SettingsPage {}');
 
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');
@@ -107,10 +107,10 @@ class PageDiscoveryTest extends TestCase
     /** @test */
     public function it_returns_unique_pages(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_pages_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/SettingsPage.php', '<?php class SettingsPage {}');
+        file_put_contents($tempDir.'/SettingsPage.php', '<?php class SettingsPage {}');
 
         Config::set('gatekeeper.discovery.pages', []);
         Config::set('gatekeeper.excluded_pages', []);
@@ -135,13 +135,13 @@ class PageDiscoveryTest extends TestCase
     /** @test */
     public function it_excludes_configured_excluded_pages(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_pages_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/SettingsPage.php', '<?php class SettingsPage {}');
-        file_put_contents($tempDir . '/InternalPage.php', '<?php class InternalPage {}');
+        file_put_contents($tempDir.'/SettingsPage.php', '<?php class SettingsPage {}');
+        file_put_contents($tempDir.'/InternalPage.php', '<?php class InternalPage {}');
 
-        Config::set('gatekeeper.discovery.pages', [str_replace(base_path() . '/', '', $tempDir)]);
+        Config::set('gatekeeper.discovery.pages', [str_replace(base_path().'/', '', $tempDir)]);
         Config::set('gatekeeper.excluded_pages', ['InternalPage']);
 
         $pages = $this->discovery->discover();
@@ -163,7 +163,7 @@ class PageDiscoveryTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_non_existent_directory_in_scanDirectory(): void
+    public function it_handles_non_existent_directory_in_scan_directory(): void
     {
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');

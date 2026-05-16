@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\File;
  *
  * This trait handles common operations for scanning directories
  * and paths to discover classes within the application.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Traits
  */
 trait InteractsWithPathScanning
 {
@@ -21,7 +19,7 @@ trait InteractsWithPathScanning
      *
      * Handles both glob patterns and direct directory paths.
      *
-     * @param string $pathPattern The path pattern to scan (supports glob patterns)
+     * @param  string  $pathPattern  The path pattern to scan (supports glob patterns)
      * @return array<string> Array of discovered class names or identifiers
      */
     protected function scanPath(string $pathPattern): array
@@ -47,8 +45,8 @@ trait InteractsWithPathScanning
      * Must be implemented by the consuming class to handle
      * specific file type detection and class extraction.
      *
-     * @param string $directory The directory path to scan
-     * @param string $pathPattern The original path pattern (for namespace resolution)
+     * @param  string  $directory  The directory path to scan
+     * @param  string  $pathPattern  The original path pattern (for namespace resolution)
      * @return array<string> Array of discovered class names or identifiers
      */
     abstract protected function scanDirectory(string $directory, string $pathPattern): array;
@@ -58,8 +56,8 @@ trait InteractsWithPathScanning
      *
      * Extracts namespace and class name from PHP source code.
      *
-     * @param string $filePath The full path to the PHP file
-     * @param string $pathPattern The path pattern for namespace resolution
+     * @param  string  $filePath  The full path to the PHP file
+     * @param  string  $pathPattern  The path pattern for namespace resolution
      * @return string|null The fully qualified class name or null if not found
      */
     protected function getClassFromFile(string $filePath, string $pathPattern): ?string

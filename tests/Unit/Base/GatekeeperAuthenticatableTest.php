@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Base\GatekeeperAuthenticatable;
+use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 
 class ConcreteAuthenticatable extends GatekeeperAuthenticatable
@@ -14,6 +15,7 @@ class ConcreteAuthenticatable extends GatekeeperAuthenticatable
     use HasFactory;
 
     protected $table = 'users';
+
     protected $fillable = ['name', 'email', 'password'];
 }
 
@@ -24,14 +26,14 @@ class GatekeeperAuthenticatableTest extends TestCase
     /** @test */
     public function it_has_web_as_default_guard_name(): void
     {
-        $user = new ConcreteAuthenticatable();
+        $user = new ConcreteAuthenticatable;
         $this->assertSame('web', $user->getGuardName());
     }
 
     /** @test */
     public function it_can_set_and_get_guard_name(): void
     {
-        $user = new ConcreteAuthenticatable();
+        $user = new ConcreteAuthenticatable;
         $result = $user->setGuardName('api');
 
         $this->assertSame('api', $user->getGuardName());
@@ -62,7 +64,7 @@ class GatekeeperAuthenticatableTest extends TestCase
         ]);
 
         $user->assignRole(
-            \LaraArabDev\FilamentGatekeeper\Models\Role::create(['name' => 'super-admin', 'guard_name' => 'web'])
+            Role::create(['name' => 'super-admin', 'guard_name' => 'web'])
         );
 
         $this->assertTrue($user->isSuperAdmin());
@@ -71,7 +73,7 @@ class GatekeeperAuthenticatableTest extends TestCase
     /** @test */
     public function it_has_has_roles_trait(): void
     {
-        $user = new ConcreteAuthenticatable();
+        $user = new ConcreteAuthenticatable;
         $this->assertTrue(method_exists($user, 'assignRole'));
         $this->assertTrue(method_exists($user, 'hasRole'));
         $this->assertTrue(method_exists($user, 'hasPermissionTo'));

@@ -16,7 +16,7 @@ class PermissionTypeTest extends TestCase
 
         $this->assertCount(8, $cases);
 
-        $values = array_map(fn($case) => $case->value, $cases);
+        $values = array_map(fn ($case) => $case->value, $cases);
 
         $this->assertContains('resource', $values);
         $this->assertContains('model', $values);
@@ -110,7 +110,7 @@ class PermissionTypeTest extends TestCase
     }
 
     /** @test */
-    public function it_tryFrom_returns_null_for_invalid_value(): void
+    public function it_try_from_returns_null_for_invalid_value(): void
     {
         $this->assertNull(PermissionType::tryFrom('invalid'));
         $this->assertNull(PermissionType::tryFrom(''));

@@ -21,6 +21,7 @@ use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 class ConcreteApiResource extends GatekeeperApiResource
 {
     protected string $shieldModel = 'User';
+
     protected string $shieldGuard = 'web';
 
     public function toArray(Request $request): array
@@ -74,6 +75,7 @@ class ConcreteApiResourceNoModel extends GatekeeperApiResource
 class ConcreteApiCollection extends GatekeeperApiCollection
 {
     protected string $shieldModel = 'User';
+
     protected string $shieldGuard = 'web';
 
     public $collects = ConcreteApiResource::class;

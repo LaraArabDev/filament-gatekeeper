@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use LaraArabDev\FilamentGatekeeper\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
@@ -25,7 +27,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->gatekeeper = new Gatekeeper(new PermissionCache());
+        $this->gatekeeper = new Gatekeeper(new PermissionCache);
     }
 
     // ── detectGuardFromRequest ─────────────────────────────────────────────
@@ -33,20 +35,20 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     /** @test */
     public function it_detects_api_guard_from_api_route_prefix(): void
     {
-        $request = \Illuminate\Http\Request::create('/api/users', 'GET');
+        $request = Request::create('/api/users', 'GET');
         app()->instance('request', $request);
 
-        $gatekeeper = new Gatekeeper(new PermissionCache());
+        $gatekeeper = new Gatekeeper(new PermissionCache);
         $this->assertEquals('api', $gatekeeper->getGuard());
     }
 
     /** @test */
     public function it_detects_web_guard_for_regular_routes(): void
     {
-        $request = \Illuminate\Http\Request::create('/dashboard', 'GET');
+        $request = Request::create('/dashboard', 'GET');
         app()->instance('request', $request);
 
-        $gatekeeper = new Gatekeeper(new PermissionCache());
+        $gatekeeper = new Gatekeeper(new PermissionCache);
         config()->set('gatekeeper.guard', 'web');
         $this->assertEquals('web', $gatekeeper->getGuard());
     }
@@ -55,7 +57,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     public function it_uses_set_guard_over_auto_detection(): void
     {
         // Even with bearer token, explicit guard wins
-        $gatekeeper = new Gatekeeper(new PermissionCache());
+        $gatekeeper = new Gatekeeper(new PermissionCache);
         $gatekeeper->guard('web');
         $this->assertEquals('web', $gatekeeper->getGuard());
     }
@@ -129,17 +131,42 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         config()->set('gatekeeper.super_admin.role', 'super-admin');
 
         // Create a user without hasRole method to force DB path
-        $user = new class implements \Illuminate\Contracts\Auth\Authenticatable {
-            public function getAuthIdentifierName(): string { return 'id'; }
-            public function getAuthIdentifier(): mixed { return 99999; }
-            public function getAuthPasswordName(): string { return 'password'; }
-            public function getAuthPassword(): string { return ''; }
-            public function getRememberToken(): string { return ''; }
+        $user = new class implements Authenticatable
+        {
+            public function getAuthIdentifierName(): string
+            {
+                return 'id';
+            }
+
+            public function getAuthIdentifier(): mixed
+            {
+                return 99999;
+            }
+
+            public function getAuthPasswordName(): string
+            {
+                return 'password';
+            }
+
+            public function getAuthPassword(): string
+            {
+                return '';
+            }
+
+            public function getRememberToken(): string
+            {
+                return '';
+            }
+
             public function setRememberToken(mixed $value): void {}
-            public function getRememberTokenName(): string { return 'remember_token'; }
+
+            public function getRememberTokenName(): string
+            {
+                return 'remember_token';
+            }
         };
 
-        $gatekeeper = new Gatekeeper(new PermissionCache());
+        $gatekeeper = new Gatekeeper(new PermissionCache);
         $result = $gatekeeper->shouldBypassPermissions($user);
 
         // No hasRole and not in DB = false
@@ -167,7 +194,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $superAdmin = $this->createSuperAdmin();
         $this->actingAs($superAdmin);
 
-        $gatekeeper = new Gatekeeper(new PermissionCache());
+        $gatekeeper = new Gatekeeper(new PermissionCache);
         // Even though user has role, bypass is disabled
         config()->set('gatekeeper.super_admin.enabled', false);
         $this->assertFalse($gatekeeper->shouldBypassPermissions($superAdmin));
@@ -222,7 +249,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     // ── canViewColumn - hasPermissionTo path then can() ────────────────────
 
     /** @test */
-    public function it_canViewColumn_checks_permission_by_name(): void
+    public function it_can_view_column_checks_permission_by_name(): void
     {
         $user = $this->createUser();
         Permission::factory()->column()->create(['name' => 'view_user_email_column']);
@@ -233,7 +260,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     }
 
     /** @test */
-    public function it_canViewColumn_returns_false_for_missing_permission(): void
+    public function it_can_view_column_returns_false_for_missing_permission(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -244,7 +271,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     // ── canViewRelation ────────────────────────────────────────────────────
 
     /** @test */
-    public function it_canViewRelation_checks_permission_by_name(): void
+    public function it_can_view_relation_checks_permission_by_name(): void
     {
         $user = $this->createUser();
         Permission::factory()->relation()->create(['name' => 'view_user_roles_relation']);
@@ -255,7 +282,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     }
 
     /** @test */
-    public function it_canViewRelation_falls_back_to_matrix(): void
+    public function it_can_view_relation_falls_back_to_matrix(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -267,7 +294,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     // ── getVisibleFields/Columns with matrix fallback ──────────────────────
 
     /** @test */
-    public function it_getVisibleFields_returns_from_matrix_when_no_can_match(): void
+    public function it_get_visible_fields_returns_from_matrix_when_no_can_match(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);
@@ -280,7 +307,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
     }
 
     /** @test */
-    public function it_getVisibleColumns_returns_from_matrix_when_no_can_match(): void
+    public function it_get_visible_columns_returns_from_matrix_when_no_can_match(): void
     {
         $user = $this->createUser();
         $this->actingAs($user);

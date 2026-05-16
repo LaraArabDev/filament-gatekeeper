@@ -19,6 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\HtmlString;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\CreateRole;
@@ -114,6 +115,7 @@ class RoleResource extends Resource
     public static function form(Form $form): Form
     {
         $guard = config('gatekeeper.guard', 'web');
+
         return $form->schema([
             Section::make(__('gatekeeper::messages.sections.role_details'))
                 ->description(__('gatekeeper::messages.sections.role_details_description'))
@@ -179,7 +181,7 @@ class RoleResource extends Resource
         $showEntityInTitle = in_array($type, static::getTypesWithEntityInTitle(), true);
 
         /** @var Collection<string, Collection> $grouped */
-        $grouped = $permissions->groupBy(fn(Permission $p) => $p->getEntityGroupKey());
+        $grouped = $permissions->groupBy(fn (Permission $p) => $p->getEntityGroupKey());
         $grouped = $grouped->sortKeys(SORT_NATURAL);
 
         $sections = [];
@@ -193,7 +195,7 @@ class RoleResource extends Resource
     /**
      * Build a single section for one entity group (e.g. "User" with its permissions).
      *
-     * @param Collection<int, Permission> $perms
+     * @param  Collection<int, Permission>  $perms
      */
     protected static function makeSectionForEntity(
         string $entityKey,
@@ -205,7 +207,7 @@ class RoleResource extends Resource
     ): Section {
         $title = str($entityKey)->headline()->toString();
         $sectionTitle = $showEntityInTitle
-            ? $title . ' — ' . str($typeLabel)->lower()->toString()
+            ? $title.' — '.str($typeLabel)->lower()->toString()
             : $title;
         $modelPath = static::getModelPath($entityKey, $type);
 
@@ -220,7 +222,7 @@ class RoleResource extends Resource
                     ->hiddenLabel()
                     ->relationship('permissions', 'id')
                     ->options(
-                        $perms->mapWithKeys(fn(Permission $p) => [
+                        $perms->mapWithKeys(fn (Permission $p) => [
                             $p->id => static::formatPermissionLabel($p->name, $entityKey),
                         ])->toArray()
                     )
@@ -236,20 +238,20 @@ class RoleResource extends Resource
             ->schema([
                 Forms\Components\Placeholder::make('no_permissions')
                     ->hiddenLabel()
-                    ->content(fn() => new \Illuminate\Support\HtmlString(
+                    ->content(fn () => new HtmlString(
                         '<div class="flex flex-col items-center justify-center py-8 text-center">
                             <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-warning-100 dark:bg-warning-500/20">
                                 <svg class="w-8 h-8 text-warning-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                                 </svg>
                             </div>
-                            <h3 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">' . __('gatekeeper::messages.placeholders.no_permissions') . '</h3>
-                            <p class="mb-4 max-w-md text-sm text-gray-500 dark:text-gray-400">' . __('gatekeeper::messages.placeholders.no_permissions_hint') . '</p>
+                            <h3 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">'.__('gatekeeper::messages.placeholders.no_permissions').'</h3>
+                            <p class="mb-4 max-w-md text-sm text-gray-500 dark:text-gray-400">'.__('gatekeeper::messages.placeholders.no_permissions_hint').'</p>
                             <div class="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                                 <svg class="w-4 h-4 text-gray-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
                                 </svg>
-                                <code class="text-sm font-mono text-primary-600 dark:text-primary-400">' . __('gatekeeper::messages.placeholders.no_permissions_command') . '</code>
+                                <code class="text-sm font-mono text-primary-600 dark:text-primary-400">'.__('gatekeeper::messages.placeholders.no_permissions_command').'</code>
                             </div>
                         </div>'
                     )),
@@ -306,7 +308,7 @@ class RoleResource extends Resource
     /**
      * Get permission descriptions for tooltips.
      *
-     * @param  \Illuminate\Support\Collection  $permissions
+     * @param  Collection  $permissions
      * @return array<int, string>
      */
     protected static function getPermissionDescriptions($permissions): array
@@ -342,8 +344,8 @@ class RoleResource extends Resource
         $guards = config('gatekeeper.guards', ['web' => ['enabled' => true]]);
 
         return collect($guards)
-            ->filter(fn($guard) => $guard['enabled'] ?? true)
-            ->mapWithKeys(fn($guard, $name) => [$name => ucfirst($name)])
+            ->filter(fn ($guard) => $guard['enabled'] ?? true)
+            ->mapWithKeys(fn ($guard, $name) => [$name => ucfirst($name)])
             ->toArray();
     }
 
@@ -390,7 +392,7 @@ class RoleResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->hidden(fn(Role $record) => $record->isSuperAdmin()),
+                    ->hidden(fn (Role $record) => $record->isSuperAdmin()),
             ])
             ->headerActions([
                 Action::make('sync')

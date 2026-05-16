@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use LaraArabDev\FilamentGatekeeper\Commands\ClearCacheCommand;
 use LaraArabDev\FilamentGatekeeper\Commands\DeletePermissionsCommand;
-use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware;
-use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Commands\InstallCommand;
 use LaraArabDev\FilamentGatekeeper\Commands\SyncPermissionsCommand;
+use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware;
+use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
@@ -29,16 +28,10 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
  */
 class GatekeeperServiceProvider extends PackageServiceProvider
 {
-    /**
-     * @var string
-     */
     public static string $name = 'gatekeeper';
 
     /**
      * Configure the package.
-     *
-     * @param Package $package
-     * @return void
      */
     public function configurePackage(Package $package): void
     {
@@ -56,8 +49,6 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
     /**
      * Register the package services.
-     *
-     * @return void
      */
     public function packageRegistered(): void
     {
@@ -72,14 +63,12 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
         // Bind the PermissionCache service
         $this->app->singleton(PermissionCache::class, function ($app) {
-            return new PermissionCache();
+            return new PermissionCache;
         });
     }
 
     /**
      * Boot the package services.
-     *
-     * @return void
      */
     public function packageBooted(): void
     {
@@ -117,33 +106,30 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
     /**
      * Register cache invalidation events.
-     * @return void
      */
     protected function registerCacheInvalidationEvents(): void
     {
         // Clear cache when role is updated
-        Event::listen('eloquent.saved: ' . Role::class, function ($role) {
+        Event::listen('eloquent.saved: '.Role::class, function ($role) {
             app(PermissionCache::class)->invalidateRole($role);
         });
 
-        Event::listen('eloquent.deleted: ' . Role::class, function ($role) {
+        Event::listen('eloquent.deleted: '.Role::class, function ($role) {
             app(PermissionCache::class)->invalidateRole($role);
         });
 
         // Clear all cache when permission is modified
-        Event::listen('eloquent.saved: ' . Permission::class, function () {
+        Event::listen('eloquent.saved: '.Permission::class, function () {
             app(PermissionCache::class)->invalidateAll();
         });
 
-        Event::listen('eloquent.deleted: ' . Permission::class, function () {
+        Event::listen('eloquent.deleted: '.Permission::class, function () {
             app(PermissionCache::class)->invalidateAll();
         });
     }
 
     /**
      * Register the middleware aliases.
-     *
-     * @return void
      */
     protected function registerMiddleware(): void
     {
@@ -156,8 +142,6 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
     /**
      * Register Gate before callback for super admin bypass.
-     *
-     * @return void
      */
     protected function registerGateCallbacks(): void
     {
@@ -183,8 +167,6 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
     /**
      * Register permission gates for all permissions in the database.
-     *
-     * @return void
      */
     protected function registerPermissionGates(): void
     {
@@ -206,16 +188,14 @@ class GatekeeperServiceProvider extends PackageServiceProvider
 
     /**
      * Publish stubs for customization.
-     *
-     * @return void
      */
     protected function publishStubs(): void
     {
         $this->publishes([
-            __DIR__ . '/../stubs/filament/Resource.stub' => base_path('stubs/filament/Resource.stub'),
-            __DIR__ . '/../stubs/filament/Page.stub' => base_path('stubs/filament/Page.stub'),
-            __DIR__ . '/../stubs/filament/Widget.stub' => base_path('stubs/filament/Widget.stub'),
-            __DIR__ . '/../stubs/filament/RelationManager.stub' => base_path('stubs/filament/RelationManager.stub'),
+            __DIR__.'/../stubs/filament/Resource.stub' => base_path('stubs/filament/Resource.stub'),
+            __DIR__.'/../stubs/filament/Page.stub' => base_path('stubs/filament/Page.stub'),
+            __DIR__.'/../stubs/filament/Widget.stub' => base_path('stubs/filament/Widget.stub'),
+            __DIR__.'/../stubs/filament/RelationManager.stub' => base_path('stubs/filament/RelationManager.stub'),
         ], 'gatekeeper-stubs');
     }
 }

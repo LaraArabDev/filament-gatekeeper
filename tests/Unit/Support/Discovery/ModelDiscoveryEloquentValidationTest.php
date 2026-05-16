@@ -20,13 +20,12 @@ abstract class ModelDiscoveryBranchAbstractModel extends Model
     protected $table = 'users';
 }
 
-interface ModelDiscoveryBranchInterface
-{
-}
+interface ModelDiscoveryBranchInterface {}
 
 class ModelDiscoveryBranchConcreteModel extends Model
 {
     protected $table = 'users';
+
     protected $guarded = [];
 }
 
@@ -45,13 +44,14 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     use RefreshDatabase;
 
     private ModelDiscovery $discovery;
+
     private string $tempDir = '';
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->discovery = new ModelDiscovery();
+        $this->discovery = new ModelDiscovery;
     }
 
     protected function tearDown(): void
@@ -73,7 +73,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     public function is_eloquent_model_returns_false_for_non_existent_class(): void
     {
         // We expose the protected method via an anonymous sub-class.
-        $proxy = new class extends ModelDiscovery {
+        $proxy = new class extends ModelDiscovery
+        {
             public function publicIsEloquentModel(string $class): bool
             {
                 return $this->isEloquentModel($class);
@@ -88,7 +89,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function is_eloquent_model_returns_false_for_abstract_class(): void
     {
-        $proxy = new class extends ModelDiscovery {
+        $proxy = new class extends ModelDiscovery
+        {
             public function publicIsEloquentModel(string $class): bool
             {
                 return $this->isEloquentModel($class);
@@ -104,7 +106,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function is_eloquent_model_returns_false_for_interface(): void
     {
-        $proxy = new class extends ModelDiscovery {
+        $proxy = new class extends ModelDiscovery
+        {
             public function publicIsEloquentModel(string $class): bool
             {
                 return $this->isEloquentModel($class);
@@ -119,7 +122,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function is_eloquent_model_returns_true_for_real_model(): void
     {
-        $proxy = new class extends ModelDiscovery {
+        $proxy = new class extends ModelDiscovery
+        {
             public function publicIsEloquentModel(string $class): bool
             {
                 return $this->isEloquentModel($class);
@@ -135,7 +139,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function is_eloquent_model_returns_false_for_non_model_class(): void
     {
-        $proxy = new class extends ModelDiscovery {
+        $proxy = new class extends ModelDiscovery
+        {
             public function publicIsEloquentModel(string $class): bool
             {
                 return $this->isEloquentModel($class);
@@ -168,25 +173,26 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function get_models_without_resources_with_real_temp_model(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_model_branch_' . uniqid();
-        $modelDir = $this->tempDir . '/Models';
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_model_branch_'.uniqid();
+        $modelDir = $this->tempDir.'/Models';
         mkdir($modelDir, 0755, true);
 
         // Write a concrete Eloquent model file
-        $modelContent = '<?php' . PHP_EOL
-            . 'namespace GatekeeperTestModels;' . PHP_EOL
-            . 'use Illuminate\\Database\\Eloquent\\Model;' . PHP_EOL
-            . 'class TempArticle extends Model { protected $table = \'users\'; }';
-        file_put_contents($modelDir . '/TempArticle.php', $modelContent);
+        $modelContent = '<?php'.PHP_EOL
+            .'namespace GatekeeperTestModels;'.PHP_EOL
+            .'use Illuminate\\Database\\Eloquent\\Model;'.PHP_EOL
+            .'class TempArticle extends Model { protected $table = \'users\'; }';
+        file_put_contents($modelDir.'/TempArticle.php', $modelContent);
 
         // We need the class to be loadable – autoload it manually
-        require_once $modelDir . '/TempArticle.php';
+        require_once $modelDir.'/TempArticle.php';
 
         config()->set('gatekeeper.modules.enabled', false);
         config()->set('gatekeeper.discovery.models', []);
 
         // Scan the temp directory directly via a sub-class
-        $proxy = new class($modelDir) extends ModelDiscovery {
+        $proxy = new class($modelDir) extends ModelDiscovery
+        {
             public function __construct(private string $dir) {}
 
             public function discover(): array
@@ -206,7 +212,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertContains('TempArticle', $found);
 
         // getModelsWithoutResources filters against a resource list
-        $discovery = new ModelDiscovery();
+        $discovery = new ModelDiscovery;
         config()->set('gatekeeper.discovery.models', []);
         $withoutResources = $discovery->getModelsWithoutResources(['SomeOtherModel']);
 
@@ -240,7 +246,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     public function discover_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
-        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_' . uniqid());
+        config()->set('gatekeeper.modules.path', '/non/existent/path/xyz_'.uniqid());
         config()->set('gatekeeper.discovery.models', []);
 
         $result = $this->discovery->discover();
@@ -251,8 +257,8 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     /** @test */
     public function discover_skips_module_without_models_directory(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_model_branch_' . uniqid();
-        mkdir($this->tempDir . '/Blog', 0755, true);
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_model_branch_'.uniqid();
+        mkdir($this->tempDir.'/Blog', 0755, true);
 
         config()->set('gatekeeper.modules.enabled', true);
         config()->set('gatekeeper.modules.path', $this->tempDir);
@@ -277,7 +283,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $files = array_diff(scandir($dir) ?: [], ['.', '..']);
 
         foreach ($files as $file) {
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            $path = $dir.DIRECTORY_SEPARATOR.$file;
 
             is_dir($path) ? $this->removeDirectory($path) : unlink($path);
         }

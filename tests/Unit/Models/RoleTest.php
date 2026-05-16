@@ -293,7 +293,7 @@ class RoleTest extends TestCase
     /** @test */
     public function it_has_fillable_attributes(): void
     {
-        $role = new Role();
+        $role = new Role;
 
         $this->assertTrue(in_array('name', $role->getFillable()));
         $this->assertTrue(in_array('guard_name', $role->getFillable()));

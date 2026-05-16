@@ -28,4 +28,3 @@ abstract class GatekeeperPage extends Page
 {
     use HasPagePermissions;
 }
-

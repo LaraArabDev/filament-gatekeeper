@@ -16,8 +16,6 @@ use ReflectionMethod;
  * Discovers table columns from various sources for permission management.
  * Supports multiple detection strategies: database schema, model attributes,
  * and Filament resource tables.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class ColumnDiscovery
 {
@@ -25,7 +23,9 @@ class ColumnDiscovery
      * Detection source constants.
      */
     public const SOURCE_DATABASE = 'database';
+
     public const SOURCE_RESOURCE = 'resource';
+
     public const SOURCE_CONFIG = 'config';
 
     /**
@@ -58,8 +58,8 @@ class ColumnDiscovery
      * This method aggregates columns from multiple sources based on configuration.
      * It applies exclusions and returns a unique list of column names.
      *
-     * @param string $modelClass The fully qualified model class name
-     * @param array<string>|null $sources Detection sources to use (null = use config)
+     * @param  string  $modelClass  The fully qualified model class name
+     * @param  array<string>|null  $sources  Detection sources to use (null = use config)
      * @return array<string> List of discovered column names
      *
      * @example
@@ -102,7 +102,7 @@ class ColumnDiscovery
      * This method queries the database schema to get all column names
      * for the model's table.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return array<string> List of database column names
      *
      * @example
@@ -143,7 +143,7 @@ class ColumnDiscovery
      * This method analyzes the table() method of a Filament resource
      * to extract column names defined in the schema.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return array<string> List of column names from the resource table
      *
      * @example
@@ -186,7 +186,7 @@ class ColumnDiscovery
      * This method retrieves manually configured columns from the
      * gatekeeper config file.
      *
-     * @param string $modelName The model name (e.g., 'User')
+     * @param  string  $modelName  The model name (e.g., 'User')
      * @return array<string> List of configured column names
      *
      * @example
@@ -210,7 +210,7 @@ class ColumnDiscovery
      * Searches through configured resource paths to find the corresponding
      * resource class for the given model.
      *
-     * @param string $modelClass The fully qualified model class name
+     * @param  string  $modelClass  The fully qualified model class name
      * @return string|null The resource class name or null if not found
      */
     protected function findResourceForModel(string $modelClass): ?string
@@ -240,7 +240,7 @@ class ColumnDiscovery
      *
      * Extracts column names from TextColumn::make(), BadgeColumn::make(), etc.
      *
-     * @param string $code The PHP source code to parse
+     * @param  string  $code  The PHP source code to parse
      * @return array<string> List of parsed column names
      */
     protected function parseColumnsFromCode(string $code): array
@@ -268,15 +268,15 @@ class ColumnDiscovery
      *
      * Removes columns that are in the exclusion list (both default and configured).
      *
-     * @param string $modelName The model name
-     * @param array<string> $columns List of columns to filter
+     * @param  string  $modelName  The model name
+     * @param  array<string>  $columns  List of columns to filter
      * @return array<string> Filtered list of columns
      */
     protected function applyExclusions(string $modelName, array $columns): array
     {
         $excluded = $this->getExcludedColumns($modelName);
 
-        return array_filter($columns, fn($column) => ! in_array($column, $excluded));
+        return array_filter($columns, fn ($column) => ! in_array($column, $excluded));
     }
 
     /**
@@ -285,7 +285,7 @@ class ColumnDiscovery
      * Combines default exclusions with model-specific and global exclusions
      * from the configuration.
      *
-     * @param string $modelName The model name
+     * @param  string  $modelName  The model name
      * @return array<string> List of excluded column names
      */
     public function getExcludedColumns(string $modelName): array
@@ -322,8 +322,7 @@ class ColumnDiscovery
      *
      * Useful when configuration or model structure changes.
      *
-     * @param string|null $modelName Specific model to clear, or null for all
-     * @return void
+     * @param  string|null  $modelName  Specific model to clear, or null for all
      */
     public function clearCache(?string $modelName = null): void
     {
@@ -340,7 +339,7 @@ class ColumnDiscovery
      * Sensitive columns are typically those containing passwords,
      * tokens, or personal identifiable information.
      *
-     * @param string $columnName The column name to check
+     * @param  string  $columnName  The column name to check
      * @return bool True if the column is considered sensitive
      */
     public function isSensitiveColumn(string $columnName): bool

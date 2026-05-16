@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Middleware;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,7 +24,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
     {
         parent::setUp();
 
-        $this->middleware = new GatekeeperApiMiddleware();
+        $this->middleware = new GatekeeperApiMiddleware;
     }
 
     /** @test */
@@ -61,7 +63,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
 
         $request = Request::create('/api/users', 'GET');
 
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
+        $this->expectException(AuthorizationException::class);
 
         // Use web guard to match user authentication
         $this->middleware->handle($request, function () {
@@ -92,7 +94,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
     {
         $request = Request::create('/api/users', 'GET');
 
-        $this->expectException(\Illuminate\Auth\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
         $this->middleware->handle($request, function () {
             return new Response('OK');

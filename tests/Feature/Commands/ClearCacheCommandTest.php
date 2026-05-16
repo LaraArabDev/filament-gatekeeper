@@ -53,6 +53,7 @@ class ClearCacheCommandTest extends TestCase
         $callCount = 0;
         $cache->remember('test-key', function () use (&$callCount) {
             $callCount++;
+
             return 'test-value';
         });
         $this->assertSame(1, $callCount);
@@ -63,6 +64,7 @@ class ClearCacheCommandTest extends TestCase
         // After clearing, the callback must run again (cache miss)
         $cache->remember('test-key', function () use (&$callCount) {
             $callCount++;
+
             return 'fresh-value';
         });
         $this->assertSame(2, $callCount, 'Cache was not cleared — callback was not invoked after clear');

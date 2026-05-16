@@ -9,8 +9,6 @@ namespace LaraArabDev\FilamentGatekeeper\Support\Traits;
  *
  * This trait handles filtering of discovered items based on
  * exclusion lists from configuration.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Traits
  */
 trait InteractsWithExclusions
 {
@@ -19,8 +17,8 @@ trait InteractsWithExclusions
      *
      * Removes items that match any entry in the exclusion list.
      *
-     * @param array<string> $items The items to filter
-     * @param array<string> $exclusions The exclusion list (class names or patterns)
+     * @param  array<string>  $items  The items to filter
+     * @param  array<string>  $exclusions  The exclusion list (class names or patterns)
      * @return array<string> Filtered array of items
      */
     protected function filterExclusions(array $items, array $exclusions): array

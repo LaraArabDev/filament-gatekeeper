@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\File;
  *
  * This class scans configured widget paths to discover all Filament widget
  * classes and supports module-based discovery for HMVC applications.
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class WidgetDiscovery
 {
@@ -59,7 +57,7 @@ class WidgetDiscovery
      *
      * Handles both glob patterns and direct directory paths.
      *
-     * @param string $pathPattern The path pattern to scan (supports glob patterns)
+     * @param  string  $pathPattern  The path pattern to scan (supports glob patterns)
      * @return array<string> Array of discovered widget names
      */
     protected function scanPath(string $pathPattern): array
@@ -85,7 +83,7 @@ class WidgetDiscovery
      * Scans a directory for PHP files and extracts widget names from
      * file names (without extension).
      *
-     * @param string $directory The directory path to scan
+     * @param  string  $directory  The directory path to scan
      * @return array<string> Array of discovered widget names
      */
     protected function scanDirectory(string $directory): array

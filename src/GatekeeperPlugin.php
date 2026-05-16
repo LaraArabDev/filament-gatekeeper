@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper;
 
 use Closure;
-use Filament\Contracts\Plugin;
 use Filament\Context;
+use Filament\Contracts\Plugin;
 use Filament\Panel;
 use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
@@ -17,54 +17,53 @@ use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
  */
 class GatekeeperPlugin implements Plugin
 {
-    /** @var string*/
+    /** @var string */
     protected string $superAdminRole = 'super-admin';
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $bypassForSuperAdmin = true;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $fieldPermissionsEnabled = true;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $columnPermissionsEnabled = true;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $actionPermissionsEnabled = true;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $relationPermissionsEnabled = true;
 
-    /** @var string*/
+    /** @var string */
     protected string $navigationGroup = 'Access Control';
 
-    /** @var string*/
+    /** @var string */
     protected string $navigationIcon = 'heroicon-o-shield-check';
 
-    /** @var int*/
+    /** @var int */
     protected int $navigationSort = 1;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $roleResourceEnabled = true;
 
-    /** @var bool*/
+    /** @var bool */
     protected bool $permissionResourceEnabled = true;
 
-    /** @var array<string>*/
+    /** @var array<string> */
     protected array $panels = [];
 
     /** @var array<string> */
     protected array $guards = ['web'];
 
-    /** @var ?Closure*/
+    /** @var ?Closure */
     protected ?Closure $modifyRoleResourceUsing = null;
 
-    /** @var ?Closure*/
+    /** @var ?Closure */
     protected ?Closure $modifyPermissionResourceUsing = null;
 
     /**
      * Get the plugin ID.
-     * @return string
      */
     public function getId(): string
     {
@@ -73,7 +72,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Make a new instance of the plugin.
-     * @return static
      */
     public static function make(): static
     {
@@ -82,7 +80,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the plugin instance.
-     * @return static
      */
     public static function get(): static
     {
@@ -94,8 +91,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Register the plugin resources.
-     * @param Context|Panel $context
-     * @return void
      */
     public function register(Context|Panel $context): void
     {
@@ -116,15 +111,11 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Boot the plugin.
-     * @param Context|Panel $context
-     * @return void
      */
     public function boot(Context|Panel $context): void {}
 
     /**
      * Set the super admin role name.
-     * @param string $role
-     * @return static
      */
     public function superAdminRole(string $role): static
     {
@@ -135,7 +126,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the super admin role name.
-     * @return string
      */
     public function getSuperAdminRole(): string
     {
@@ -144,8 +134,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable or disable super admin bypass.
-     * @param bool $bypass
-     * @return static
      */
     public function bypassForSuperAdmin(bool $bypass = true): static
     {
@@ -156,7 +144,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if super admin bypass is enabled.
-     * @return bool
      */
     public function isBypassForSuperAdminEnabled(): bool
     {
@@ -165,7 +152,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isBypassForSuperAdminEnabled().
-     * @return bool
      */
     public function shouldBypassForSuperAdmin(): bool
     {
@@ -174,8 +160,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable field permissions.
-     * @param bool $enable
-     * @return static
      */
     public function enableFieldPermissions(bool $enable = true): static
     {
@@ -186,7 +170,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if field permissions are enabled.
-     * @return bool
      */
     public function isFieldPermissionsEnabled(): bool
     {
@@ -195,7 +178,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isFieldPermissionsEnabled().
-     * @return bool
      */
     public function hasFieldPermissions(): bool
     {
@@ -204,8 +186,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable column permissions.
-     * @param bool $enable
-     * @return static
      */
     public function enableColumnPermissions(bool $enable = true): static
     {
@@ -216,7 +196,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if column permissions are enabled.
-     * @return bool
      */
     public function isColumnPermissionsEnabled(): bool
     {
@@ -225,7 +204,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isColumnPermissionsEnabled().
-     * @return bool
      */
     public function hasColumnPermissions(): bool
     {
@@ -234,8 +212,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable action permissions.
-     * @param bool $enable
-     * @return static
      */
     public function enableActionPermissions(bool $enable = true): static
     {
@@ -246,7 +222,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if action permissions are enabled.
-     * @return bool
      */
     public function isActionPermissionsEnabled(): bool
     {
@@ -255,7 +230,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isActionPermissionsEnabled().
-     * @return bool
      */
     public function hasActionPermissions(): bool
     {
@@ -264,8 +238,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable relation permissions.
-     * @param bool $enable
-     * @return static
      */
     public function enableRelationPermissions(bool $enable = true): static
     {
@@ -276,7 +248,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if relation permissions are enabled.
-     * @return bool
      */
     public function isRelationPermissionsEnabled(): bool
     {
@@ -285,7 +256,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isRelationPermissionsEnabled().
-     * @return bool
      */
     public function hasRelationPermissions(): bool
     {
@@ -294,8 +264,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Set the navigation group.
-     * @param string $group
-     * @return static
      */
     public function navigationGroup(string $group): static
     {
@@ -306,7 +274,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the navigation group.
-     * @return string
      */
     public function getNavigationGroup(): string
     {
@@ -315,8 +282,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Set the navigation icon.
-     * @param string $icon
-     * @return static
      */
     public function navigationIcon(string $icon): static
     {
@@ -327,7 +292,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the navigation icon.
-     * @return string
      */
     public function getNavigationIcon(): string
     {
@@ -336,8 +300,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Set the navigation sort order.
-     * @param int $sort
-     * @return static
      */
     public function navigationSort(int $sort): static
     {
@@ -348,7 +310,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the navigation sort order.
-     * @return int
      */
     public function getNavigationSort(): int
     {
@@ -357,8 +318,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable or disable the Role resource.
-     * @param bool $enabled
-     * @return static
      */
     public function roleResource(bool $enabled = true): static
     {
@@ -369,7 +328,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if Role resource is enabled.
-     * @return bool
      */
     public function isRoleResourceEnabled(): bool
     {
@@ -378,7 +336,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isRoleResourceEnabled().
-     * @return bool
      */
     public function hasRoleResource(): bool
     {
@@ -387,8 +344,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Enable or disable the Permission resource.
-     * @param bool $enabled
-     * @return static
      */
     public function permissionResource(bool $enabled = true): static
     {
@@ -399,7 +354,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Check if Permission resource is enabled.
-     * @return bool
      */
     public function isPermissionResourceEnabled(): bool
     {
@@ -408,7 +362,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Alias for isPermissionResourceEnabled().
-     * @return bool
      */
     public function hasPermissionResource(): bool
     {
@@ -417,7 +370,8 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Set the panels to enable Gatekeeper on.
-     * @param array<string> $panels
+     *
+     * @param  array<string>  $panels
      */
     public function panels(array $panels): static
     {
@@ -428,6 +382,7 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the panels.
+     *
      * @return array<string>
      */
     public function getPanels(): array
@@ -437,8 +392,8 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Set the guards to use.
-     * @param array<string> $guards
-     * @return static
+     *
+     * @param  array<string>  $guards
      */
     public function guards(array $guards): static
     {
@@ -449,6 +404,7 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the guards.
+     *
      * @return array<string>
      */
     public function getGuards(): array
@@ -458,8 +414,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Modify the Role resource using a callback.
-     * @param ?Closure $callback
-     * @return static
      */
     public function modifyRoleResourceUsing(?Closure $callback): static
     {
@@ -470,7 +424,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the Role resource modifier callback.
-     * @return ?Closure
      */
     public function getModifyRoleResourceUsing(): ?Closure
     {
@@ -479,8 +432,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Modify the Permission resource using a callback.
-     * @param ?Closure $callback
-     * @return static
      */
     public function modifyPermissionResourceUsing(?Closure $callback): static
     {
@@ -491,7 +442,6 @@ class GatekeeperPlugin implements Plugin
 
     /**
      * Get the Permission resource modifier callback.
-     * @return ?Closure
      */
     public function getModifyPermissionResourceUsing(): ?Closure
     {

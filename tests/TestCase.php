@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use LaraArabDev\FilamentGatekeeper\Database\Factories\PermissionFactory;
+use LaraArabDev\FilamentGatekeeper\Database\Factories\UserFactory;
+use LaraArabDev\FilamentGatekeeper\GatekeeperServiceProvider;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
-use LaraArabDev\FilamentGatekeeper\GatekeeperServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\PermissionServiceProvider;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -22,11 +24,11 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn(string $modelName) => 'LaraArabDev\\FilamentGatekeeper\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'LaraArabDev\\FilamentGatekeeper\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
         // Reset permission cache
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     protected function getPackageProviders($app): array
@@ -64,17 +66,17 @@ class TestCase extends Orchestra
         config()->set('permission.models.role', Role::class);
 
         // Run migrations
-        $migration = include __DIR__ . '/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
+        $migration = include __DIR__.'/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
         $migration->up();
 
         // Run package migrations
-        $typeMigration = include __DIR__ . '/../database/migrations/add_type_to_permissions_table.php.stub';
+        $typeMigration = include __DIR__.'/../database/migrations/add_type_to_permissions_table.php.stub';
         $typeMigration->up();
 
-        $entityMigration = include __DIR__ . '/../database/migrations/add_entity_to_permissions_table.php.stub';
+        $entityMigration = include __DIR__.'/../database/migrations/add_entity_to_permissions_table.php.stub';
         $entityMigration->up();
 
-        $fieldPermissionsMigration = include __DIR__ . '/../database/migrations/add_field_permissions_to_roles_table.php.stub';
+        $fieldPermissionsMigration = include __DIR__.'/../database/migrations/add_field_permissions_to_roles_table.php.stub';
         $fieldPermissionsMigration->up();
 
         // Add description column to roles table if it doesn't exist
@@ -157,11 +159,13 @@ class TestCase extends Orchestra
  */
 class TestUser extends Authenticatable
 {
-    use HasRoles;
     use HasFactory;
+    use HasRoles;
 
     protected $table = 'users';
+
     protected $fillable = ['name', 'email', 'password'];
+
     protected $guard_name = 'web';
 
     /**
@@ -185,8 +189,8 @@ class TestUser extends Authenticatable
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): \LaraArabDev\FilamentGatekeeper\Database\Factories\UserFactory
+    protected static function newFactory(): UserFactory
     {
-        return \LaraArabDev\FilamentGatekeeper\Database\Factories\UserFactory::new();
+        return UserFactory::new();
     }
 }

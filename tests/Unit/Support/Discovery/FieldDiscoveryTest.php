@@ -6,7 +6,6 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Discovery;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 
@@ -21,7 +20,7 @@ class FieldDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new FieldDiscovery();
+        $this->discovery = new FieldDiscovery;
     }
 
     /** @test */
@@ -172,7 +171,7 @@ class FieldDiscoveryTest extends TestCase
         $this->discovery->clearCache();
 
         // Create a new instance to get fresh config
-        $discovery = new FieldDiscovery();
+        $discovery = new FieldDiscovery;
 
         $fields = $discovery->discoverForModel(TestModelWithFillable::class, [FieldDiscovery::SOURCE_FILLABLE]);
 
@@ -189,7 +188,7 @@ class FieldDiscoveryTest extends TestCase
         ]);
         Config::set('gatekeeper.field_discovery.sources', [FieldDiscovery::SOURCE_CONFIG]);
 
-        $discovery = new FieldDiscovery();
+        $discovery = new FieldDiscovery;
         $discovery->clearCache();
 
         $fields = $discovery->discoverForModel('App\\Models\\User');
@@ -202,7 +201,7 @@ class FieldDiscoveryTest extends TestCase
     /** @test */
     public function it_uses_cache_on_subsequent_calls(): void
     {
-        $discovery = new FieldDiscovery();
+        $discovery = new FieldDiscovery;
 
         // First call - should discover
         $fields1 = $discovery->discoverForModel(TestModelWithFillable::class, [FieldDiscovery::SOURCE_FILLABLE]);

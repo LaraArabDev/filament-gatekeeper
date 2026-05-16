@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\File;
  * This class scans configured page paths to discover all Filament page
  * classes, supports module-based discovery for HMVC applications, and
  * filters out resource page files (CreateUser, EditUser, ListUsers).
- *
- * @package LaraArabDev\FilamentGatekeeper\Support\Discovery
  */
 class PageDiscovery
 {
@@ -60,7 +58,7 @@ class PageDiscovery
      *
      * Handles both glob patterns and direct directory paths.
      *
-     * @param string $pathPattern The path pattern to scan (supports glob patterns)
+     * @param  string  $pathPattern  The path pattern to scan (supports glob patterns)
      * @return array<string> Array of discovered page names
      */
     protected function scanPath(string $pathPattern): array
@@ -87,7 +85,7 @@ class PageDiscovery
      * (CreateUser, EditUser, ListUsers, ViewUser, ManageUser) which are
      * handled separately by ResourceDiscovery.
      *
-     * @param string $directory The directory path to scan
+     * @param  string  $directory  The directory path to scan
      * @return array<string> Array of discovered page names
      */
     protected function scanDirectory(string $directory): array

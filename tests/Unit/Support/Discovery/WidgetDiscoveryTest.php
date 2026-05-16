@@ -17,7 +17,7 @@ class WidgetDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new WidgetDiscovery();
+        $this->discovery = new WidgetDiscovery;
     }
 
     /** @test */
@@ -49,11 +49,11 @@ class WidgetDiscoveryTest extends TestCase
     /** @test */
     public function it_discovers_widgets_from_directory(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_widgets_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
-        file_put_contents($tempDir . '/RevenueChartWidget.php', '<?php class RevenueChartWidget {}');
+        file_put_contents($tempDir.'/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
+        file_put_contents($tempDir.'/RevenueChartWidget.php', '<?php class RevenueChartWidget {}');
 
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');
@@ -72,12 +72,12 @@ class WidgetDiscoveryTest extends TestCase
     public function it_includes_all_php_files_unlike_page_discovery(): void
     {
         // Widget discovery does NOT filter out Create/Edit/List prefixes
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_widgets_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
-        file_put_contents($tempDir . '/LatestOrdersWidget.php', '<?php class LatestOrdersWidget {}');
-        file_put_contents($tempDir . '/RevenueWidget.php', '<?php class RevenueWidget {}');
+        file_put_contents($tempDir.'/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
+        file_put_contents($tempDir.'/LatestOrdersWidget.php', '<?php class LatestOrdersWidget {}');
+        file_put_contents($tempDir.'/RevenueWidget.php', '<?php class RevenueWidget {}');
 
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');
@@ -96,13 +96,13 @@ class WidgetDiscoveryTest extends TestCase
     /** @test */
     public function it_excludes_configured_excluded_widgets(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_widgets_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
-        file_put_contents($tempDir . '/AccountWidget.php', '<?php class AccountWidget {}');
+        file_put_contents($tempDir.'/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
+        file_put_contents($tempDir.'/AccountWidget.php', '<?php class AccountWidget {}');
 
-        Config::set('gatekeeper.discovery.widgets', [str_replace(base_path() . '/', '', $tempDir)]);
+        Config::set('gatekeeper.discovery.widgets', [str_replace(base_path().'/', '', $tempDir)]);
         Config::set('gatekeeper.excluded_widgets', ['AccountWidget']);
 
         $widgets = $this->discovery->discover();
@@ -115,10 +115,10 @@ class WidgetDiscoveryTest extends TestCase
     /** @test */
     public function it_returns_unique_widgets(): void
     {
-        $tempDir = sys_get_temp_dir() . '/gatekeeper_widgets_test_' . uniqid();
+        $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
         mkdir($tempDir, 0755, true);
 
-        file_put_contents($tempDir . '/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
+        file_put_contents($tempDir.'/StatsOverviewWidget.php', '<?php class StatsOverviewWidget {}');
 
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');
@@ -147,7 +147,7 @@ class WidgetDiscoveryTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_non_existent_directory_in_scanDirectory(): void
+    public function it_handles_non_existent_directory_in_scan_directory(): void
     {
         $reflection = new \ReflectionClass($this->discovery);
         $method = $reflection->getMethod('scanDirectory');

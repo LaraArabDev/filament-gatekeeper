@@ -27,4 +27,3 @@ abstract class GatekeeperWidget extends Widget
 {
     use HasWidgetPermissions;
 }
-

@@ -19,7 +19,7 @@ class PermissionCacheTest extends TestCase
     {
         parent::setUp();
 
-        $this->cache = new PermissionCache();
+        $this->cache = new PermissionCache;
     }
 
     /** @test */
@@ -38,7 +38,7 @@ class PermissionCacheTest extends TestCase
     {
         config()->set('gatekeeper.cache.prefix', 'custom_prefix_');
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertEquals('custom_prefix_', $stats['prefix']);
@@ -49,7 +49,7 @@ class PermissionCacheTest extends TestCase
     {
         config()->set('gatekeeper.cache.ttl', 7200);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $stats = $cache->getStats();
 
         $this->assertEquals(7200, $stats['ttl']);
@@ -59,7 +59,7 @@ class PermissionCacheTest extends TestCase
     public function it_can_invalidate_all_cache(): void
     {
         // Store some cached data
-        $this->cache->remember('test_key', fn() => 'test_value');
+        $this->cache->remember('test_key', fn () => 'test_value');
 
         // Invalidate all
         $this->cache->invalidateAll();
@@ -71,7 +71,7 @@ class PermissionCacheTest extends TestCase
     /** @test */
     public function it_can_remember_value(): void
     {
-        $value = $this->cache->remember('test_key', fn() => 'cached_value');
+        $value = $this->cache->remember('test_key', fn () => 'cached_value');
 
         $this->assertEquals('cached_value', $value);
     }
@@ -79,12 +79,12 @@ class PermissionCacheTest extends TestCase
     /** @test */
     public function it_can_forget_specific_key(): void
     {
-        $this->cache->remember('test_key', fn() => 'cached_value');
+        $this->cache->remember('test_key', fn () => 'cached_value');
 
         $this->cache->forget('test_key');
 
         // Trying to get the value again should re-compute
-        $newValue = $this->cache->remember('test_key', fn() => 'new_value');
+        $newValue = $this->cache->remember('test_key', fn () => 'new_value');
 
         $this->assertEquals('new_value', $newValue);
     }
@@ -97,7 +97,7 @@ class PermissionCacheTest extends TestCase
         $key = $this->cache->getUserPermissionsCacheKey($user);
 
         $this->assertStringContainsString('user:', $key);
-        $this->assertStringContainsString((string)$user->id, $key);
+        $this->assertStringContainsString((string) $user->id, $key);
         $this->assertStringContainsString('matrix', $key);
     }
 
@@ -108,7 +108,7 @@ class PermissionCacheTest extends TestCase
 
         // Cache user permissions
         $key = $this->cache->getUserPermissionsCacheKey($user);
-        $this->cache->remember($key, fn() => ['permission1', 'permission2']);
+        $this->cache->remember($key, fn () => ['permission1', 'permission2']);
 
         // Invalidate
         $this->cache->invalidateForUser($user);
@@ -122,17 +122,19 @@ class PermissionCacheTest extends TestCase
     {
         config()->set('gatekeeper.cache.enabled', false);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
 
         // When cache is disabled, remember should always compute
         $counter = 0;
         $value1 = $cache->remember('test', function () use (&$counter) {
             $counter++;
+
             return 'value';
         });
 
         $value2 = $cache->remember('test', function () use (&$counter) {
             $counter++;
+
             return 'value';
         });
 
@@ -148,8 +150,8 @@ class PermissionCacheTest extends TestCase
     /** @test */
     public function it_can_flush_all_shield_cache(): void
     {
-        $this->cache->remember('key1', fn() => 'value1');
-        $this->cache->remember('key2', fn() => 'value2');
+        $this->cache->remember('key1', fn () => 'value1');
+        $this->cache->remember('key2', fn () => 'value2');
 
         $this->cache->flushAll();
 
@@ -162,11 +164,12 @@ class PermissionCacheTest extends TestCase
     {
         config()->set('gatekeeper.cache.enabled', false);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
 
         $callCount = 0;
         $value = $cache->remember('some_key', function () use (&$callCount) {
             $callCount++;
+
             return 'direct_value';
         });
 
@@ -179,15 +182,17 @@ class PermissionCacheTest extends TestCase
     {
         config()->set('gatekeeper.cache.enabled', false);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
 
         $callCount = 0;
         $cache->remember('some_key', function () use (&$callCount) {
             $callCount++;
+
             return 'value';
         });
         $cache->remember('some_key', function () use (&$callCount) {
             $callCount++;
+
             return 'value';
         });
 
@@ -198,7 +203,7 @@ class PermissionCacheTest extends TestCase
     /** @test */
     public function it_can_forget_a_key(): void
     {
-        $this->cache->remember('forget_test_key', fn() => 'initial_value');
+        $this->cache->remember('forget_test_key', fn () => 'initial_value');
 
         $result = $this->cache->forget('forget_test_key');
 
@@ -234,7 +239,7 @@ class PermissionCacheTest extends TestCase
     /** @test */
     public function it_invalidates_all_without_exception(): void
     {
-        $this->cache->remember('key_for_invalidate', fn() => 'value');
+        $this->cache->remember('key_for_invalidate', fn () => 'value');
 
         // Should complete without throwing
         $this->cache->invalidateAll();

@@ -106,4 +106,3 @@ class ClearCacheCommand extends Command
         );
     }
 }
-

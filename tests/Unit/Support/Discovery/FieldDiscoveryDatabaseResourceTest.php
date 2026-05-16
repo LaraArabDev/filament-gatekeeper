@@ -23,7 +23,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = new FieldDiscovery();
+        $this->discovery = new FieldDiscovery;
     }
 
     // ── discoverFromDatabase ──────────────────────────────────────────────
@@ -63,7 +63,8 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
     public function it_returns_empty_array_for_model_with_nonexistent_table(): void
     {
         // Create a model class pointing to a nonexistent table
-        $model = new class extends Model {
+        $model = new class extends Model
+        {
             protected $table = 'nonexistent_table_xyz_12345';
         };
 
@@ -125,7 +126,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
             'TestUser' => ['salary', 'bonus'],
         ]);
 
-        $discovery = new FieldDiscovery();
+        $discovery = new FieldDiscovery;
         $fields = $discovery->discoverForModel(
             TestUser::class,
             [FieldDiscovery::SOURCE_DATABASE, FieldDiscovery::SOURCE_CONFIG]
@@ -144,7 +145,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
             'TestUser' => ['email', 'name'],
         ]);
 
-        $discovery = new FieldDiscovery();
+        $discovery = new FieldDiscovery;
         $fields = $discovery->discoverForModel(
             TestUser::class,
             [FieldDiscovery::SOURCE_DATABASE, FieldDiscovery::SOURCE_CONFIG]
@@ -176,7 +177,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
     }
 
     /** @test */
-    public function it_clears_cached_database_result_on_clearCache(): void
+    public function it_clears_cached_database_result_on_clear_cache(): void
     {
         $this->discovery->discoverForModel(TestUser::class, [FieldDiscovery::SOURCE_DATABASE]);
         $this->discovery->clearCache(class_basename(TestUser::class));

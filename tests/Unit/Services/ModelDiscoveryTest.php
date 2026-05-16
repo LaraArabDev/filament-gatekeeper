@@ -18,7 +18,7 @@ class ModelDiscoveryTest extends TestCase
     {
         parent::setUp();
 
-        $this->discovery = new ModelDiscovery();
+        $this->discovery = new ModelDiscovery;
     }
 
     /** @test */
@@ -42,7 +42,7 @@ class ModelDiscoveryTest extends TestCase
             app_path('Models'),
         ]);
 
-        $discovery = new ModelDiscovery();
+        $discovery = new ModelDiscovery;
         $models = $discovery->discover();
 
         $this->assertIsArray($models);
@@ -55,7 +55,7 @@ class ModelDiscoveryTest extends TestCase
             'App\\Models\\BaseModel',
         ]);
 
-        $discovery = new ModelDiscovery();
+        $discovery = new ModelDiscovery;
         $models = $discovery->discover();
 
         $this->assertNotContains('App\\Models\\BaseModel', $models);
@@ -93,4 +93,3 @@ class ModelDiscoveryTest extends TestCase
         $this->assertTrue(method_exists($this->discovery, 'isEloquentModel'));
     }
 }
-

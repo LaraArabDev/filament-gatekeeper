@@ -35,7 +35,7 @@ class BranchModuleDiscoverer
     {
         $results = [];
 
-        foreach (glob($directory . '/*') ?: [] as $file) {
+        foreach (glob($directory.'/*') ?: [] as $file) {
             if (is_file($file)) {
                 $results[] = pathinfo($file, PATHINFO_FILENAME);
             }
@@ -100,7 +100,7 @@ class BranchPathScanner
     {
         $results = [];
 
-        foreach (glob($directory . '/*.php') ?: [] as $file) {
+        foreach (glob($directory.'/*.php') ?: [] as $file) {
             $class = $this->getClassFromFile($file, $pathPattern);
 
             if ($class !== null) {
@@ -147,9 +147,9 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function module_discovery_returns_empty_when_modules_path_missing(): void
     {
-        config()->set('gatekeeper.modules.path', '/totally/non/existent/path_' . uniqid());
+        config()->set('gatekeeper.modules.path', '/totally/non/existent/path_'.uniqid());
 
-        $discoverer = new BranchModuleDiscoverer();
+        $discoverer = new BranchModuleDiscoverer;
         $result = $discoverer->runDiscoverFromModules('{module}/Models');
 
         $this->assertSame([], $result);
@@ -158,15 +158,15 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function module_discovery_discovers_files_from_module_subdirectory(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_traits_branch_' . uniqid();
-        $modelsDir = $this->tempDir . '/Blog/Models';
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_traits_branch_'.uniqid();
+        $modelsDir = $this->tempDir.'/Blog/Models';
         mkdir($modelsDir, 0755, true);
-        file_put_contents($modelsDir . '/Post.php', '<?php class Post {}');
-        file_put_contents($modelsDir . '/Tag.php', '<?php class Tag {}');
+        file_put_contents($modelsDir.'/Post.php', '<?php class Post {}');
+        file_put_contents($modelsDir.'/Tag.php', '<?php class Tag {}');
 
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discoverer = new BranchModuleDiscoverer();
+        $discoverer = new BranchModuleDiscoverer;
         $result = $discoverer->runDiscoverFromModules('{module}/Models');
 
         $this->assertContains('Post', $result);
@@ -176,12 +176,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function module_discovery_skips_modules_without_matching_subdirectory(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_traits_branch2_' . uniqid();
-        mkdir($this->tempDir . '/Blog', 0755, true); // no 'Models' sub-dir
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_traits_branch2_'.uniqid();
+        mkdir($this->tempDir.'/Blog', 0755, true); // no 'Models' sub-dir
 
         config()->set('gatekeeper.modules.path', $this->tempDir);
 
-        $discoverer = new BranchModuleDiscoverer();
+        $discoverer = new BranchModuleDiscoverer;
         $result = $discoverer->runDiscoverFromModules('{module}/Models');
 
         $this->assertSame([], $result);
@@ -192,7 +192,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     {
         config()->set('gatekeeper.modules.enabled', false);
 
-        $discoverer = new BranchModuleDiscoverer();
+        $discoverer = new BranchModuleDiscoverer;
 
         $this->assertFalse($discoverer->runIsModuleDiscoveryEnabled());
     }
@@ -202,7 +202,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     {
         config()->set('gatekeeper.modules.enabled', true);
 
-        $discoverer = new BranchModuleDiscoverer();
+        $discoverer = new BranchModuleDiscoverer;
 
         $this->assertTrue($discoverer->runIsModuleDiscoveryEnabled());
     }
@@ -214,7 +214,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function filter_exclusions_removes_matching_items(): void
     {
-        $obj = new BranchExclusionClass();
+        $obj = new BranchExclusionClass;
 
         $items = ['UserResource', 'PostResource', 'CommentResource'];
         $exclusions = ['App\\Filament\\Resources\\PostResource'];
@@ -229,7 +229,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function filter_exclusions_returns_all_when_empty_exclusions(): void
     {
-        $obj = new BranchExclusionClass();
+        $obj = new BranchExclusionClass;
 
         $items = ['UserResource', 'PostResource'];
         $result = $obj->runFilterExclusions($items, []);
@@ -240,7 +240,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function filter_exclusions_removes_multiple_exclusions(): void
     {
-        $obj = new BranchExclusionClass();
+        $obj = new BranchExclusionClass;
 
         $items = ['Alpha', 'Beta', 'Gamma'];
         $exclusions = ['SomeNs\\Beta', 'SomeNs\\Gamma'];
@@ -253,7 +253,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function filter_exclusions_returns_empty_when_all_excluded(): void
     {
-        $obj = new BranchExclusionClass();
+        $obj = new BranchExclusionClass;
 
         $items = ['Alpha'];
         $exclusions = ['Ns\\Alpha'];
@@ -266,7 +266,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function filter_exclusions_returns_empty_for_empty_items(): void
     {
-        $obj = new BranchExclusionClass();
+        $obj = new BranchExclusionClass;
 
         $result = $obj->runFilterExclusions([], ['SomeClass']);
 
@@ -280,9 +280,9 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function scan_path_returns_empty_for_non_existent_directory(): void
     {
-        $scanner = new BranchPathScanner();
+        $scanner = new BranchPathScanner;
 
-        $result = $scanner->runScanPath('totally/non/existent/path_xyz_' . uniqid());
+        $result = $scanner->runScanPath('totally/non/existent/path_xyz_'.uniqid());
 
         $this->assertSame([], $result);
     }
@@ -290,11 +290,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function scan_path_scans_an_existing_directory(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_scan_branch_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_scan_branch_'.uniqid();
         mkdir($this->tempDir, 0755, true);
-        file_put_contents($this->tempDir . '/MyClass.php', '<?php' . PHP_EOL . 'namespace App\\Models;' . PHP_EOL . 'class MyClass {}');
+        file_put_contents($this->tempDir.'/MyClass.php', '<?php'.PHP_EOL.'namespace App\\Models;'.PHP_EOL.'class MyClass {}');
 
-        $scanner = new class($this->tempDir) extends BranchPathScanner {
+        $scanner = new class($this->tempDir) extends BranchPathScanner
+        {
             public function __construct(private string $dir) {}
 
             public function runScanDirectory(string $pattern): array
@@ -311,13 +312,14 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function scan_path_with_glob_pattern_finds_directories(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_glob_branch_' . uniqid();
-        $moduleDir = $this->tempDir . '/modules/Blog/Filament/Resources';
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_glob_branch_'.uniqid();
+        $moduleDir = $this->tempDir.'/modules/Blog/Filament/Resources';
         mkdir($moduleDir, 0755, true);
-        file_put_contents($moduleDir . '/PostResource.php', '<?php' . PHP_EOL . 'namespace Blog;' . PHP_EOL . 'class PostResource {}');
+        file_put_contents($moduleDir.'/PostResource.php', '<?php'.PHP_EOL.'namespace Blog;'.PHP_EOL.'class PostResource {}');
 
         // Use a path-relative approach: scanPath uses base_path(), so we test via scanDirectory directly
-        $scanner = new class($moduleDir) extends BranchPathScanner {
+        $scanner = new class($moduleDir) extends BranchPathScanner
+        {
             public function __construct(private string $dir) {}
 
             public function runScan(): array
@@ -338,12 +340,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function get_class_from_file_returns_null_for_empty_file(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_class_branch_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch_'.uniqid();
         mkdir($this->tempDir, 0755, true);
-        $file = $this->tempDir . '/empty.php';
+        $file = $this->tempDir.'/empty.php';
         file_put_contents($file, '');
 
-        $scanner = new BranchPathScanner();
+        $scanner = new BranchPathScanner;
         $result = $scanner->runGetClassFromFile($file, '');
 
         $this->assertNull($result);
@@ -352,12 +354,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function get_class_from_file_returns_null_when_no_class_declaration(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_class_branch2_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch2_'.uniqid();
         mkdir($this->tempDir, 0755, true);
-        $file = $this->tempDir . '/helpers.php';
+        $file = $this->tempDir.'/helpers.php';
         file_put_contents($file, '<?php function myHelper() { return true; }');
 
-        $scanner = new BranchPathScanner();
+        $scanner = new BranchPathScanner;
         $result = $scanner->runGetClassFromFile($file, '');
 
         $this->assertNull($result);
@@ -366,12 +368,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function get_class_from_file_returns_class_without_namespace(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_class_branch3_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch3_'.uniqid();
         mkdir($this->tempDir, 0755, true);
-        $file = $this->tempDir . '/Standalone.php';
-        file_put_contents($file, '<?php' . PHP_EOL . 'class Standalone {}');
+        $file = $this->tempDir.'/Standalone.php';
+        file_put_contents($file, '<?php'.PHP_EOL.'class Standalone {}');
 
-        $scanner = new BranchPathScanner();
+        $scanner = new BranchPathScanner;
         $result = $scanner->runGetClassFromFile($file, '');
 
         $this->assertSame('Standalone', $result);
@@ -380,12 +382,12 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     /** @test */
     public function get_class_from_file_returns_fully_qualified_class_with_namespace(): void
     {
-        $this->tempDir = sys_get_temp_dir() . '/gatekeeper_class_branch4_' . uniqid();
+        $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch4_'.uniqid();
         mkdir($this->tempDir, 0755, true);
-        $file = $this->tempDir . '/MyModel.php';
-        file_put_contents($file, '<?php' . PHP_EOL . 'namespace App\\Models;' . PHP_EOL . 'class MyModel {}');
+        $file = $this->tempDir.'/MyModel.php';
+        file_put_contents($file, '<?php'.PHP_EOL.'namespace App\\Models;'.PHP_EOL.'class MyModel {}');
 
-        $scanner = new BranchPathScanner();
+        $scanner = new BranchPathScanner;
         $result = $scanner->runGetClassFromFile($file, 'app/Models');
 
         $this->assertSame('App\\Models\\MyModel', $result);
@@ -404,7 +406,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $files = array_diff(scandir($dir) ?: [], ['.', '..']);
 
         foreach ($files as $file) {
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
+            $path = $dir.DIRECTORY_SEPARATOR.$file;
 
             is_dir($path) ? $this->removeDirectory($path) : unlink($path);
         }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Http\Middleware;
 
 use Closure;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
@@ -23,7 +25,7 @@ class GatekeeperApiMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next, string $permission, ?string $guard = null): Response
     {
@@ -31,11 +33,11 @@ class GatekeeperApiMiddleware
 
         $user = Auth::guard($guard)->user();
         if (! $user) {
-            throw new \Illuminate\Auth\AuthenticationException('Unauthenticated.');
+            throw new AuthenticationException('Unauthenticated.');
         }
 
         if (! Gatekeeper::guard($guard)->can($permission)) {
-            throw new \Illuminate\Auth\Access\AuthorizationException(
+            throw new AuthorizationException(
                 __('gatekeeper::messages.unauthorized')
             );
         }

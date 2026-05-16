@@ -12,8 +12,6 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
  * This trait enables granular control over form field visibility and
  * editability based on user permissions. It integrates with Gatekeeper
  * to check field-level permissions defined in the configuration.
- *
- * @package LaraArabDev\FilamentGatekeeper\Concerns
  */
 trait HasFieldPermissions
 {
@@ -22,7 +20,7 @@ trait HasFieldPermissions
     /**
      * Check if the current user can view a specific field.
      *
-     * @param string $field The field name to check
+     * @param  string  $field  The field name to check
      * @return bool True if the user can view the field, false otherwise
      */
     public static function canViewField(string $field): bool
@@ -39,7 +37,7 @@ trait HasFieldPermissions
     /**
      * Check if the current user can update a specific field.
      *
-     * @param string $field The field name to check
+     * @param  string  $field  The field name to check
      * @return bool True if the user can update the field, false otherwise
      */
     public static function canUpdateField(string $field): bool
@@ -58,7 +56,7 @@ trait HasFieldPermissions
      *
      * A field is disabled if the user cannot update it.
      *
-     * @param string $field The field name to check
+     * @param  string  $field  The field name to check
      * @return bool True if the field should be disabled, false otherwise
      */
     public static function isFieldDisabled(string $field): bool
@@ -71,7 +69,7 @@ trait HasFieldPermissions
      *
      * A field is hidden if the user cannot view it.
      *
-     * @param string $field The field name to check
+     * @param  string  $field  The field name to check
      * @return bool True if the field should be hidden, false otherwise
      */
     public static function isFieldHidden(string $field): bool
@@ -107,8 +105,8 @@ trait HasFieldPermissions
      * Generates a permission name in the format: {action}_{model}_{field}_field
      * (Action + Entity + Type) which matches the format used by PermissionRegistrar.
      *
-     * @param string $action The action type ('view' or 'update')
-     * @param string $field The field name
+     * @param  string  $action  The action type ('view' or 'update')
+     * @param  string  $field  The field name
      * @return string The generated permission name
      */
     public static function getFieldPermissionName(string $action, string $field): string
@@ -155,7 +153,7 @@ trait HasFieldPermissions
             $modelName = static::getFieldPermissionModelName();
 
             return array_merge(
-                config("gatekeeper.field_permissions.*", []),
+                config('gatekeeper.field_permissions.*', []),
                 config("gatekeeper.field_permissions.{$modelName}", [])
             );
         }
@@ -179,6 +177,7 @@ trait HasFieldPermissions
                 config('gatekeeper.field_permissions.*', []),
                 config("gatekeeper.field_permissions.{$modelName}", [])
             );
+
             return $configuredFields;
         }
 
@@ -191,7 +190,7 @@ trait HasFieldPermissions
             return [];
         }
 
-        return array_filter($configuredFields, fn($field) => static::canUpdateField($field));
+        return array_filter($configuredFields, fn ($field) => static::canUpdateField($field));
     }
 
     /**
@@ -207,11 +206,11 @@ trait HasFieldPermissions
                 $fieldName = $component->getName();
 
                 if (method_exists($component, 'visible')) {
-                    $component->visible(fn() => static::canViewField($fieldName));
+                    $component->visible(fn () => static::canViewField($fieldName));
                 }
 
                 if (method_exists($component, 'disabled')) {
-                    $component->disabled(fn() => ! static::canUpdateField($fieldName));
+                    $component->disabled(fn () => ! static::canUpdateField($fieldName));
                 }
             }
 

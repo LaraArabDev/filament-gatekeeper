@@ -38,8 +38,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -92,13 +90,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete field permissions.
-     *
-     * @param PermissionRegistrar $registrar
-     * @param string|null $model
-     * @param array $fields
-     * @param string|null $guard
-     * @param bool $force
-     * @return int
      */
     protected function deleteFieldPermissions(
         PermissionRegistrar $registrar,
@@ -120,8 +111,8 @@ class DeletePermissionsCommand extends Command
         $fieldsToDelete = ! empty($fields) ? $fields : null;
 
         $description = $fieldsToDelete
-            ? "field permissions for: " . implode(', ', $fieldsToDelete)
-            : "all field permissions";
+            ? 'field permissions for: '.implode(', ', $fieldsToDelete)
+            : 'all field permissions';
 
         if (! $force && ! $this->confirm("Delete {$description} for model '{$model}'?")) {
             $this->info('Operation cancelled');
@@ -134,13 +125,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete column permissions.
-     *
-     * @param PermissionRegistrar $registrar
-     * @param string|null $model
-     * @param array $columns
-     * @param string|null $guard
-     * @param bool $force
-     * @return int
      */
     protected function deleteColumnPermissions(
         PermissionRegistrar $registrar,
@@ -162,8 +146,8 @@ class DeletePermissionsCommand extends Command
         $columnsToDelete = ! empty($columns) ? $columns : null;
 
         $description = $columnsToDelete
-            ? "column permissions for: " . implode(', ', $columnsToDelete)
-            : "all column permissions";
+            ? 'column permissions for: '.implode(', ', $columnsToDelete)
+            : 'all column permissions';
 
         if (! $force && ! $this->confirm("Delete {$description} for model '{$model}'?")) {
             $this->info('Operation cancelled');
@@ -176,12 +160,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete all permissions for a model.
-     *
-     * @param PermissionRegistrar $registrar
-     * @param string|null $model
-     * @param string|null $guard
-     * @param bool $force
-     * @return int
      */
     protected function deleteModelPermissions(
         PermissionRegistrar $registrar,
@@ -210,10 +188,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete orphaned permissions.
-     *
-     * @param PermissionRegistrar $registrar
-     * @param bool $force
-     * @return int
      */
     protected function deleteOrphanedPermissions(PermissionRegistrar $registrar, bool $force): int
     {
@@ -228,9 +202,6 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Handle invalid permission type.
-     *
-     * @param string $type
-     * @return int
      */
     protected function invalidType(string $type): int
     {

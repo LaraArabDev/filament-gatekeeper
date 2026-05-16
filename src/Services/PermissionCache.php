@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 
@@ -43,7 +45,7 @@ class PermissionCache
         return $this->cache()->remember(
             $cacheKey,
             $this->ttl,
-            fn() => $this->buildPermissionMatrix($user)
+            fn () => $this->buildPermissionMatrix($user)
         );
     }
 
@@ -60,7 +62,7 @@ class PermissionCache
             return $matrix;
         }
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, Role> $roles */
+        /** @var Collection<int, Role> $roles */
         $roles = $user->roles;
 
         foreach ($roles as $role) {
@@ -171,7 +173,7 @@ class PermissionCache
     /**
      * Get the cache instance.
      */
-    protected function cache(): \Illuminate\Contracts\Cache\Repository
+    protected function cache(): Repository
     {
         $store = $this->driver ? Cache::store($this->driver) : Cache::store();
 
@@ -202,10 +204,6 @@ class PermissionCache
 
     /**
      * Remember a value in cache.
-     *
-     * @param string $key
-     * @param callable $callback
-     * @return mixed
      */
     public function remember(string $key, callable $callback): mixed
     {
@@ -220,9 +218,6 @@ class PermissionCache
 
     /**
      * Forget a cached value.
-     *
-     * @param string $key
-     * @return bool
      */
     public function forget(string $key): bool
     {

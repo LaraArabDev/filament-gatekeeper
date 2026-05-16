@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
@@ -19,7 +20,7 @@ class PermissionCacheExtendedTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cache = new PermissionCache();
+        $this->cache = new PermissionCache;
     }
 
     /** @test */
@@ -75,7 +76,7 @@ class PermissionCacheExtendedTest extends TestCase
     {
         config()->set('gatekeeper.cache.enabled', false);
 
-        $cache = new PermissionCache();
+        $cache = new PermissionCache;
         $user = $this->createUser();
 
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -190,9 +191,9 @@ class PermissionCacheExtendedTest extends TestCase
     }
 
     /** @test */
-    public function it_invalidateAll_does_not_throw(): void
+    public function it_invalidate_all_does_not_throw(): void
     {
-        $this->cache->remember('test_key_extended', fn() => 'test_value');
+        $this->cache->remember('test_key_extended', fn () => 'test_value');
 
         $this->cache->invalidateAll();
 
@@ -203,14 +204,39 @@ class PermissionCacheExtendedTest extends TestCase
     public function it_returns_empty_matrix_for_user_without_roles_method(): void
     {
         // Create a user that implements Authenticatable but has no roles() method
-        $simpleUser = new class implements \Illuminate\Contracts\Auth\Authenticatable {
-            public function getAuthIdentifierName(): string { return 'id'; }
-            public function getAuthIdentifier(): mixed { return 99999; }
-            public function getAuthPasswordName(): string { return 'password'; }
-            public function getAuthPassword(): string { return ''; }
-            public function getRememberToken(): string { return ''; }
+        $simpleUser = new class implements Authenticatable
+        {
+            public function getAuthIdentifierName(): string
+            {
+                return 'id';
+            }
+
+            public function getAuthIdentifier(): mixed
+            {
+                return 99999;
+            }
+
+            public function getAuthPasswordName(): string
+            {
+                return 'password';
+            }
+
+            public function getAuthPassword(): string
+            {
+                return '';
+            }
+
+            public function getRememberToken(): string
+            {
+                return '';
+            }
+
             public function setRememberToken(mixed $value): void {}
-            public function getRememberTokenName(): string { return 'remember_token'; }
+
+            public function getRememberTokenName(): string
+            {
+                return 'remember_token';
+            }
         };
 
         $matrix = $this->cache->getPermissionMatrix($simpleUser);

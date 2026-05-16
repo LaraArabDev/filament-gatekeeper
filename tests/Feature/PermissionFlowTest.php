@@ -9,6 +9,7 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionFlowTest extends TestCase
 {
@@ -143,7 +144,7 @@ class PermissionFlowTest extends TestCase
         $role->syncPermissions(['permission_2', 'permission_3']);
 
         // Clear cache
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         // Refresh user
         $user->refresh();

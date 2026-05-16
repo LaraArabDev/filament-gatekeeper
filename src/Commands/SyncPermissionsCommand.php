@@ -138,4 +138,3 @@ class SyncPermissionsCommand extends Command
         }
     }
 }
-
