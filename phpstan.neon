@@ -10,7 +10,7 @@ parameters:
         - '#Unable to resolve the template type T(Key|Value|CacheValue) in call to#'
         - '#PHPDoc tag @var for variable \$grouped contains generic class#'
         - message: '#has parameter \$permissions with generic class Illuminate\\Support\\Collection but does not specify its types#'
-          path: src/Resources/RoleResource.php
+          path: src/Resources/RoleResource/Forms/RoleForm.php
         - message: '#getTableFilters\(\) should return array<int, Filament\\Tables\\Filters\\Filter> but returns#'
           path: src/Resources/PermissionResource.php
     excludePaths:
