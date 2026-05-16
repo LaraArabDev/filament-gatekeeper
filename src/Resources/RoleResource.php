@@ -20,7 +20,7 @@ class RoleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function getNavigationIcon(): string|\BackedEnum|null
+    public static function getNavigationIcon(): \Illuminate\Contracts\Support\Htmlable|string|null
     {
         return 'heroicon-o-shield-check';
     }
