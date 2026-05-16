@@ -15,6 +15,10 @@
 **Advanced Role and Permission management for Laravel Filament 3.x with Spatie Permission integration.**
 A comprehensive solution for managing access control across your entire application — from Filament admin panels to API endpoints.
 
+<br>
+
+<img src="art/screenshot.png" alt="Filament Gatekeeper — Permission Management UI" width="100%">
+
 </div>
 
 ---
