@@ -1,0 +1,12 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/laraarabdev/filament-gatekeeper/security/policy
+    about: Please report security vulnerabilities privately via our security policy.
+  - name: Filament Documentation
+    url: https://filamentphp.com/docs
+    about: Official Filament documentation.
+  - name: Spatie Laravel Permission Documentation
+    url: https://spatie.be/docs/laravel-permission
+    about: Official Spatie Laravel Permission documentation.

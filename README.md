@@ -14,6 +14,8 @@
 
 **Advanced Role and Permission management for Laravel Filament 3.x with Spatie Permission integration.**
 
+> **Imagine having full control over every part of your app — dashboards, chart widgets, table fields, columns, form fields, pages, API responses — all with minimal configuration. That's Filament Gatekeeper.**
+
 <br>
 
 <img src="art/screenshot.png" alt="Filament Gatekeeper — Permission Management UI" width="100%">
@@ -22,7 +24,11 @@
 
 ---
 
-## Stop Wrestling With Permissions. Take Full Control.
+## Stop Wrestling With Permissions. Take Full Control — Over Everything.
+
+Imagine you could control **every single part** of your app — your dashboard, your chart widgets, your table columns, your form fields, your API responses — and do it all from one place, with almost zero configuration.
+
+**That's exactly what Filament Gatekeeper gives you.**
 
 Building a Filament admin panel is fast — until you need to control **who sees what**.
 
@@ -31,6 +37,8 @@ Suddenly you're writing `canViewAny()` overrides in every resource, scattering `
 **Filament Gatekeeper ends all of that.**
 
 One package gives you complete, consistent access control across your **entire** Laravel application — the Filament panel, your REST API, and everything in between — driven by a single source of truth.
+
+**Full control. Every layer. Minimal config.**
 
 ---
 

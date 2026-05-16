@@ -1,0 +1,59 @@
+name: Support Question
+description: Ask a question about using FilamentGatekeeper
+title: "[Question]: "
+labels: ["question", "support"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a support question, please check:
+        - [Documentation](https://github.com/laraarabdev/filament-gatekeeper#readme)
+        - [Existing issues](https://github.com/laraarabdev/filament-gatekeeper/issues)
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      options:
+        - label: I have read the documentation and could not find an answer.
+          required: true
+        - label: I have searched existing issues and discussions.
+          required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What do you need help with?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Share your setup, what you've tried, and any relevant code snippets.
+      render: php
+    validations:
+      required: false
+
+  - type: input
+    id: package_version
+    attributes:
+      label: FilamentGatekeeper Version
+      placeholder: "e.g. 1.2.0"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: laravel_version
+    attributes:
+      label: Laravel Version
+      options:
+        - "10.x"
+        - "11.x"
+        - "12.x"
+    validations:
+      required: false
