@@ -1,0 +1,54 @@
+name: Mutation Testing
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  infection:
+    name: Infection PHP (Mutation Testing)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: xdebug
+          ini-values: xdebug.mode=coverage
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-infection-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-infection-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Install Infection
+        run: composer require --dev infection/infection --no-interaction --no-progress
+
+      - name: Run Infection (Mutation Testing)
+        run: |
+          vendor/bin/pest --coverage --coverage-xml=coverage/coverage-xml --log-junit=coverage/junit.xml
+          vendor/bin/infection \
+            --threads=4 \
+            --coverage=coverage \
+            --min-msi=70 \
+            --min-covered-msi=80 \
+            --no-progress \
+            --logger-github
+        env:
+          INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}

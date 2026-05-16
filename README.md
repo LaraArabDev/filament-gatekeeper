@@ -10,6 +10,8 @@
 [![Tests](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/tests.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/laraarabdev/filament-gatekeeper/branch/main/graph/badge.svg)](https://codecov.io/gh/laraarabdev/filament-gatekeeper)
 [![Static Analysis](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/static-analysis.yml)
+[![Security Audit](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/security.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/security.yml)
+[![Mutation Testing](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/mutation-testing.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/mutation-testing.yml)
 [![Code Style](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/code-style.yml/badge.svg)](https://github.com/LaraArabDev/filament-gatekeeper/actions/workflows/code-style.yml)
 [![PHP](https://img.shields.io/badge/PHP-8.2%20|%208.3%20|%208.4-blue?style=flat-square)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-10.x%20|%2011.x%20|%2012.x-red?style=flat-square)](https://laravel.com)
