@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
+      - name: Allow Infection Composer plugin
+        run: composer config allow-plugins.infection/extension-installer true
+
       - name: Install Infection
         run: composer require --dev infection/infection --no-interaction --no-progress
 
