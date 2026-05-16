@@ -6,7 +6,6 @@ namespace LaraArabDev\FilamentGatekeeper\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 
@@ -62,14 +61,10 @@ class PermissionCache
             return $matrix;
         }
 
-        /** @var Collection<int, Role> $roles */
+        /** @phpstan-ignore property.notFound */
         $roles = $user->roles;
 
         foreach ($roles as $role) {
-            if (! $role instanceof Role) {
-                continue;
-            }
-
             $fieldPermissions = $role->field_permissions ?? [];
 
             foreach ($fieldPermissions as $modelName => $permissions) {

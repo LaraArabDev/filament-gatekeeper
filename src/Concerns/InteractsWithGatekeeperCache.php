@@ -28,6 +28,8 @@ trait InteractsWithGatekeeperCache
 
     /**
      * Get the permission matrix for the current user.
+     *
+     * @return array<string, mixed>
      */
     protected static function getPermissionMatrix(): array
     {

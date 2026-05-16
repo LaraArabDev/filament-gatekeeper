@@ -90,6 +90,8 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete field permissions.
+     *
+     * @param  array<int, string>  $fields
      */
     protected function deleteFieldPermissions(
         PermissionRegistrar $registrar,
@@ -125,6 +127,8 @@ class DeletePermissionsCommand extends Command
 
     /**
      * Delete column permissions.
+     *
+     * @param  array<int, string>  $columns
      */
     protected function deleteColumnPermissions(
         PermissionRegistrar $registrar,

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaraArabDev\FilamentGatekeeper;
 
 use Closure;
-use Filament\Context;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
@@ -79,7 +78,7 @@ class GatekeeperPlugin implements Plugin
     /**
      * Register the plugin resources.
      */
-    public function register(Context|Panel $context): void
+    public function register(Panel $context): void
     {
         $resources = [];
 
@@ -91,15 +90,13 @@ class GatekeeperPlugin implements Plugin
             $resources[] = PermissionResource::class;
         }
 
-        if (method_exists($context, 'resources')) {
-            $context->resources($resources);
-        }
+        $context->resources($resources);
     }
 
     /**
      * Boot the plugin.
      */
-    public function boot(Context|Panel $context): void {}
+    public function boot(Panel $context): void {}
 
     /**
      * Set the super admin role name.

@@ -67,7 +67,7 @@ trait HasGatekeeperPermissions
     /**
      * Alias for canEdit (Filament uses canUpdate in some contexts).
      */
-    public static function canUpdate($record = null): bool
+    public static function canUpdate(mixed $record = null): bool
     {
         if ($record instanceof Model) {
             return static::canEdit($record);

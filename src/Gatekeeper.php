@@ -164,7 +164,6 @@ class Gatekeeper
 
         if (method_exists($user, 'hasPermissionTo')) {
             try {
-                /** @phpstan-ignore-next-line */
                 return $user->hasPermissionTo($permission, $guard);
             } catch (PermissionDoesNotExist $e) {
                 return false;
@@ -173,8 +172,7 @@ class Gatekeeper
             }
         }
 
-        /** @phpstan-ignore-next-line */
-        return method_exists($user, 'can') && $user->can($permission);
+        return $user->can($permission);
     }
 
     /**
@@ -285,7 +283,6 @@ class Gatekeeper
         }
 
         try {
-            /** @phpstan-ignore-next-line */
             return $guard !== null
                 ? $user->hasRole($roleName, $guard)
                 : $user->hasRole($roleName);
@@ -344,6 +341,8 @@ class Gatekeeper
 
     /**
      * Get the permission matrix for a user.
+     *
+     * @return array<string, mixed>
      */
     public function getPermissionMatrix(?Authenticatable $user = null): array
     {
@@ -376,11 +375,8 @@ class Gatekeeper
         $modelSnake = str($modelName)->snake()->toString();
         $permissionName = "{$prefix}_{$modelSnake}_{$field}_field";
 
-        if (method_exists($user, 'can')) {
-            /** @phpstan-ignore-next-line */
-            if ($user->can($permissionName)) {
-                return true;
-            }
+        if ($user->can($permissionName)) {
+            return true;
         }
 
         $matrix = $this->getPermissionMatrix();
@@ -408,11 +404,8 @@ class Gatekeeper
         $modelSnake = str($modelName)->snake()->toString();
         $permissionName = "{$prefix}_{$modelSnake}_{$field}_field";
 
-        if (method_exists($user, 'can')) {
-            /** @phpstan-ignore-next-line */
-            if ($user->can($permissionName)) {
-                return true;
-            }
+        if ($user->can($permissionName)) {
+            return true;
         }
 
         $matrix = $this->getPermissionMatrix();
@@ -443,7 +436,6 @@ class Gatekeeper
 
         if (method_exists($user, 'hasPermissionTo')) {
             try {
-                /** @phpstan-ignore-next-line */
                 if ($user->hasPermissionTo($permissionName, $guard)) {
                     return true;
                 }
@@ -451,11 +443,8 @@ class Gatekeeper
             }
         }
 
-        if (method_exists($user, 'can')) {
-            /** @phpstan-ignore-next-line */
-            if ($user->can($permissionName)) {
-                return true;
-            }
+        if ($user->can($permissionName)) {
+            return true;
         }
 
         $matrix = $this->getPermissionMatrix();
@@ -483,11 +472,8 @@ class Gatekeeper
         $modelSnake = str($modelName)->snake()->toString();
         $permissionName = "{$prefix}_{$modelSnake}_{$action}_action";
 
-        if (method_exists($user, 'can')) {
-            /** @phpstan-ignore-next-line */
-            if ($user->can($permissionName)) {
-                return true;
-            }
+        if ($user->can($permissionName)) {
+            return true;
         }
 
         $matrix = $this->getPermissionMatrix();
@@ -518,7 +504,6 @@ class Gatekeeper
 
         if (method_exists($user, 'hasPermissionTo')) {
             try {
-                /** @phpstan-ignore-next-line */
                 if ($user->hasPermissionTo($permissionName, $guard)) {
                     return true;
                 }
@@ -526,11 +511,8 @@ class Gatekeeper
             }
         }
 
-        if (method_exists($user, 'can')) {
-            /** @phpstan-ignore-next-line */
-            if ($user->can($permissionName)) {
-                return true;
-            }
+        if ($user->can($permissionName)) {
+            return true;
         }
 
         $matrix = $this->getPermissionMatrix();
@@ -540,6 +522,8 @@ class Gatekeeper
 
     /**
      * Get all visible fields for a model.
+     *
+     * @return array<int, string>
      */
     public function getVisibleFields(string $modelName): array
     {
@@ -575,11 +559,8 @@ class Gatekeeper
         foreach ($configuredFields as $field) {
             $permissionName = "{$prefix}_{$modelSnake}_{$field}_field";
 
-            if (method_exists($user, 'can')) {
-                /** @phpstan-ignore-next-line */
-                if ($user->can($permissionName)) {
-                    $visibleFields[] = $field;
-                }
+            if ($user->can($permissionName)) {
+                $visibleFields[] = $field;
             }
         }
 
@@ -594,6 +575,8 @@ class Gatekeeper
 
     /**
      * Get all visible columns for a model.
+     *
+     * @return array<int, string>
      */
     public function getVisibleColumns(string $modelName): array
     {
@@ -632,7 +615,6 @@ class Gatekeeper
 
             if (method_exists($user, 'hasPermissionTo')) {
                 try {
-                    /** @phpstan-ignore-next-line */
                     if ($user->hasPermissionTo($permissionName, $guard)) {
                         $visibleColumns[] = $column;
 
@@ -642,11 +624,8 @@ class Gatekeeper
                 }
             }
 
-            if (method_exists($user, 'can')) {
-                /** @phpstan-ignore-next-line */
-                if ($user->can($permissionName)) {
-                    $visibleColumns[] = $column;
-                }
+            if ($user->can($permissionName)) {
+                $visibleColumns[] = $column;
             }
         }
 

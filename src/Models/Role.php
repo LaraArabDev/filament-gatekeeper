@@ -16,13 +16,14 @@ use Spatie\Permission\Models\Role as SpatieRole;
  * @property int $id
  * @property string $name
  * @property string $guard_name
- * @property array|null $field_permissions
+ * @property array<string, mixed>|null $field_permissions
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Permission> $permissions
  */
 class Role extends SpatieRole
 {
+    /** @use HasFactory<RoleFactory> */
     use HasFactory;
 
     /**
@@ -36,7 +37,7 @@ class Role extends SpatieRole
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -56,6 +57,8 @@ class Role extends SpatieRole
 
     /**
      * Get the permissions relationship.
+     *
+     * @return BelongsToMany<Permission, $this>
      */
     public function permissions(): BelongsToMany
     {
@@ -69,6 +72,9 @@ class Role extends SpatieRole
 
     /**
      * Scope a query to only include roles for a specific guard.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeForGuard(Builder $query, string $guard): Builder
     {
@@ -77,6 +83,9 @@ class Role extends SpatieRole
 
     /**
      * Scope a query to exclude super admin role.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeWithoutSuperAdmin(Builder $query): Builder
     {

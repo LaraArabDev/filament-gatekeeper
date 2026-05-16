@@ -29,11 +29,11 @@ use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
  * Field Permissions:
  * @method static bool canViewField(string $modelName, string $field)
  * @method static bool canUpdateField(string $modelName, string $field)
- * @method static array getVisibleFields(string $modelName)
+ * @method static array<int, string> getVisibleFields(string $modelName)
  *
  * Column Permissions:
  * @method static bool canViewColumn(string $modelName, string $column)
- * @method static array getVisibleColumns(string $modelName)
+ * @method static array<int, string> getVisibleColumns(string $modelName)
  *
  * Action Permissions:
  * @method static bool canExecuteAction(string $modelName, string $action)
@@ -43,7 +43,7 @@ use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
  *
  * Cache:
  * @method static PermissionCache cache()
- * @method static array getPermissionMatrix(\Illuminate\Contracts\Auth\Authenticatable|null $user = null)
+ * @method static array<string, mixed> getPermissionMatrix(\Illuminate\Contracts\Auth\Authenticatable|null $user = null)
  *
  * @see \LaraArabDev\FilamentGatekeeper\GatekeeperService
  */

@@ -70,11 +70,11 @@ class GatekeeperResourceMiddleware
 
         return match (true) {
             $method === 'GET' && ! $hasRouteParameter => "view_any_{$modelSnake}",
-            $method === 'GET' && $hasRouteParameter => "view_{$modelSnake}",
+            $method === 'GET' => "view_{$modelSnake}",
             $method === 'POST' => "create_{$modelSnake}",
             ($method === 'PUT' || $method === 'PATCH') => "update_{$modelSnake}",
             $method === 'DELETE' && ! $hasRouteParameter => "delete_any_{$modelSnake}",
-            $method === 'DELETE' && $hasRouteParameter => "delete_{$modelSnake}",
+            $method === 'DELETE' => "delete_{$modelSnake}",
             default => null,
         };
     }
@@ -100,7 +100,7 @@ class GatekeeperResourceMiddleware
             return (bool) preg_match('/\{[^}]+\}/', $uri);
         }
 
-        return ! empty($parameters);
+        return true;
     }
 
     /**

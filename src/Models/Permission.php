@@ -22,6 +22,7 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
  */
 class Permission extends SpatiePermission
 {
+    /** @use HasFactory<PermissionFactory> */
     use HasFactory;
 
     /**
@@ -35,7 +36,7 @@ class Permission extends SpatiePermission
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -94,6 +95,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include permissions of a specific type.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeOfType(Builder $query, string $type): Builder
     {
@@ -102,6 +106,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include resource permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeResources(Builder $query): Builder
     {
@@ -110,6 +117,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include model permissions (API models without resources).
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeModels(Builder $query): Builder
     {
@@ -118,6 +128,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include page permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopePages(Builder $query): Builder
     {
@@ -126,6 +139,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include widget permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeWidgets(Builder $query): Builder
     {
@@ -134,6 +150,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include field permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeFields(Builder $query): Builder
     {
@@ -142,6 +161,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include column permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeColumns(Builder $query): Builder
     {
@@ -150,6 +172,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include action permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeActions(Builder $query): Builder
     {
@@ -158,6 +183,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include relation permissions.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeRelations(Builder $query): Builder
     {
@@ -166,6 +194,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include permissions for a specific guard.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeForGuard(Builder $query, string $guard): Builder
     {
@@ -174,6 +205,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include permissions matching a pattern.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeMatching(Builder $query, string $pattern): Builder
     {
@@ -182,6 +216,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include permissions for a specific model.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeForModel(Builder $query, string $model): Builder
     {
@@ -193,6 +230,9 @@ class Permission extends SpatiePermission
 
     /**
      * Scope a query to only include permissions for a specific entity.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
      */
     public function scopeForEntity(Builder $query, string $entity): Builder
     {

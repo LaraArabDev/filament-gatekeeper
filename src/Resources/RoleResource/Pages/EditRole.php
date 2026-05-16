@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
 
 class EditRole extends EditRecord
@@ -16,7 +17,11 @@ class EditRole extends EditRecord
     {
         return [
             Actions\DeleteAction::make()
-                ->hidden(fn () => $this->record->isSuperAdmin()),
+                ->hidden(function () {
+                    $record = $this->record;
+
+                    return $record instanceof Role && $record->isSuperAdmin();
+                }),
         ];
     }
 

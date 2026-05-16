@@ -26,7 +26,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     /**
      * {@inheritdoc}
      */
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Resource => 'Resource',
@@ -43,7 +43,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     /**
      * {@inheritdoc}
      */
-    public function getColor(): ?string
+    public function getColor(): string
     {
         return match ($this) {
             self::Resource => 'primary',
@@ -60,7 +60,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     /**
      * {@inheritdoc}
      */
-    public function getIcon(): ?string
+    public function getIcon(): string
     {
         return match ($this) {
             self::Resource => 'heroicon-o-rectangle-stack',
@@ -84,7 +84,7 @@ enum PermissionType: string implements HasColor, HasIcon, HasLabel
     {
         $out = [];
         foreach (self::cases() as $case) {
-            $out[$case->value] = $case->getLabel() ?? $case->value;
+            $out[$case->value] = $case->getLabel();
         }
 
         return $out;

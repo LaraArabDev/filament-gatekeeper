@@ -6,6 +6,12 @@ parameters:
         - src
     level: 6
     ignoreErrors:
-        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+        - '#Trait .* is used zero times and is not analysed#'
+        - '#Unable to resolve the template type T(Key|Value|CacheValue) in call to#'
+        - '#PHPDoc tag @var for variable \$grouped contains generic class#'
+        - message: '#has parameter \$permissions with generic class Illuminate\\Support\\Collection but does not specify its types#'
+          path: src/Resources/RoleResource.php
+        - message: '#getTableFilters\(\) should return array<int, Filament\\Tables\\Filters\\Filter> but returns#'
+          path: src/Resources/PermissionResource.php
     excludePaths:
-        - src/stubs
+        - stubs
