@@ -17,37 +17,26 @@ use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
  */
 class GatekeeperPlugin implements Plugin
 {
-    /** @var string */
     protected string $superAdminRole = 'super-admin';
 
-    /** @var bool */
     protected bool $bypassForSuperAdmin = true;
 
-    /** @var bool */
     protected bool $fieldPermissionsEnabled = true;
 
-    /** @var bool */
     protected bool $columnPermissionsEnabled = true;
 
-    /** @var bool */
     protected bool $actionPermissionsEnabled = true;
 
-    /** @var bool */
     protected bool $relationPermissionsEnabled = true;
 
-    /** @var string */
     protected string $navigationGroup = 'Access Control';
 
-    /** @var string */
     protected string $navigationIcon = 'heroicon-o-shield-check';
 
-    /** @var int */
     protected int $navigationSort = 1;
 
-    /** @var bool */
     protected bool $roleResourceEnabled = true;
 
-    /** @var bool */
     protected bool $permissionResourceEnabled = true;
 
     /** @var array<string> */
@@ -56,10 +45,8 @@ class GatekeeperPlugin implements Plugin
     /** @var array<string> */
     protected array $guards = ['web'];
 
-    /** @var ?Closure */
     protected ?Closure $modifyRoleResourceUsing = null;
 
-    /** @var ?Closure */
     protected ?Closure $modifyPermissionResourceUsing = null;
 
     /**
