@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Traits;
 
 use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithPathScanning;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConcretePathScanner
 {
@@ -58,7 +59,7 @@ class InteractsWithPathScanningTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_class_with_namespace_from_file(): void
     {
         $file = $this->tmpDir.'/TestClass.php';
@@ -69,7 +70,7 @@ class InteractsWithPathScanningTest extends TestCase
         $this->assertSame('App\Models\TestClass', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_class_without_namespace_from_file(): void
     {
         $file = $this->tmpDir.'/Standalone.php';
@@ -80,7 +81,7 @@ class InteractsWithPathScanningTest extends TestCase
         $this->assertSame('Standalone', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_for_file_with_no_class(): void
     {
         $file = $this->tmpDir.'/helpers.php';
@@ -91,7 +92,7 @@ class InteractsWithPathScanningTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_for_empty_file(): void
     {
         $file = $this->tmpDir.'/empty.php';
@@ -102,14 +103,14 @@ class InteractsWithPathScanningTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_for_non_existent_directory(): void
     {
         $result = $this->scanner->scan('non/existent/path/that/does/not/exist');
         $this->assertSame([], $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_scans_directory_and_finds_classes(): void
     {
         file_put_contents(

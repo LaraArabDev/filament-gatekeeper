@@ -9,6 +9,7 @@ use LaraArabDev\FilamentGatekeeper\Support\Discovery\PageDiscovery;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ResourceDiscovery;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\WidgetDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for module-based discovery in ResourceDiscovery, PageDiscovery, and WidgetDiscovery.
@@ -40,7 +41,7 @@ class ResourceDiscoveryModuleTest extends TestCase
     // ResourceDiscovery – discoverModuleResources() / discoverFromModules()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function resource_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -53,7 +54,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_from_modules_returns_empty_when_module_has_no_resources_dir(): void
     {
         mkdir($this->tempDir.'/Blog', 0755, true);
@@ -68,7 +69,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_from_modules_discovers_resource_files(): void
     {
         $resourcesDir = $this->tempDir.'/Blog/Filament/Resources';
@@ -87,7 +88,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('Category', $result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_from_modules_skips_non_resource_files(): void
     {
         $resourcesDir = $this->tempDir.'/Blog/Filament/Resources';
@@ -105,7 +106,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertNotContains('helpers', $result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_from_modules_uses_custom_discovery_path(): void
     {
         $resourcesDir = $this->tempDir.'/Blog/Http/Resources';
@@ -122,7 +123,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('Article', $result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_includes_module_resources_when_modules_enabled(): void
     {
         $resourcesDir = $this->tempDir.'/Shop/Filament/Resources';
@@ -139,7 +140,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('Product', $result);
     }
 
-    /** @test */
+    #[Test]
     public function resource_discover_with_multiple_modules(): void
     {
         mkdir($this->tempDir.'/Blog/Filament/Resources', 0755, true);
@@ -162,7 +163,7 @@ class ResourceDiscoveryModuleTest extends TestCase
     // PageDiscovery – discoverModulePages()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function page_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -174,7 +175,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    /** @test */
+    #[Test]
     public function page_discover_from_modules_returns_empty_when_module_has_no_pages_dir(): void
     {
         mkdir($this->tempDir.'/Blog', 0755, true);
@@ -190,7 +191,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function page_discover_from_modules_discovers_page_files(): void
     {
         $pagesDir = $this->tempDir.'/Blog/Filament/Pages';
@@ -209,7 +210,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('Settings', $result);
     }
 
-    /** @test */
+    #[Test]
     public function page_discover_from_modules_skips_resource_page_files(): void
     {
         $pagesDir = $this->tempDir.'/Blog/Filament/Pages';
@@ -232,7 +233,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertNotContains('ListPosts', $result);
     }
 
-    /** @test */
+    #[Test]
     public function page_discover_from_modules_uses_custom_discovery_path(): void
     {
         $pagesDir = $this->tempDir.'/Blog/Pages';
@@ -254,7 +255,7 @@ class ResourceDiscoveryModuleTest extends TestCase
     // WidgetDiscovery – discoverModuleWidgets()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function widget_discover_from_modules_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -266,7 +267,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    /** @test */
+    #[Test]
     public function widget_discover_from_modules_returns_empty_when_module_has_no_widgets_dir(): void
     {
         mkdir($this->tempDir.'/Blog', 0755, true);
@@ -282,7 +283,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function widget_discover_from_modules_discovers_widget_files(): void
     {
         $widgetsDir = $this->tempDir.'/Blog/Filament/Widgets';
@@ -301,7 +302,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('RecentPostsWidget', $result);
     }
 
-    /** @test */
+    #[Test]
     public function widget_discover_from_modules_uses_custom_discovery_path(): void
     {
         $widgetsDir = $this->tempDir.'/Blog/Widgets';
@@ -319,7 +320,7 @@ class ResourceDiscoveryModuleTest extends TestCase
         $this->assertContains('CustomWidget', $result);
     }
 
-    /** @test */
+    #[Test]
     public function widget_discover_with_multiple_modules(): void
     {
         mkdir($this->tempDir.'/Blog/Filament/Widgets', 0755, true);

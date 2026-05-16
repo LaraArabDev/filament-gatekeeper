@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Discovery;
 
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ModuleDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ModuleDiscoveryTest extends TestCase
 {
@@ -17,7 +18,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->discovery = new ModuleDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -25,7 +26,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertFalse($this->discovery->isEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_modules_enabled(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -33,7 +34,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertTrue($this->discovery->isEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -41,7 +42,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame([], $this->discovery->getModules());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -50,7 +51,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame([], $this->discovery->getModules());
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_modules_from_directory(): void
     {
         $tmpDir = sys_get_temp_dir().'/gatekeeper_modules_test_'.uniqid();
@@ -71,7 +72,7 @@ class ModuleDiscoveryTest extends TestCase
         rmdir($tmpDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_module_namespace(): void
     {
         config()->set('gatekeeper.modules.namespace', 'Modules');
@@ -81,7 +82,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame('Modules\\Blog', $namespace);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_model_class(): void
     {
         config()->set('gatekeeper.modules.namespace', 'Modules');
@@ -91,7 +92,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame('Modules\\Blog\\Models\\Post', $class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_resource_class(): void
     {
         config()->set('gatekeeper.modules.namespace', 'Modules');
@@ -101,7 +102,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame('Modules\\Blog\\Filament\\Resources\\PostResource', $class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_models_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -109,7 +110,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame([], $this->discovery->getModels());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_resources_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -117,7 +118,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame([], $this->discovery->getResources());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_pages_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -125,7 +126,7 @@ class ModuleDiscoveryTest extends TestCase
         $this->assertSame([], $this->discovery->getPages());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_widgets_when_modules_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);

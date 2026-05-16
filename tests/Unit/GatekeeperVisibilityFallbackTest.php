@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use LaraArabDev\FilamentGatekeeper\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for Gatekeeper visibility methods using the can() fallback path.
@@ -29,7 +30,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── getVisibleColumns with can() fallback ──────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_column_via_can_fallback_when_permission_not_in_db(): void
     {
         $user = $this->createUser();
@@ -46,7 +47,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertContains('email', $columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_column_when_both_has_permission_to_fails_and_can_returns_false(): void
     {
         $user = $this->createUser();
@@ -62,7 +63,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── getVisibleFields with can() path ───────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_field_via_can_when_gate_allows(): void
     {
         $user = $this->createUser();
@@ -78,7 +79,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertContains('name', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_matrix_fallback_when_can_returns_false_for_field(): void
     {
         $user = $this->createUser();
@@ -96,7 +97,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── canViewField matrix fallback ──────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_matrix_when_can_returns_false_for_can_view_field(): void
     {
         $user = $this->createUser();
@@ -108,7 +109,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_view_field_when_gate_allows(): void
     {
         $user = $this->createUser();
@@ -122,7 +123,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_update_field_when_gate_allows(): void
     {
         $user = $this->createUser();
@@ -139,7 +140,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── canUpdateField via Gate ───────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_update_field_via_gate(): void
     {
         $user = $this->createUser();
@@ -154,7 +155,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_matrix_for_can_update_field_when_can_returns_false(): void
     {
         $user = $this->createUser();
@@ -168,7 +169,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── canViewRelation via Gate ──────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_view_relation_via_gate_fallback(): void
     {
         $user = $this->createUser();
@@ -182,7 +183,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_matrix_for_can_view_relation(): void
     {
         $user = $this->createUser();
@@ -196,7 +197,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── canExecuteAction via Gate ─────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_execute_action_via_gate(): void
     {
         $user = $this->createUser();
@@ -209,7 +210,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_matrix_for_can_execute_action(): void
     {
         $user = $this->createUser();
@@ -223,7 +224,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
 
     // ── isSuperAdmin ──────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_is_super_admin_returns_false_for_regular_user(): void
     {
         $user = $this->createUser();
@@ -232,7 +233,7 @@ class GatekeeperVisibilityFallbackTest extends TestCase
         $this->assertFalse($this->gatekeeper->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_is_super_admin_returns_true_for_super_admin_user(): void
     {
         $superAdmin = $this->createSuperAdmin();

@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Traits;
 
 use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithModuleDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConcreteModuleDiscoverer
 {
@@ -38,7 +39,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->discoverer = new ConcreteModuleDiscoverer;
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_module_discovery_is_disabled(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -46,7 +47,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->assertFalse($this->discoverer->moduleEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_module_discovery_is_enabled(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -54,7 +55,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->assertTrue($this->discoverer->moduleEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.path', '/non/existent/path/abc123');
@@ -64,7 +65,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_from_module_directories(): void
     {
         $tmpDir = sys_get_temp_dir().'/gatekeeper_module_disc_'.uniqid();
@@ -90,7 +91,7 @@ class InteractsWithModuleDiscoveryTest extends TestCase
         rmdir($tmpDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_non_existent_sub_directories(): void
     {
         $tmpDir = sys_get_temp_dir().'/gatekeeper_module_disc2_'.uniqid();

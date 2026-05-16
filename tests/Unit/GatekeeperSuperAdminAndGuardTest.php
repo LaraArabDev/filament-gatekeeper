@@ -12,6 +12,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Branch coverage tests for the Gatekeeper class.
@@ -32,7 +33,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── detectGuardFromRequest ─────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_detects_api_guard_from_api_route_prefix(): void
     {
         $request = Request::create('/api/users', 'GET');
@@ -42,7 +43,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertEquals('api', $gatekeeper->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_detects_web_guard_for_regular_routes(): void
     {
         $request = Request::create('/dashboard', 'GET');
@@ -53,7 +54,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertEquals('web', $gatekeeper->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_set_guard_over_auto_detection(): void
     {
         // Even with bearer token, explicit guard wins
@@ -64,7 +65,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── getGuardsToCheckForSuperAdmin ─────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_checks_super_admin_across_multiple_guards(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -76,7 +77,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertTrue($this->gatekeeper->shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_user_guard_name_in_guards_to_check(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -99,7 +100,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertTrue($this->gatekeeper->shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_web_fallback_guard_when_not_already_in_list(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -124,7 +125,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── checkSuperAdminViaDatabase ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_checks_super_admin_via_database_when_has_role_unavailable(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -173,7 +174,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_from_database_check_when_no_matching_role(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -186,7 +187,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertFalse($this->gatekeeper->shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_super_admin_disabled(): void
     {
         config()->set('gatekeeper.super_admin.enabled', false);
@@ -202,7 +203,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── userHasRole exception handling ────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_handles_guard_does_not_match_exception_gracefully(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -219,7 +220,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── getPermissionMatrix ────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_matrix_when_no_user_authenticated(): void
     {
         $matrix = $this->gatekeeper->getPermissionMatrix();
@@ -227,7 +228,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertEmpty($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_matrix_for_authenticated_user(): void
     {
         $user = $this->createUser();
@@ -237,7 +238,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertIsArray($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_matrix_for_explicit_user_argument(): void
     {
         $user = $this->createUser();
@@ -248,7 +249,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── canViewColumn - hasPermissionTo path then can() ────────────────────
 
-    /** @test */
+    #[Test]
     public function it_can_view_column_checks_permission_by_name(): void
     {
         $user = $this->createUser();
@@ -259,7 +260,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertTrue($this->gatekeeper->canViewColumn('User', 'email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_column_returns_false_for_missing_permission(): void
     {
         $user = $this->createUser();
@@ -270,7 +271,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── canViewRelation ────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_can_view_relation_checks_permission_by_name(): void
     {
         $user = $this->createUser();
@@ -281,7 +282,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertTrue($this->gatekeeper->canViewRelation('User', 'roles'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_relation_falls_back_to_matrix(): void
     {
         $user = $this->createUser();
@@ -293,7 +294,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
 
     // ── getVisibleFields/Columns with matrix fallback ──────────────────────
 
-    /** @test */
+    #[Test]
     public function it_get_visible_fields_returns_from_matrix_when_no_can_match(): void
     {
         $user = $this->createUser();
@@ -306,7 +307,7 @@ class GatekeeperSuperAdminAndGuardTest extends TestCase
         $this->assertIsArray($fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_columns_returns_from_matrix_when_no_can_match(): void
     {
         $user = $this->createUser();

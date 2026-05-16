@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Base\GatekeeperAuthenticatable;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConcreteAuthenticatable extends GatekeeperAuthenticatable
 {
@@ -23,14 +24,14 @@ class GatekeeperAuthenticatableTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_has_web_as_default_guard_name(): void
     {
         $user = new ConcreteAuthenticatable;
         $this->assertSame('web', $user->getGuardName());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_guard_name(): void
     {
         $user = new ConcreteAuthenticatable;
@@ -40,7 +41,7 @@ class GatekeeperAuthenticatableTest extends TestCase
         $this->assertSame($user, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_is_super_admin_without_role(): void
     {
         $user = ConcreteAuthenticatable::create([
@@ -52,7 +53,7 @@ class GatekeeperAuthenticatableTest extends TestCase
         $this->assertFalse($user->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_is_super_admin_with_super_admin_role(): void
     {
         config()->set('gatekeeper.super_admin.role', 'super-admin');
@@ -70,7 +71,7 @@ class GatekeeperAuthenticatableTest extends TestCase
         $this->assertTrue($user->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_has_has_roles_trait(): void
     {
         $user = new ConcreteAuthenticatable;

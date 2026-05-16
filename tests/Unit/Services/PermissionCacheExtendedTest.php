@@ -10,6 +10,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionCacheExtendedTest extends TestCase
 {
@@ -23,7 +24,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->cache = new PermissionCache;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_matrix_for_user(): void
     {
         $user = $this->createUser();
@@ -36,7 +37,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertIsArray($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_warm_cache_for_user(): void
     {
         $user = $this->createUser();
@@ -49,7 +50,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidate_for_user_clears_specific_user_cache(): void
     {
         $user = $this->createUser();
@@ -59,7 +60,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_user_permissions_cache_key(): void
     {
         $user = $this->createUser();
@@ -71,7 +72,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertStringContainsString((string) $user->getAuthIdentifier(), $key);
     }
 
-    /** @test */
+    #[Test]
     public function it_cache_disabled_bypasses_caching(): void
     {
         config()->set('gatekeeper.cache.enabled', false);
@@ -87,7 +88,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertIsArray($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidate_role_clears_cache_for_role_users(): void
     {
         $user = $this->createUser();
@@ -99,7 +100,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_cache_key_is_unique_per_user(): void
     {
         $user1 = $this->createUser();
@@ -111,7 +112,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertNotEquals($key1, $key2);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_matrix_is_empty_for_user_with_no_roles(): void
     {
         $user = $this->createUser();
@@ -122,7 +123,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertEmpty($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_matrix_reflects_role_field_permissions(): void
     {
         $user = $this->createUser();
@@ -148,7 +149,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertContains('view', $matrix['User']['relations']['posts'] ?? []);
     }
 
-    /** @test */
+    #[Test]
     public function it_merges_field_permissions_from_multiple_roles(): void
     {
         $user = $this->createUser();
@@ -180,7 +181,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertTrue($matrix['User']['fields']['salary']['view'] ?? false);
     }
 
-    /** @test */
+    #[Test]
     public function it_cache_key_contains_matrix_suffix(): void
     {
         $user = $this->createUser();
@@ -190,7 +191,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertStringContainsString('matrix', $key);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidate_all_does_not_throw(): void
     {
         $this->cache->remember('test_key_extended', fn () => 'test_value');
@@ -200,7 +201,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_matrix_for_user_without_roles_method(): void
     {
         // Create a user that implements Authenticatable but has no roles() method
@@ -245,7 +246,7 @@ class PermissionCacheExtendedTest extends TestCase
         $this->assertSame([], $matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_flush_all_cache(): void
     {
         $user = $this->createUser();

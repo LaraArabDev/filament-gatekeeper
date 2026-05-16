@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionExtendedTest extends TestCase
 {
@@ -14,7 +15,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── Type-check convenience methods ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_can_check_field_permission_type(): void
     {
         $permission = Permission::factory()->field()->create(['name' => 'view_user_email_field']);
@@ -22,7 +23,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertFalse($permission->isResourcePermission());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_column_permission_type(): void
     {
         $permission = Permission::factory()->column()->create(['name' => 'view_user_name_column']);
@@ -30,7 +31,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertFalse($permission->isFieldPermission());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_action_permission_type(): void
     {
         $permission = Permission::factory()->action()->create(['name' => 'execute_user_export_action']);
@@ -38,7 +39,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertFalse($permission->isColumnPermission());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_relation_permission_type(): void
     {
         $permission = Permission::factory()->relation()->create(['name' => 'view_user_posts_relation']);
@@ -48,7 +49,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── extractPageName() branches ────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function extract_page_name_with_page_infix_pattern(): void
     {
         // Pattern: _page_(.+)$ (e.g., "view_page_dashboard" or "access_page_settings")
@@ -61,7 +62,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function extract_page_name_with_page_suffix_and_view_prefix(): void
     {
         // Pattern: ^(.+)_page$ with "view_" prefix parsed out
@@ -74,7 +75,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function extract_page_name_with_page_suffix_no_view_prefix(): void
     {
         // Pattern: ^(.+)_page$ without "view_" prefix → uses full part
@@ -89,7 +90,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── extractWidgetName() branches ──────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function extract_widget_name_with_widget_infix_pattern(): void
     {
         // Pattern: _widget_(.+)$
@@ -102,7 +103,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function extract_widget_name_with_widget_suffix_and_view_prefix(): void
     {
         // Pattern: ^(.+)_widget$ with "view_" prefix parsed out
@@ -115,7 +116,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function extract_widget_name_with_widget_suffix_no_view_prefix(): void
     {
         // Pattern: ^(.+)_widget$ without "view_" prefix
@@ -130,7 +131,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── getModelName() edge cases ─────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_model_name_returns_null_for_field_type_with_no_between(): void
     {
         // Field name with only 2 parts → no 'between' part
@@ -146,7 +147,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_uses_entity_column_for_field_type(): void
     {
         // Field type with entity set → use entity for display
@@ -159,7 +160,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertSame('User', $result);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_falls_back_to_last_part_when_no_model_parts(): void
     {
         // Resource permission where all parts are in skip words
@@ -175,7 +176,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── getDistinctEntityOptionsForFilter() ──────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_distinct_entity_options_merges_column_and_name_based(): void
     {
         // Entity from column
@@ -192,7 +193,7 @@ class PermissionExtendedTest extends TestCase
 
     // ── getActionLabel() branches ─────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_column_type_returns_headline(): void
     {
         $permission = Permission::factory()->column()->create([
@@ -204,7 +205,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotEmpty($label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_relation_type_returns_headline(): void
     {
         $permission = Permission::factory()->relation()->create([
@@ -216,7 +217,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotEmpty($label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_action_type_returns_headline(): void
     {
         $permission = Permission::factory()->action()->create([
@@ -228,7 +229,7 @@ class PermissionExtendedTest extends TestCase
         $this->assertNotEmpty($label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_resource_with_empty_entity_key(): void
     {
         // entityKey === 'other' → no entity removal from name

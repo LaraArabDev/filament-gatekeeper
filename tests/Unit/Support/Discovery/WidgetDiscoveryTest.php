@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\WidgetDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class WidgetDiscoveryTest extends TestCase
 {
@@ -20,13 +21,13 @@ class WidgetDiscoveryTest extends TestCase
         $this->discovery = new WidgetDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         expect($this->discovery)->toBeInstanceOf(WidgetDiscovery::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_no_paths_configured(): void
     {
         Config::set('gatekeeper.discovery.widgets', []);
@@ -36,7 +37,7 @@ class WidgetDiscoveryTest extends TestCase
         expect($widgets)->toBeArray()->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_path_does_not_exist(): void
     {
         Config::set('gatekeeper.discovery.widgets', ['app/Filament/Widgets/NonExistent']);
@@ -46,7 +47,7 @@ class WidgetDiscoveryTest extends TestCase
         expect($widgets)->toBeArray()->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_widgets_from_directory(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
@@ -68,7 +69,7 @@ class WidgetDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_all_php_files_unlike_page_discovery(): void
     {
         // Widget discovery does NOT filter out Create/Edit/List prefixes
@@ -93,7 +94,7 @@ class WidgetDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_configured_excluded_widgets(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
@@ -112,7 +113,7 @@ class WidgetDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_unique_widgets(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_widgets_test_'.uniqid();
@@ -135,7 +136,7 @@ class WidgetDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_module_discovery_when_disabled(): void
     {
         Config::set('gatekeeper.modules.enabled', false);
@@ -146,7 +147,7 @@ class WidgetDiscoveryTest extends TestCase
         expect($widgets)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_non_existent_directory_in_scan_directory(): void
     {
         $reflection = new \ReflectionClass($this->discovery);

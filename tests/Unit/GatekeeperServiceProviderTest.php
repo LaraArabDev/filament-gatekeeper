@@ -15,12 +15,13 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class GatekeeperServiceProviderTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_registers_gatekeeper_as_singleton(): void
     {
         $instance1 = app(Gatekeeper::class);
@@ -30,7 +31,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $this->assertSame($instance1, $instance2);
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_permission_cache_as_singleton(): void
     {
         $instance1 = app(PermissionCache::class);
@@ -40,7 +41,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $this->assertSame($instance1, $instance2);
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_gatekeeper_api_middleware_alias(): void
     {
         $router = app(Router::class);
@@ -53,7 +54,7 @@ class GatekeeperServiceProviderTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_gatekeeper_resource_middleware_alias(): void
     {
         $router = app(Router::class);
@@ -66,7 +67,7 @@ class GatekeeperServiceProviderTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidates_role_cache_when_role_is_saved(): void
     {
         $role = Role::factory()->create(['name' => 'test-role']);
@@ -80,7 +81,7 @@ class GatekeeperServiceProviderTest extends TestCase
         Event::dispatch('eloquent.saved: '.Role::class, $role);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidates_role_cache_when_role_is_deleted(): void
     {
         $role = Role::factory()->create(['name' => 'test-role-del']);
@@ -92,7 +93,7 @@ class GatekeeperServiceProviderTest extends TestCase
         Event::dispatch('eloquent.deleted: '.Role::class, $role);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidates_all_cache_when_permission_is_saved(): void
     {
         $cacheMock = $this->mock(PermissionCache::class);
@@ -102,7 +103,7 @@ class GatekeeperServiceProviderTest extends TestCase
         Event::dispatch('eloquent.saved: '.Permission::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidates_all_cache_when_permission_is_deleted(): void
     {
         $cacheMock = $this->mock(PermissionCache::class);
@@ -112,7 +113,7 @@ class GatekeeperServiceProviderTest extends TestCase
         Event::dispatch('eloquent.deleted: '.Permission::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_super_admin_via_gate_before_callback(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -125,7 +126,7 @@ class GatekeeperServiceProviderTest extends TestCase
         $this->assertTrue(Gate::allows('any-arbitrary-permission'));
     }
 
-    /** @test */
+    #[Test]
     public function it_has_gate_before_callback_registered(): void
     {
         // Verify the app is booted and Gate policies can be checked

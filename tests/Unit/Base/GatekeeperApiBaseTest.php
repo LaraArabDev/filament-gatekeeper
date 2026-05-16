@@ -13,6 +13,7 @@ use LaraArabDev\FilamentGatekeeper\Base\GatekeeperApiResource;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasResourcePermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 // ------------------------------------------------------------------
 // Concrete subclasses for testing abstract base behaviour
@@ -99,28 +100,28 @@ class GatekeeperApiResourceTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_extends_json_resource(): void
     {
         $resource = new ConcreteApiResource(['email' => 'test@example.com']);
         $this->assertInstanceOf(JsonResource::class, $resource);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_has_resource_permissions_trait(): void
     {
         $traits = class_uses_recursive(GatekeeperApiResource::class);
         $this->assertContains(HasResourcePermissions::class, $traits);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_shield_model_from_property(): void
     {
         $resource = new ConcreteApiResource(['email' => 'test@example.com']);
         $this->assertSame('User', $resource->callGetGatekeeperModel());
     }
 
-    /** @test */
+    #[Test]
     public function it_derives_model_name_from_class_name_when_no_shield_model(): void
     {
         $resource = new ConcreteApiResourceNoModel(['email' => 'test@example.com']);
@@ -130,14 +131,14 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertNotEmpty($modelName);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_shield_guard_from_property(): void
     {
         $resource = new ConcreteApiResource(['email' => 'test@example.com']);
         $this->assertSame('web', $resource->callGetShieldGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_field_permission(): void
     {
         $user = $this->createUser();
@@ -149,7 +150,7 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertTrue($resource->callCanViewField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_field_without_permission(): void
     {
         $user = $this->createUser();
@@ -159,7 +160,7 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertFalse($resource->callCanViewField('salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_column_permission(): void
     {
         $user = $this->createUser();
@@ -171,7 +172,7 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertTrue($resource->callCanViewColumn('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_relation_permission(): void
     {
         $user = $this->createUser();
@@ -183,7 +184,7 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertTrue($resource->callCanViewRelation('posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_relation_without_permission(): void
     {
         $user = $this->createUser();
@@ -193,7 +194,7 @@ class GatekeeperApiResourceTest extends TestCase
         $this->assertFalse($resource->callCanViewRelation('orders'));
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -214,42 +215,42 @@ class GatekeeperApiCollectionTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_extends_resource_collection(): void
     {
         $collection = new ConcreteApiCollection(collect([]));
         $this->assertInstanceOf(ResourceCollection::class, $collection);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_has_resource_permissions_trait(): void
     {
         $traits = class_uses_recursive(GatekeeperApiCollection::class);
         $this->assertContains(HasResourcePermissions::class, $traits);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_shield_model_from_property(): void
     {
         $collection = new ConcreteApiCollection(collect([]));
         $this->assertSame('User', $collection->callGetGatekeeperModel());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_shield_guard_from_property(): void
     {
         $collection = new ConcreteApiCollection(collect([]));
         $this->assertSame('web', $collection->callGetShieldGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated_with_empty_collection(): void
     {
         $collection = new ConcreteApiCollection(collect([]));
         $this->assertInstanceOf(ConcreteApiCollection::class, $collection);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated_with_collection_of_items(): void
     {
         $items = collect([

@@ -6,10 +6,11 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Enums;
 
 use LaraArabDev\FilamentGatekeeper\Enums\PermissionType;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionTypeTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_has_all_eight_cases(): void
     {
         $cases = PermissionType::cases();
@@ -28,7 +29,7 @@ class PermissionTypeTest extends TestCase
         $this->assertContains('relation', $values);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_created_from_string_value(): void
     {
         $this->assertEquals(PermissionType::Resource, PermissionType::from('resource'));
@@ -41,7 +42,7 @@ class PermissionTypeTest extends TestCase
         $this->assertEquals(PermissionType::Relation, PermissionType::from('relation'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_labels(): void
     {
         $this->assertEquals('Resource', PermissionType::Resource->getLabel());
@@ -54,7 +55,7 @@ class PermissionTypeTest extends TestCase
         $this->assertEquals('Relation', PermissionType::Relation->getLabel());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_colors(): void
     {
         $this->assertEquals('primary', PermissionType::Resource->getColor());
@@ -67,7 +68,7 @@ class PermissionTypeTest extends TestCase
         $this->assertEquals('purple', PermissionType::Relation->getColor());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_icons(): void
     {
         $this->assertEquals('heroicon-o-rectangle-stack', PermissionType::Resource->getIcon());
@@ -80,7 +81,7 @@ class PermissionTypeTest extends TestCase
         $this->assertEquals('heroicon-o-link', PermissionType::Relation->getIcon());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_options_for_select(): void
     {
         $options = PermissionType::optionsForSelect();
@@ -98,7 +99,7 @@ class PermissionTypeTest extends TestCase
         $this->assertEquals('Relation', $options['relation']);
     }
 
-    /** @test */
+    #[Test]
     public function it_options_keys_match_case_values(): void
     {
         $options = PermissionType::optionsForSelect();
@@ -109,7 +110,7 @@ class PermissionTypeTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_try_from_returns_null_for_invalid_value(): void
     {
         $this->assertNull(PermissionType::tryFrom('invalid'));
@@ -117,7 +118,7 @@ class PermissionTypeTest extends TestCase
         $this->assertNull(PermissionType::tryFrom('Resource'));
     }
 
-    /** @test */
+    #[Test]
     public function it_all_cases_have_non_null_label_color_icon(): void
     {
         foreach (PermissionType::cases() as $case) {

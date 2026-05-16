@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasGatekeeperPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasResourcePermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_any_permission(): void
     {
         $user = $this->createUser();
@@ -31,7 +32,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewAny());
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_any_without_permission(): void
     {
         $user = $this->createUser();
@@ -43,7 +44,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewAny());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_create_permission(): void
     {
         $user = $this->createUser();
@@ -61,7 +62,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canCreate());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_update_permission(): void
     {
         $user = $this->createUser();
@@ -79,7 +80,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canUpdate());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_delete_permission(): void
     {
         $user = $this->createUser();
@@ -97,7 +98,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canDelete());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_restore_permission(): void
     {
         $user = $this->createUser();
@@ -115,7 +116,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canRestore());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_force_delete_permission(): void
     {
         $user = $this->createUser();
@@ -133,7 +134,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canForceDelete());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_replicate_permission(): void
     {
         $user = $this->createUser();
@@ -151,7 +152,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canReplicate());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_reorder_permission(): void
     {
         $user = $this->createUser();
@@ -169,7 +170,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canReorder());
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_permissions_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -189,7 +190,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertTrue($testClass::canReorder());
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_permission_names(): void
     {
         $testClass = $this->createTestResourceClass();
@@ -205,7 +206,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertEquals('reorder_test_model', $testClass::getPermissionName('reorder'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_model_name(): void
     {
         $testClass = $this->createTestResourceClass();
@@ -213,7 +214,7 @@ class HasResourcePermissionsTest extends TestCase
         $this->assertEquals('test_model', $testClass::getModelPermissionName());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_all_permissions(): void
     {
         $testClass = $this->createTestResourceClass();

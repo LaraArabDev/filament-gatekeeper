@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Support\Traits;
 
 use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithExclusions;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConcreteExclusionClass
 {
@@ -31,7 +32,7 @@ class ConcreteExclusionClass
 
 class InteractsWithExclusionsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_returns_all_items_when_exclusion_list_is_empty(): void
     {
         $obj = new ConcreteExclusionClass;
@@ -42,7 +43,7 @@ class InteractsWithExclusionsTest extends TestCase
         $this->assertSame($items, array_values($result));
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_out_items_matching_exclusion(): void
     {
         $obj = new ConcreteExclusionClass;
@@ -56,7 +57,7 @@ class InteractsWithExclusionsTest extends TestCase
         $this->assertContains('CommentResource', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_multiple_exclusions(): void
     {
         $obj = new ConcreteExclusionClass;
@@ -71,7 +72,7 @@ class InteractsWithExclusionsTest extends TestCase
         $this->assertSame(['UserResource'], $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_all_items_excluded(): void
     {
         $obj = new ConcreteExclusionClass;
@@ -83,7 +84,7 @@ class InteractsWithExclusionsTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_given_empty_items(): void
     {
         $obj = new ConcreteExclusionClass;

@@ -13,6 +13,7 @@ use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class GatekeeperApiMiddlewareTest extends TestCase
 {
@@ -27,7 +28,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
         $this->middleware = new GatekeeperApiMiddleware;
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_request_with_permission(): void
     {
         $user = $this->createUser();
@@ -53,7 +54,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_request_without_permission(): void
     {
         $user = $this->createUser();
@@ -71,7 +72,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
         }, 'view_any_user', 'web');
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -89,7 +90,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_unauthenticated_request(): void
     {
         $request = Request::create('/api/users', 'GET');
@@ -101,7 +102,7 @@ class GatekeeperApiMiddlewareTest extends TestCase
         }, 'view_any_user');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_multiple_permissions_with_or(): void
     {
         $user = $this->createUser();

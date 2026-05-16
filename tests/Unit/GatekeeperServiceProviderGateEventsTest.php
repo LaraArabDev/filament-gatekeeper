@@ -13,6 +13,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Branch coverage tests for GatekeeperServiceProvider.
@@ -25,7 +26,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_gate_before_returns_null_for_regular_user(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -39,7 +40,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertFalse(Gate::allows('any-unknown-permission'));
     }
 
-    /** @test */
+    #[Test]
     public function it_gate_before_returns_null_when_super_admin_disabled(): void
     {
         // Create user with super-admin role but THEN disable the config
@@ -59,7 +60,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_gate_before_returns_null_when_user_has_no_has_role_method(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -80,7 +81,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertFalse($result); // TestUser does have hasRole via HasRoles trait, just no super-admin role
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_middleware_aliases_in_provider(): void
     {
         $router = app(Router::class);
@@ -90,7 +91,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertArrayHasKey('gatekeeper.resource', $middleware);
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_permission_gates_for_existing_permissions(): void
     {
         // Create a permission in DB
@@ -107,7 +108,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_permission_gates_exception_gracefully(): void
     {
         // ServiceProvider registerPermissionGates has try-catch for DB not ready
@@ -115,21 +116,21 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertTrue(app()->isBooted());
     }
 
-    /** @test */
+    #[Test]
     public function it_resolves_gatekeeper_singleton_correctly(): void
     {
         $gatekeeper = app(Gatekeeper::class);
         $this->assertInstanceOf(Gatekeeper::class, $gatekeeper);
     }
 
-    /** @test */
+    #[Test]
     public function it_resolves_permission_cache_singleton_correctly(): void
     {
         $cache = app(PermissionCache::class);
         $this->assertInstanceOf(PermissionCache::class, $cache);
     }
 
-    /** @test */
+    #[Test]
     public function it_fires_cache_invalidation_on_role_saved(): void
     {
         // When role is saved, cache is invalidated
@@ -149,7 +150,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_fires_cache_invalidation_on_permission_saved(): void
     {
         // When permission is saved, all cache is invalidated
@@ -162,7 +163,7 @@ class GatekeeperServiceProviderGateEventsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_fires_cache_invalidation_on_permission_deleted(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'delete_cache_test_perm']);

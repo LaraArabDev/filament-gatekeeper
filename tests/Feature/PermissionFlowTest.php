@@ -9,13 +9,14 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Permission\PermissionRegistrar;
 
 class PermissionFlowTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function complete_permission_flow(): void
     {
         // Step 1: Sync permissions
@@ -86,7 +87,7 @@ class PermissionFlowTest extends TestCase
         $this->assertFalse(Gatekeeper::can('view_user_email_column'));
     }
 
-    /** @test */
+    #[Test]
     public function super_admin_has_all_permissions(): void
     {
         // Setup
@@ -117,7 +118,7 @@ class PermissionFlowTest extends TestCase
         $this->assertTrue(Gatekeeper::shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function role_permission_syncing(): void
     {
         // Create permissions using factory
@@ -154,7 +155,7 @@ class PermissionFlowTest extends TestCase
         $this->assertTrue(Gatekeeper::can('permission_3'));
     }
 
-    /** @test */
+    #[Test]
     public function multiple_roles_combine_permissions(): void
     {
         Permission::factory()->resource()->create(['name' => 'role1_permission']);
@@ -178,7 +179,7 @@ class PermissionFlowTest extends TestCase
         $this->assertTrue(Gatekeeper::can('shared_permission'));
     }
 
-    /** @test */
+    #[Test]
     public function guard_specific_permissions(): void
     {
         Permission::factory()->forGuard('web')->resource()->create(['name' => 'web_permission']);

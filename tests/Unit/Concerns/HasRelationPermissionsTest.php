@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasRelationPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasRelationPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_relation_permission(): void
     {
         $user = $this->createUser();
@@ -31,7 +32,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewRelation('posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_relation_without_permission(): void
     {
         $user = $this->createUser();
@@ -43,7 +44,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewRelation('posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_multiple_relation_permissions(): void
     {
         $user = $this->createUser();
@@ -62,7 +63,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewRelation('orders'));
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_relation_permissions_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -76,7 +77,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewRelation('any_relation'));
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_relation_permission_names(): void
     {
         $testClass = $this->createTestResourceWithRelationPermissions();
@@ -85,7 +86,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertEquals('view_test_model_comments_relation', $testClass::getRelationPermissionName('comments'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_all_relation_permissions(): void
     {
         config()->set('gatekeeper.relation_permissions.TestModel', ['posts', 'comments', 'orders']);
@@ -99,7 +100,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertContains('view_test_model_orders_relation', $permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_permitted_relations(): void
     {
         $user = $this->createUser();
@@ -130,7 +131,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertIsArray($permittedRelations);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_available_relations_for_current_user(): void
     {
         $user = $this->createUser();
@@ -150,7 +151,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertNotContains('orders', $available);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_available_relations_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -166,7 +167,7 @@ class HasRelationPermissionsTest extends TestCase
         $this->assertContains('orders', $available);
     }
 
-    /** @test */
+    #[Test]
     public function it_filter_relation_managers_delegates_to_get_permitted_relations(): void
     {
         $user = $this->createUser();
@@ -184,7 +185,7 @@ class HasRelationPermissionsTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_relation_name_from_class(): void
     {
         // PostsRelationManagerForTest -> strips RelationManager -> PostsForTest -> snake: posts_for_test -> no underscores: postsfortest
@@ -231,7 +232,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_returns_all_managers_for_super_admin_in_get_permitted_relations(): void
     {
         $user = $this->createSuperAdmin();
@@ -244,7 +245,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_managers_for_regular_user_in_get_permitted_relations(): void
     {
         $user = $this->createUser();
@@ -259,7 +260,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_in_get_permitted_relations_when_no_permission(): void
     {
         $user = $this->createUser();
@@ -272,7 +273,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertEmpty(array_values($result));
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_relation_name_from_class_with_relation_manager_suffix(): void
     {
         // Standard class: PostsRelationManager -> 'posts'
@@ -280,7 +281,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertEquals('posts', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_relation_name_from_class_without_relation_manager_suffix(): void
     {
         // Class without suffix: Tags -> 'tags'
@@ -288,7 +289,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertEquals('tags', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_filter_relation_managers_returns_same_as_get_permitted_relations_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -302,7 +303,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertEquals(array_values($permitted), array_values($filtered));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_configured_relations_for_super_admin_in_get_available_relations(): void
     {
         $user = $this->createSuperAdmin();
@@ -317,7 +318,7 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertContains('orders', $available);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_relations_for_regular_user_in_get_available_relations(): void
     {
         $user = $this->createUser();
@@ -333,14 +334,14 @@ class HasRelationPermissionsExtendedTest extends TestCase
         $this->assertNotContains('comments', $available);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_model_property_for_relation_permission_model_name_when_no_get_model_name(): void
     {
         $name = TestResourceRelationsWithModelProp::getRelationPermissionName('posts');
         $this->assertStringContainsString('test_model_for_relations_prop', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_class_basename_for_relation_permission_model_name(): void
     {
         $name = TestResourceRelationsNoModel::getRelationPermissionName('posts');

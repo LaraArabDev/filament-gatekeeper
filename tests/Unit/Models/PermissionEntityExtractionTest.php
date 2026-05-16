@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Additional tests targeting uncovered branches in Permission model.
@@ -17,7 +18,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── getModelName() branches ───────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_model_name_uses_entity_column_for_resource_type(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -29,7 +30,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertSame('User', $name);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_for_action_type_with_entity_set(): void
     {
         $permission = Permission::factory()->action()->create([
@@ -41,7 +42,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertSame('Product', $name);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_for_relation_type_with_entity_set(): void
     {
         $permission = Permission::factory()->relation()->create([
@@ -53,7 +54,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertSame('User', $name);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_for_column_type_without_entity(): void
     {
         $permission = Permission::factory()->column()->create([
@@ -66,7 +67,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertStringContainsString('User', $name);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_for_resource_type_skips_action_words(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -79,7 +80,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertStringContainsString('Blog', $name);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_returns_null_for_single_word_name(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -91,7 +92,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function get_model_name_uses_fallback_last_part_when_all_skip_words(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -106,7 +107,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── extractPageName() fallback branch ─────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function extract_page_name_fallback_returns_model_name_when_no_pattern(): void
     {
         // A page permission that doesn't match either pattern - goes to fallback
@@ -125,7 +126,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── extractWidgetName() fallback branch ──────────────────────────────
 
-    /** @test */
+    #[Test]
     public function extract_widget_name_fallback_returns_model_name_when_no_pattern(): void
     {
         $permission = Permission::factory()->widget()->create([
@@ -139,7 +140,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── extractFieldName() - no match fallback ────────────────────────────
 
-    /** @test */
+    #[Test]
     public function extract_field_name_fallback_returns_model_name(): void
     {
         $permission = Permission::factory()->field()->create([
@@ -156,7 +157,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── getEntityGroupKey() for empty entity ─────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_entity_group_key_returns_other_for_null_entity_and_null_model(): void
     {
         $permission = Permission::factory()->create([
@@ -170,7 +171,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertEquals('other', $key);
     }
 
-    /** @test */
+    #[Test]
     public function get_entity_group_key_returns_snake_case_of_entity_column(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -184,7 +185,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── getEntityDisplayName() ────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function get_entity_display_name_returns_other_when_no_entity_name(): void
     {
         $permission = Permission::factory()->create([
@@ -201,7 +202,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── getActionLabel() for resource type with entity removal ─────────────
 
-    /** @test */
+    #[Test]
     public function get_action_label_removes_entity_key_from_resource_name(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -215,7 +216,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertStringNotContainsString('User', $label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_page_type_uses_entity_key_removal(): void
     {
         $permission = Permission::factory()->page()->create([
@@ -227,7 +228,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertNotEmpty($label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_widget_type_uses_entity_key_removal(): void
     {
         $permission = Permission::factory()->widget()->create([
@@ -239,7 +240,7 @@ class PermissionEntityExtractionTest extends TestCase
         $this->assertNotEmpty($label);
     }
 
-    /** @test */
+    #[Test]
     public function get_action_label_for_model_type(): void
     {
         $permission = Permission::factory()->model()->create([
@@ -253,7 +254,7 @@ class PermissionEntityExtractionTest extends TestCase
 
     // ── scopeOfType ───────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function scope_of_type_filters_correctly(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);

@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RoleExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_field_permissions_for_model(): void
     {
         $role = $this->createRole('editor');
@@ -27,7 +28,7 @@ class RoleExtendedTest extends TestCase
         $this->assertArrayHasKey('phone', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_column_permissions_for_model(): void
     {
         $role = $this->createRole('editor');
@@ -40,7 +41,7 @@ class RoleExtendedTest extends TestCase
         $this->assertArrayHasKey('salary', $columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_action_permissions_for_model(): void
     {
         $role = $this->createRole('editor');
@@ -53,7 +54,7 @@ class RoleExtendedTest extends TestCase
         $this->assertArrayHasKey('import', $actions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_relation_permissions_for_model(): void
     {
         $role = $this->createRole('editor');
@@ -66,7 +67,7 @@ class RoleExtendedTest extends TestCase
         $this->assertArrayHasKey('roles', $relations);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_has_field_permission(): void
     {
         $role = $this->createRole('editor');
@@ -80,7 +81,7 @@ class RoleExtendedTest extends TestCase
         $this->assertTrue($role->hasFieldPermission('User', 'phone', 'view'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_has_column_permission(): void
     {
         $role = $this->createRole('editor');
@@ -90,7 +91,7 @@ class RoleExtendedTest extends TestCase
         $this->assertFalse($role->hasColumnPermission('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_has_action_permission(): void
     {
         $role = $this->createRole('editor');
@@ -100,7 +101,7 @@ class RoleExtendedTest extends TestCase
         $this->assertFalse($role->hasActionPermission('User', 'import'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_has_relation_permission(): void
     {
         $role = $this->createRole('editor');
@@ -110,7 +111,7 @@ class RoleExtendedTest extends TestCase
         $this->assertFalse($role->hasRelationPermission('User', 'roles', 'view'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_model_with_no_permissions(): void
     {
         $role = $this->createRole('editor');
@@ -121,7 +122,7 @@ class RoleExtendedTest extends TestCase
         $this->assertEmpty($role->getRelationPermissionsForModel('User'));
     }
 
-    /** @test */
+    #[Test]
     public function it_scope_for_guard_filters_by_guard(): void
     {
         $webRole = Role::factory()->forGuard('web')->create(['name' => 'web-editor']);
@@ -135,7 +136,7 @@ class RoleExtendedTest extends TestCase
         $this->assertTrue($apiRoles->contains('name', 'api-editor'));
     }
 
-    /** @test */
+    #[Test]
     public function it_scope_without_super_admin_excludes_super_admin(): void
     {
         config()->set('gatekeeper.super_admin.role', 'super-admin');
@@ -149,7 +150,7 @@ class RoleExtendedTest extends TestCase
         $this->assertTrue($roles->contains('name', 'editor'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_is_super_admin(): void
     {
         config()->set('gatekeeper.super_admin.role', 'super-admin');
@@ -161,7 +162,7 @@ class RoleExtendedTest extends TestCase
         $this->assertFalse($editor->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permissions_by_type_for_extended_role(): void
     {
         $role = $this->createRole('editor');
@@ -179,7 +180,7 @@ class RoleExtendedTest extends TestCase
         $this->assertTrue($fieldPerms->contains('name', 'view_user_email_field'));
     }
 
-    /** @test */
+    #[Test]
     public function it_overwrites_existing_field_permissions_on_set(): void
     {
         $role = $this->createRole('editor');
@@ -194,7 +195,7 @@ class RoleExtendedTest extends TestCase
         $this->assertArrayNotHasKey('phone', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_all_permissions_to_role(): void
     {
         $role = $this->createRole('admin');
@@ -207,7 +208,7 @@ class RoleExtendedTest extends TestCase
         $this->assertEquals(2, $role->permissions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_resource_permissions_only(): void
     {
         $role = $this->createRole('admin');
@@ -222,7 +223,7 @@ class RoleExtendedTest extends TestCase
         $this->assertFalse($role->hasPermissionTo('view_user_email_field'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_configured_models_after_setting_permissions(): void
     {
         $role = $this->createRole('admin');
@@ -236,7 +237,7 @@ class RoleExtendedTest extends TestCase
         $this->assertContains('Post', $models);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_description_fillable(): void
     {
         $role = new Role;

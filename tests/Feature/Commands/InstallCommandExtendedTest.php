@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Commands;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Commands\InstallCommand;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Extended tests for InstallCommand targeting uncovered branches:
@@ -19,7 +20,7 @@ class InstallCommandExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_outputs_next_steps_after_installation(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -27,7 +28,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_plugin_registration_instruction(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -35,7 +36,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_resource_usage_instruction(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -43,7 +44,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_syncs_permissions_when_sync_flag_is_set(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--sync' => true, '--no-interaction' => true])
@@ -51,7 +52,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_publishes_stubs_when_confirmed_in_interactive_mode(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true])
@@ -61,7 +62,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_syncs_when_confirmed_in_interactive_mode(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true])
@@ -71,7 +72,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_publishes_migrations(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -79,7 +80,7 @@ class InstallCommandExtendedTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_documentation_link(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])

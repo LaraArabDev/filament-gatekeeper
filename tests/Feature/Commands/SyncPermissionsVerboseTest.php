@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Commands;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for SyncPermissionsCommand verbose output — previously uncovered.
@@ -28,7 +29,7 @@ class SyncPermissionsVerboseTest extends TestCase
         config()->set('gatekeeper.column_discovery.enabled', false);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_verbose_output_when_verbose_flag_is_used(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -39,7 +40,7 @@ class SyncPermissionsVerboseTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_dry_run_output_correctly(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email', 'name']]);
@@ -54,7 +55,7 @@ class SyncPermissionsVerboseTest extends TestCase
         $this->assertEquals(0, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_displays_results_table_after_sync(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -66,7 +67,7 @@ class SyncPermissionsVerboseTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_displays_only_message_when_syncing_specific_type(): void
     {
         config()->set('gatekeeper.guards', ['web' => ['enabled' => true]]);

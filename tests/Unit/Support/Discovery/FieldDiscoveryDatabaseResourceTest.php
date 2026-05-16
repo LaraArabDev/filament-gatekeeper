@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for FieldDiscovery::discoverFromDatabase(), discoverFromResource(),
@@ -28,7 +29,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
 
     // ── discoverFromDatabase ──────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_discovers_columns_from_database_for_real_model(): void
     {
         // TestUser maps to the `users` table which is created by migrations
@@ -41,7 +42,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertContains('name', $columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_existent_class_in_database_discovery(): void
     {
         $columns = $this->discovery->discoverFromDatabase('App\\Models\\CompletelyNonExistentModel');
@@ -50,7 +51,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_model_class_in_database_discovery(): void
     {
         $columns = $this->discovery->discoverFromDatabase(\stdClass::class);
@@ -59,7 +60,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_model_with_nonexistent_table(): void
     {
         // Create a model class pointing to a nonexistent table
@@ -76,7 +77,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
 
     // ── discoverFromResource ──────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_for_model_with_no_corresponding_resource(): void
     {
         // TestUser has no UserResource in App\Filament\Resources
@@ -86,7 +87,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertEmpty($fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_for_non_existent_class_in_resource_discovery(): void
     {
         $fields = $this->discovery->discoverFromResource('App\\Models\\DoesNotExist');
@@ -97,7 +98,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
 
     // ── discoverForModel with database source ─────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_discovers_for_model_using_database_source(): void
     {
         // Using TestUser which has a real users table
@@ -108,7 +109,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertContains('email', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_for_model_using_resource_source(): void
     {
         // No UserResource exists, so should return empty
@@ -119,7 +120,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertEmpty($fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_for_model_combining_database_and_config_sources(): void
     {
         config()->set('gatekeeper.field_permissions', [
@@ -138,7 +139,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertContains('email', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_deduplicates_fields_when_using_multiple_sources(): void
     {
         config()->set('gatekeeper.field_permissions', [
@@ -156,7 +157,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertSame(count($uniqueFields), count($fields));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_for_default_source_with_unknown_class(): void
     {
         $fields = $this->discovery->discoverFromDatabase('NonExistentClassXyz');
@@ -167,7 +168,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
 
     // ── discoverForModel cache behavior ───────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_cached_result_on_second_call_with_database_source(): void
     {
         $first = $this->discovery->discoverForModel(TestUser::class, [FieldDiscovery::SOURCE_DATABASE]);
@@ -176,7 +177,7 @@ class FieldDiscoveryDatabaseResourceTest extends TestCase
         $this->assertSame($first, $second);
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cached_database_result_on_clear_cache(): void
     {
         $this->discovery->discoverForModel(TestUser::class, [FieldDiscovery::SOURCE_DATABASE]);

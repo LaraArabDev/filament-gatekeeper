@@ -11,6 +11,7 @@ use Illuminate\Routing\Route;
 use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class GatekeeperResourceMiddlewareTest extends TestCase
 {
@@ -25,7 +26,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->middleware = new GatekeeperResourceMiddleware;
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_get_index_request_with_view_any_permission(): void
     {
         $user = $this->createUser();
@@ -49,7 +50,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_get_show_request_with_view_permission(): void
     {
         $user = $this->createUser();
@@ -80,7 +81,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_post_request_with_create_permission(): void
     {
         $user = $this->createUser();
@@ -104,7 +105,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_put_request_with_update_permission(): void
     {
         $user = $this->createUser();
@@ -128,7 +129,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_patch_request_with_update_permission(): void
     {
         $user = $this->createUser();
@@ -152,7 +153,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_delete_request_with_delete_permission(): void
     {
         $user = $this->createUser();
@@ -184,7 +185,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_post_request_without_create_permission(): void
     {
         $user = $this->createUser();
@@ -208,7 +209,7 @@ class GatekeeperResourceMiddlewareTest extends TestCase
         $this->assertEquals('create_user', $content['permission']);
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_super_admin_for_all_methods(): void
     {
         $user = $this->createSuperAdmin();

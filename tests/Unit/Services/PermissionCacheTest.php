@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionCacheTest extends TestCase
 {
@@ -22,7 +23,7 @@ class PermissionCacheTest extends TestCase
         $this->cache = new PermissionCache;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_cache_stats(): void
     {
         $stats = $this->cache->getStats();
@@ -33,7 +34,7 @@ class PermissionCacheTest extends TestCase
         $this->assertArrayHasKey('supports_tagging', $stats);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_prefix(): void
     {
         config()->set('gatekeeper.cache.prefix', 'custom_prefix_');
@@ -44,7 +45,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals('custom_prefix_', $stats['prefix']);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_ttl(): void
     {
         config()->set('gatekeeper.cache.ttl', 7200);
@@ -55,7 +56,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals(7200, $stats['ttl']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_invalidate_all_cache(): void
     {
         // Store some cached data
@@ -68,7 +69,7 @@ class PermissionCacheTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_remember_value(): void
     {
         $value = $this->cache->remember('test_key', fn () => 'cached_value');
@@ -76,7 +77,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals('cached_value', $value);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_forget_specific_key(): void
     {
         $this->cache->remember('test_key', fn () => 'cached_value');
@@ -89,7 +90,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals('new_value', $newValue);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_user_permissions_cache_key(): void
     {
         $user = $this->createUser();
@@ -101,7 +102,7 @@ class PermissionCacheTest extends TestCase
         $this->assertStringContainsString('matrix', $key);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_invalidate_user_cache(): void
     {
         $user = $this->createUser();
@@ -117,7 +118,7 @@ class PermissionCacheTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_cache_enabled_config(): void
     {
         config()->set('gatekeeper.cache.enabled', false);
@@ -147,7 +148,7 @@ class PermissionCacheTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_flush_all_shield_cache(): void
     {
         $this->cache->remember('key1', fn () => 'value1');
@@ -159,7 +160,7 @@ class PermissionCacheTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_executes_callback_directly_when_cache_disabled_in_remember(): void
     {
         config()->set('gatekeeper.cache.enabled', false);
@@ -177,7 +178,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals(1, $callCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_calls_callback_every_time_when_cache_is_disabled(): void
     {
         config()->set('gatekeeper.cache.enabled', false);
@@ -200,7 +201,7 @@ class PermissionCacheTest extends TestCase
         $this->assertEquals(2, $callCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_forget_a_key(): void
     {
         $this->cache->remember('forget_test_key', fn () => 'initial_value');
@@ -211,7 +212,7 @@ class PermissionCacheTest extends TestCase
         $this->assertIsBool($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_warm_cache_for_user(): void
     {
         $user = $this->createUser();
@@ -222,7 +223,7 @@ class PermissionCacheTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_stats_with_all_required_keys(): void
     {
         $stats = $this->cache->getStats();
@@ -236,7 +237,7 @@ class PermissionCacheTest extends TestCase
         $this->assertIsBool($stats['supports_tagging']);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidates_all_without_exception(): void
     {
         $this->cache->remember('key_for_invalidate', fn () => 'value');

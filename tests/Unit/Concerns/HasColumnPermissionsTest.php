@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasColumnPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasColumnPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_column_permission(): void
     {
         $user = $this->createUser();
@@ -31,7 +32,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewColumn('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_column_without_permission(): void
     {
         $user = $this->createUser();
@@ -43,7 +44,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewColumn('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_multiple_column_permissions(): void
     {
         $user = $this->createUser();
@@ -62,7 +63,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewColumn('salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_column_permissions_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -76,7 +77,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewColumn('any_column'));
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_column_permission_names(): void
     {
         $testClass = $this->createTestResourceWithColumnPermissions();
@@ -84,7 +85,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertEquals('view_test_model_email_column', $testClass::getColumnPermissionName('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_all_column_permissions(): void
     {
         config()->set('gatekeeper.column_permissions.TestModel', ['email', 'phone', 'created_at']);
@@ -98,7 +99,7 @@ class HasColumnPermissionsTest extends TestCase
         $this->assertContains('view_test_model_created_at_column', $permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_columns(): void
     {
         $user = $this->createUser();
@@ -152,7 +153,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_is_column_hidden_when_no_view_permission(): void
     {
         $user = $this->createUser();
@@ -161,7 +162,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertTrue(TestResourceWithColumns::isColumnHidden('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_is_column_hidden_when_has_view_permission(): void
     {
         $user = $this->createUser();
@@ -172,7 +173,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertFalse(TestResourceWithColumns::isColumnHidden('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_column_permissions_to_objects_with_get_name_and_visible(): void
     {
         $user = $this->createUser();
@@ -205,7 +206,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertNotNull($column->visibleCallback);
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_column_permissions_to_plain_objects_without_get_name(): void
     {
         $plainObject = new \stdClass;
@@ -216,7 +217,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertSame($plainObject, $result[0]);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_columns_by_permission_for_objects_with_get_name(): void
     {
         $user = $this->createUser();
@@ -245,7 +246,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertSame($allowedColumn, array_values($result)[0]);
     }
 
-    /** @test */
+    #[Test]
     public function it_keeps_plain_objects_without_get_name_in_filter_columns(): void
     {
         $user = $this->createUser();
@@ -258,7 +259,7 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_configured_columns_for_super_admin_in_get_visible_columns(): void
     {
         $user = $this->createSuperAdmin();
@@ -273,14 +274,14 @@ class HasColumnPermissionsExtendedTest extends TestCase
         $this->assertContains('salary', $visibleColumns);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_model_property_for_column_permission_model_name_when_no_get_model_name(): void
     {
         $name = TestResourceColumnsWithModelProp::getColumnPermissionName('email');
         $this->assertStringContainsString('test_model_for_columns_prop', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_class_basename_for_column_permission_model_name(): void
     {
         $name = TestResourceColumnsNoModel::getColumnPermissionName('email');

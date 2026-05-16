@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_create_role(): void
     {
         $role = Role::factory()->create([
@@ -27,7 +28,7 @@ class RoleTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_role_with_description(): void
     {
         $role = Role::factory()->withDescription('Administrator role with full access')->create([
@@ -40,7 +41,7 @@ class RoleTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_if_super_admin(): void
     {
         config()->set('gatekeeper.super_admin.role', 'super-admin');
@@ -55,7 +56,7 @@ class RoleTest extends TestCase
         $this->assertFalse($admin->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_scope_without_super_admin(): void
     {
         config()->set('gatekeeper.super_admin.role', 'super-admin');
@@ -67,7 +68,7 @@ class RoleTest extends TestCase
         $this->assertEquals(2, Role::withoutSuperAdmin()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_scope_by_guard(): void
     {
         Role::factory()->forGuard('web')->create(['name' => 'admin']);
@@ -78,7 +79,7 @@ class RoleTest extends TestCase
         $this->assertEquals(2, Role::forGuard('api')->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_store_field_permissions_as_json(): void
     {
         $fieldPermissions = [
@@ -108,7 +109,7 @@ class RoleTest extends TestCase
         $this->assertEquals($fieldPermissions, $role->field_permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_field_permissions_for_model(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -124,7 +125,7 @@ class RoleTest extends TestCase
         $this->assertEquals(['view' => true, 'update' => false], $fieldPermissions['email']);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_existing_model(): void
     {
         $role = Role::factory()->withFieldPermissions([])->create(['name' => 'manager']);
@@ -134,7 +135,7 @@ class RoleTest extends TestCase
         $this->assertEquals([], $fieldPermissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_field_permission(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -152,7 +153,7 @@ class RoleTest extends TestCase
         $this->assertTrue($role->hasFieldPermission('User', 'salary', 'update'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_column_permission(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -168,7 +169,7 @@ class RoleTest extends TestCase
         $this->assertFalse($role->hasColumnPermission('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_action_permission(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -184,7 +185,7 @@ class RoleTest extends TestCase
         $this->assertFalse($role->hasActionPermission('User', 'delete'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_relation_permission(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -200,7 +201,7 @@ class RoleTest extends TestCase
         $this->assertFalse($role->hasRelationPermission('User', 'posts', 'view'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_configured_models(): void
     {
         $role = Role::factory()->withFieldPermissions([
@@ -217,7 +218,7 @@ class RoleTest extends TestCase
         $this->assertCount(3, $models);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_assign_permissions(): void
     {
         $role = Role::factory()->create(['name' => 'admin']);
@@ -232,7 +233,7 @@ class RoleTest extends TestCase
         $this->assertEquals(2, $role->permissions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_permissions(): void
     {
         $role = Role::factory()->create(['name' => 'admin']);
@@ -256,7 +257,7 @@ class RoleTest extends TestCase
         $this->assertEquals(2, $role->permissions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_revoke_permissions(): void
     {
         $role = Role::factory()->create(['name' => 'admin']);
@@ -270,7 +271,7 @@ class RoleTest extends TestCase
         $this->assertFalse($role->hasPermissionTo('view_any_user'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permissions_by_type(): void
     {
         $role = Role::factory()->create(['name' => 'admin']);
@@ -290,7 +291,7 @@ class RoleTest extends TestCase
         $this->assertEquals(1, $widgetPerms->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_has_fillable_attributes(): void
     {
         $role = new Role;
@@ -300,7 +301,7 @@ class RoleTest extends TestCase
         $this->assertTrue(in_array('field_permissions', $role->getFillable()));
     }
 
-    /** @test */
+    #[Test]
     public function it_casts_field_permissions_to_array(): void
     {
         $role = Role::factory()->withFieldPermissions(['User' => ['fields' => []]])->create(['name' => 'admin']);

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests targeting PermissionCache branch coverage:
@@ -21,7 +22,7 @@ class PermissionCacheDriverTest extends TestCase
 
     // ── supportsTagging() ──────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_supports_tagging_with_array_driver(): void
     {
         config()->set('cache.default', 'array');
@@ -33,7 +34,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertTrue($stats['supports_tagging']);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_support_tagging_with_file_driver(): void
     {
         config()->set('cache.default', 'file');
@@ -45,7 +46,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertFalse($stats['supports_tagging']);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_support_tagging_with_database_driver(): void
     {
         config()->set('cache.default', 'database');
@@ -57,7 +58,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertFalse($stats['supports_tagging']);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_driver_for_tagging_check(): void
     {
         // When driver is explicitly set, it uses that for supportsTagging check
@@ -70,7 +71,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertTrue($stats['supports_tagging']);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_support_tagging_when_driver_is_file(): void
     {
         config()->set('gatekeeper.cache.driver', 'file');
@@ -83,7 +84,7 @@ class PermissionCacheDriverTest extends TestCase
 
     // ── buildPermissionMatrix() with non-Role instance ─────────────────────
 
-    /** @test */
+    #[Test]
     public function it_skips_non_role_instances_in_matrix_building(): void
     {
         $user = $this->createUser();
@@ -96,7 +97,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertEmpty($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_builds_complete_matrix_with_all_permission_types(): void
     {
         $user = $this->createUser();
@@ -131,7 +132,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertContains('view', $matrix['Order']['relations']['customer']);
     }
 
-    /** @test */
+    #[Test]
     public function it_merges_relation_permissions_from_multiple_roles_uniquely(): void
     {
         $user = $this->createUser();
@@ -166,7 +167,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertEquals(count($relations), count(array_unique($relations)));
     }
 
-    /** @test */
+    #[Test]
     public function it_combines_boolean_column_permissions_with_or_logic(): void
     {
         $user = $this->createUser();
@@ -198,7 +199,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertTrue($matrix['Product']['columns']['price'] ?? false);
     }
 
-    /** @test */
+    #[Test]
     public function it_combines_field_view_permissions_with_or_logic(): void
     {
         $user = $this->createUser();
@@ -231,7 +232,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertFalse($matrix['Invoice']['fields']['amount']['update']);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_permission_matrix_with_cache_enabled_caches_result(): void
     {
         config()->set('gatekeeper.cache.enabled', true);
@@ -247,7 +248,7 @@ class PermissionCacheDriverTest extends TestCase
         $this->assertEquals($matrix1, $matrix2);
     }
 
-    /** @test */
+    #[Test]
     public function it_invalidate_user_clears_user_specific_cache(): void
     {
         $user = $this->createUser();

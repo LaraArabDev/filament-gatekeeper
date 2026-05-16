@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Commands;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Branch coverage tests for DeletePermissionsCommand.
@@ -21,7 +22,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteOrphanedPermissions ─────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_deletes_orphaned_permissions_with_force_flag(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_deleted_model']);
@@ -32,7 +33,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
         ])->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_cancels_orphaned_permissions_when_not_confirmed(): void
     {
         $this->artisan('gatekeeper:delete', ['--type' => 'orphaned'])
@@ -44,7 +45,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_confirms_and_deletes_orphaned_permissions(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_orphaned_entity']);
@@ -59,7 +60,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteFieldPermissions - cancellation ─────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_cancels_field_deletion_when_not_confirmed(): void
     {
         Permission::factory()->field()->create(['name' => 'view_user_email_field']);
@@ -73,7 +74,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_failure_when_model_not_provided_for_field_deletion(): void
     {
         $this->artisan('gatekeeper:delete', ['--type' => 'field', '--force' => true])
@@ -84,7 +85,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteColumnPermissions - cancellation ────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_cancels_column_deletion_when_not_confirmed(): void
     {
         Permission::factory()->column()->create(['name' => 'view_user_email_column']);
@@ -98,7 +99,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_failure_when_model_not_provided_for_column_deletion(): void
     {
         $this->artisan('gatekeeper:delete', ['--type' => 'column', '--force' => true])
@@ -109,7 +110,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteModelPermissions - cancellation ─────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_cancels_model_deletion_when_not_confirmed(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_product']);
@@ -123,7 +124,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_failure_when_model_not_provided_for_model_deletion(): void
     {
         $this->artisan('gatekeeper:delete', ['--type' => 'model', '--force' => true])
@@ -134,7 +135,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── interactive type selection ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_prompts_for_type_when_not_specified(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_order']);
@@ -150,7 +151,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteFieldPermissions - with specific fields description ──────────
 
-    /** @test */
+    #[Test]
     public function it_shows_specific_fields_in_confirmation_when_specified(): void
     {
         Permission::factory()->field()->create(['name' => 'view_product_price_field']);
@@ -170,7 +171,7 @@ class DeletePermissionsCommandInteractiveTest extends TestCase
 
     // ── deleteColumnPermissions - with specific columns description ────────
 
-    /** @test */
+    #[Test]
     public function it_shows_specific_columns_in_confirmation_when_specified(): void
     {
         Permission::factory()->column()->create(['name' => 'view_product_price_column']);

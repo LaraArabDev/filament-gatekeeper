@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ModelDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ModelDiscoveryTest extends TestCase
 {
@@ -21,13 +22,13 @@ class ModelDiscoveryTest extends TestCase
         $this->discovery = new ModelDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         $this->assertInstanceOf(ModelDiscovery::class, $this->discovery);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_array_from_discover(): void
     {
         $models = $this->discovery->discover();
@@ -35,7 +36,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertIsArray($models);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_model_paths(): void
     {
         config()->set('gatekeeper.model_paths', [
@@ -48,7 +49,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertIsArray($models);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_configured_models(): void
     {
         config()->set('gatekeeper.excluded_models', [
@@ -61,7 +62,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertNotContains('App\\Models\\BaseModel', $models);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_model_name_from_class(): void
     {
         $modelName = $this->discovery->getModelName('App\\Models\\User');
@@ -69,7 +70,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertEquals('User', $modelName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_model_name(): void
     {
         $permissionName = $this->discovery->getPermissionModelName('App\\Models\\User');
@@ -77,7 +78,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertEquals('user', $permissionName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_model_name_for_multi_word_models(): void
     {
         $permissionName = $this->discovery->getPermissionModelName('App\\Models\\BlogPost');
@@ -85,7 +86,7 @@ class ModelDiscoveryTest extends TestCase
         $this->assertEquals('blog_post', $permissionName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_if_model_is_eloquent(): void
     {
         // This would require actual model classes to test properly

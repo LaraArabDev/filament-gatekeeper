@@ -11,6 +11,7 @@ use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionRegistrarAdditionalTest extends TestCase
 {
@@ -36,21 +37,21 @@ class PermissionRegistrarAdditionalTest extends TestCase
         config()->set('gatekeeper.relation_permissions', []);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_field_discovery_service(): void
     {
         $discovery = $this->registrar->getFieldDiscovery();
         $this->assertInstanceOf(FieldDiscovery::class, $discovery);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_column_discovery_service(): void
     {
         $discovery = $this->registrar->getColumnDiscovery();
         $this->assertInstanceOf(ColumnDiscovery::class, $discovery);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_prefixes_for_resource(): void
     {
         $prefixes = $this->registrar->getPermissionPrefixes('resource');
@@ -58,7 +59,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertNotEmpty($prefixes);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_prefixes_for_field(): void
     {
         $prefixes = $this->registrar->getPermissionPrefixes('field');
@@ -66,7 +67,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertContains('view', $prefixes);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_prefixes_for_unknown_type(): void
     {
         $prefixes = $this->registrar->getPermissionPrefixes('nonexistent_type');
@@ -74,7 +75,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertEmpty($prefixes);
     }
 
-    /** @test */
+    #[Test]
     public function sync_super_admin_role_in_dry_run_mode_does_not_create_role(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -91,7 +92,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertStringContainsString('Would create', $log['super_admin'][0]);
     }
 
-    /** @test */
+    #[Test]
     public function sync_super_admin_role_live_mode_creates_role_and_syncs_permissions(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -111,7 +112,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertStringContainsString('Synced', $log['super_admin'][0]);
     }
 
-    /** @test */
+    #[Test]
     public function sync_all_runs_all_sync_methods(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -130,7 +131,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_roles_relation']);
     }
 
-    /** @test */
+    #[Test]
     public function create_or_update_permission_creates_new_permission(): void
     {
         $this->registrar->createOrUpdatePermission(
@@ -147,7 +148,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function create_or_update_permission_updates_existing_permission(): void
     {
         // Create first
@@ -160,7 +161,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertEquals(1, Permission::where('name', 'view_any_test2')->count());
     }
 
-    /** @test */
+    #[Test]
     public function delete_field_permissions_with_guard_filter(): void
     {
         Permission::factory()->field()->forGuard('web')->create([
@@ -179,7 +180,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_product_price_field', 'guard_name' => 'api']);
     }
 
-    /** @test */
+    #[Test]
     public function delete_field_permissions_in_dry_run_does_not_delete(): void
     {
         Permission::factory()->field()->create([
@@ -197,7 +198,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertStringContainsString('Would delete', $log['delete_field'][0]);
     }
 
-    /** @test */
+    #[Test]
     public function delete_column_permissions_with_specific_columns(): void
     {
         Permission::factory()->column()->create([
@@ -215,7 +216,7 @@ class PermissionRegistrarAdditionalTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_name_column']);
     }
 
-    /** @test */
+    #[Test]
     public function delete_column_permissions_in_dry_run(): void
     {
         Permission::factory()->column()->create([

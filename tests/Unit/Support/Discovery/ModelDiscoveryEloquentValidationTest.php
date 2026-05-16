@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ModelDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 
 // ---------------------------------------------------------------------------
 // Helper classes declared at file scope (not inside any class)
@@ -69,7 +70,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     //  a temp directory that contains the relevant PHP file with the class)
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function is_eloquent_model_returns_false_for_non_existent_class(): void
     {
         // We expose the protected method via an anonymous sub-class.
@@ -86,7 +87,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function is_eloquent_model_returns_false_for_abstract_class(): void
     {
         $proxy = new class extends ModelDiscovery
@@ -103,7 +104,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function is_eloquent_model_returns_false_for_interface(): void
     {
         $proxy = new class extends ModelDiscovery
@@ -119,7 +120,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /** @test */
+    #[Test]
     public function is_eloquent_model_returns_true_for_real_model(): void
     {
         $proxy = new class extends ModelDiscovery
@@ -136,7 +137,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function is_eloquent_model_returns_false_for_non_model_class(): void
     {
         $proxy = new class extends ModelDiscovery
@@ -157,7 +158,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     // getModelsWithoutResources()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function get_models_without_resources_returns_models_not_in_resource_list(): void
     {
         // Point discovery at a path that doesn't exist so discover() returns []
@@ -170,7 +171,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    /** @test */
+    #[Test]
     public function get_models_without_resources_with_real_temp_model(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_model_branch_'.uniqid();
@@ -223,7 +224,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     // getModelName() and getPermissionModelName()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function get_model_name_returns_class_basename(): void
     {
         $this->assertEquals('User', $this->discovery->getModelName('App\\Models\\User'));
@@ -231,7 +232,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertEquals('Order', $this->discovery->getModelName('Order'));
     }
 
-    /** @test */
+    #[Test]
     public function get_permission_model_name_returns_snake_case(): void
     {
         $this->assertEquals('user', $this->discovery->getPermissionModelName('App\\Models\\User'));
@@ -242,7 +243,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
     // discoverModuleModels() via discover() with modules enabled
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function discover_returns_empty_when_modules_path_does_not_exist(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -254,7 +255,7 @@ class ModelDiscoveryEloquentValidationTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    /** @test */
+    #[Test]
     public function discover_skips_module_without_models_directory(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_model_branch_'.uniqid();

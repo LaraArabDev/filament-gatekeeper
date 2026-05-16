@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ResourceDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ResourceDiscoveryTest extends TestCase
 {
@@ -21,13 +22,13 @@ class ResourceDiscoveryTest extends TestCase
         $this->discovery = new ResourceDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         $this->assertInstanceOf(ResourceDiscovery::class, $this->discovery);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_array_from_discover(): void
     {
         $resources = $this->discovery->discover();
@@ -35,7 +36,7 @@ class ResourceDiscoveryTest extends TestCase
         $this->assertIsArray($resources);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_resource_paths(): void
     {
         config()->set('gatekeeper.discovery.resource_paths', [
@@ -48,7 +49,7 @@ class ResourceDiscoveryTest extends TestCase
         $this->assertIsArray($resources);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_resource_model_name(): void
     {
         $modelName = $this->discovery->getModelFromResource('UserResource');
@@ -56,7 +57,7 @@ class ResourceDiscoveryTest extends TestCase
         $this->assertEquals('User', $modelName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_name_from_resource(): void
     {
         $permissionName = $this->discovery->getPermissionName('UserResource');
@@ -64,7 +65,7 @@ class ResourceDiscoveryTest extends TestCase
         $this->assertEquals('user', $permissionName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_name_for_multi_word_resources(): void
     {
         $permissionName = $this->discovery->getPermissionName('BlogPostResource');
@@ -72,7 +73,7 @@ class ResourceDiscoveryTest extends TestCase
         $this->assertEquals('blog_post', $permissionName);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_discover_modules_resources(): void
     {
         config()->set('gatekeeper.modules.enabled', true);

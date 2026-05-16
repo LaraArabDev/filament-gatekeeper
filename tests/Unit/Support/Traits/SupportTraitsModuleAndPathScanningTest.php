@@ -8,6 +8,7 @@ use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithExclusions;
 use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithModuleDiscovery;
 use LaraArabDev\FilamentGatekeeper\Support\Traits\InteractsWithPathScanning;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 // ---------------------------------------------------------------------------
 // Concrete helper classes for InteractsWithModuleDiscovery
@@ -144,7 +145,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     // InteractsWithModuleDiscovery – discoverFromModules()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function module_discovery_returns_empty_when_modules_path_missing(): void
     {
         config()->set('gatekeeper.modules.path', '/totally/non/existent/path_'.uniqid());
@@ -155,7 +156,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    /** @test */
+    #[Test]
     public function module_discovery_discovers_files_from_module_subdirectory(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_traits_branch_'.uniqid();
@@ -173,7 +174,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertContains('Tag', $result);
     }
 
-    /** @test */
+    #[Test]
     public function module_discovery_skips_modules_without_matching_subdirectory(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_traits_branch2_'.uniqid();
@@ -187,7 +188,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    /** @test */
+    #[Test]
     public function is_module_discovery_enabled_returns_false_by_default(): void
     {
         config()->set('gatekeeper.modules.enabled', false);
@@ -197,7 +198,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertFalse($discoverer->runIsModuleDiscoveryEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function is_module_discovery_enabled_returns_true_when_set(): void
     {
         config()->set('gatekeeper.modules.enabled', true);
@@ -211,7 +212,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     // InteractsWithExclusions – filterExclusions() with actual exclusions
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function filter_exclusions_removes_matching_items(): void
     {
         $obj = new BranchExclusionClass;
@@ -226,7 +227,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertContains('CommentResource', $result);
     }
 
-    /** @test */
+    #[Test]
     public function filter_exclusions_returns_all_when_empty_exclusions(): void
     {
         $obj = new BranchExclusionClass;
@@ -237,7 +238,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame($items, $result);
     }
 
-    /** @test */
+    #[Test]
     public function filter_exclusions_removes_multiple_exclusions(): void
     {
         $obj = new BranchExclusionClass;
@@ -250,7 +251,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame(['Alpha'], $result);
     }
 
-    /** @test */
+    #[Test]
     public function filter_exclusions_returns_empty_when_all_excluded(): void
     {
         $obj = new BranchExclusionClass;
@@ -263,7 +264,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /** @test */
+    #[Test]
     public function filter_exclusions_returns_empty_for_empty_items(): void
     {
         $obj = new BranchExclusionClass;
@@ -277,7 +278,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     // InteractsWithPathScanning – scanPath() with glob patterns
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function scan_path_returns_empty_for_non_existent_directory(): void
     {
         $scanner = new BranchPathScanner;
@@ -287,7 +288,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    /** @test */
+    #[Test]
     public function scan_path_scans_an_existing_directory(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_scan_branch_'.uniqid();
@@ -309,7 +310,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertContains('App\\Models\\MyClass', $result);
     }
 
-    /** @test */
+    #[Test]
     public function scan_path_with_glob_pattern_finds_directories(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_glob_branch_'.uniqid();
@@ -337,7 +338,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
     // InteractsWithPathScanning – getClassFromFile() edge cases
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function get_class_from_file_returns_null_for_empty_file(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch_'.uniqid();
@@ -351,7 +352,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function get_class_from_file_returns_null_when_no_class_declaration(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch2_'.uniqid();
@@ -365,7 +366,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertNull($result);
     }
 
-    /** @test */
+    #[Test]
     public function get_class_from_file_returns_class_without_namespace(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch3_'.uniqid();
@@ -379,7 +380,7 @@ class SupportTraitsModuleAndPathScanningTest extends TestCase
         $this->assertSame('Standalone', $result);
     }
 
-    /** @test */
+    #[Test]
     public function get_class_from_file_returns_fully_qualified_class_with_namespace(): void
     {
         $this->tempDir = sys_get_temp_dir().'/gatekeeper_class_branch4_'.uniqid();

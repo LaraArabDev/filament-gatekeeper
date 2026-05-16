@@ -8,13 +8,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasApiPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HasApiPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_index(): void
     {
         $user = $this->createUser();
@@ -34,7 +35,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_exception_when_index_not_authorized(): void
     {
         $user = $this->createUser();
@@ -48,7 +49,7 @@ class HasApiPermissionsTest extends TestCase
         $controller->authorizeIndex();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_show(): void
     {
         $user = $this->createUser();
@@ -67,7 +68,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_store(): void
     {
         $user = $this->createUser();
@@ -86,7 +87,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_update(): void
     {
         $user = $this->createUser();
@@ -105,7 +106,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_destroy(): void
     {
         $user = $this->createUser();
@@ -124,7 +125,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_restore(): void
     {
         $user = $this->createUser();
@@ -143,7 +144,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_force_delete(): void
     {
         $user = $this->createUser();
@@ -162,7 +163,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -183,7 +184,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_custom_permission(): void
     {
         $user = $this->createUser();
@@ -202,7 +203,7 @@ class HasApiPermissionsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_permission_without_throwing(): void
     {
         $user = $this->createUser();
@@ -239,7 +240,7 @@ class HasApiPermissionsExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_returns_shield_model_property_when_set(): void
     {
         $controller = new class
@@ -257,7 +258,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertEquals('Product', $controller->callGetGatekeeperModel());
     }
 
-    /** @test */
+    #[Test]
     public function it_prefers_shield_model_over_permission_model(): void
     {
         $controller = new class
@@ -277,7 +278,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertEquals('Product', $controller->callGetGatekeeperModel());
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_model_name_from_controller_class_name_when_no_properties(): void
     {
         $controller = new TestUserApiController;
@@ -287,7 +288,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertStringContainsString('TestUser', $model);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_api_guard_by_default_when_no_shield_guard_property(): void
     {
         $controller = new class
@@ -305,7 +306,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertEquals('api', $controller->callGetShieldGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_field_permission_via_api(): void
     {
         $user = $this->createUser();
@@ -318,7 +319,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertTrue($controller->callCanViewField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_can_view_field_without_permission(): void
     {
         $user = $this->createUser();
@@ -329,7 +330,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertFalse($controller->callCanViewField('salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_update_field_permission_via_api(): void
     {
         $user = $this->createUser();
@@ -342,7 +343,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertTrue($controller->callCanUpdateField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_column_permission_via_api(): void
     {
         $user = $this->createUser();
@@ -355,7 +356,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertTrue($controller->callCanViewColumn('name'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_execute_action_permission_via_api(): void
     {
         $user = $this->createUser();
@@ -368,7 +369,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertTrue($controller->callCanExecuteAction('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_fields_via_api(): void
     {
         $user = $this->createUser();
@@ -385,7 +386,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertIsArray($visibleFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_columns_via_api(): void
     {
         $user = $this->createUser();
@@ -400,7 +401,7 @@ class HasApiPermissionsExtendedTest extends TestCase
         $this->assertIsArray($visibleColumns);
     }
 
-    /** @test */
+    #[Test]
     public function it_filter_by_permissions_returns_all_when_no_visible_fields(): void
     {
         $user = $this->createUser();

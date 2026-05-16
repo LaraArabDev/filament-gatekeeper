@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionRegistrarSyncOnlyTest extends TestCase
 {
@@ -30,35 +31,35 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         config()->set('gatekeeper.column_discovery.enabled', false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_resources(): void
     {
         $log = $this->registrar->syncOnly('resources');
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_models(): void
     {
         $log = $this->registrar->syncOnly('models');
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_pages(): void
     {
         $log = $this->registrar->syncOnly('pages');
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_widgets(): void
     {
         $log = $this->registrar->syncOnly('widgets');
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_fields(): void
     {
         config()->set('gatekeeper.field_permissions', []);
@@ -66,7 +67,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_columns(): void
     {
         config()->set('gatekeeper.column_permissions', []);
@@ -74,7 +75,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_actions(): void
     {
         config()->set('gatekeeper.action_permissions', []);
@@ -82,7 +83,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_relations(): void
     {
         config()->set('gatekeeper.relation_permissions', []);
@@ -90,7 +91,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_log_for_unknown_sync_type(): void
     {
         $log = $this->registrar->syncOnly('unknown_type_that_does_not_exist');
@@ -98,7 +99,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertSame([], $log);
     }
 
-    /** @test */
+    #[Test]
     public function it_syncs_field_permissions_from_config_when_discovery_disabled(): void
     {
         config()->set('gatekeeper.field_permissions.User', ['email', 'name']);
@@ -110,7 +111,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_name_field']);
     }
 
-    /** @test */
+    #[Test]
     public function it_syncs_column_permissions_from_config_when_discovery_disabled(): void
     {
         config()->set('gatekeeper.column_permissions.User', ['email', 'created_at']);
@@ -122,7 +123,7 @@ class PermissionRegistrarSyncOnlyTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_created_at_column']);
     }
 
-    /** @test */
+    #[Test]
     public function sync_log_is_reset_on_each_sync_call(): void
     {
         config()->set('gatekeeper.field_permissions.Post', ['title']);

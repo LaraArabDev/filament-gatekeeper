@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the FieldDiscovery class.
@@ -23,13 +24,13 @@ class FieldDiscoveryTest extends TestCase
         $this->discovery = new FieldDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         expect($this->discovery)->toBeInstanceOf(FieldDiscovery::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_available_sources(): void
     {
         $sources = FieldDiscovery::getAvailableSources();
@@ -41,7 +42,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($sources)->toHaveKey(FieldDiscovery::SOURCE_RESOURCE);
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_fields_from_fillable(): void
     {
         $fields = $this->discovery->discoverFromFillable(TestModelWithFillable::class);
@@ -52,7 +53,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toContain('salary');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_existent_class(): void
     {
         $fields = $this->discovery->discoverFromFillable('NonExistentClass');
@@ -61,7 +62,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_model_class(): void
     {
         $fields = $this->discovery->discoverFromFillable(NonModelClass::class);
@@ -70,7 +71,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_fields_from_config(): void
     {
         Config::set('gatekeeper.field_permissions', [
@@ -85,7 +86,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toContain('field3');
     }
 
-    /** @test */
+    #[Test]
     public function it_merges_global_fields_from_config(): void
     {
         Config::set('gatekeeper.field_permissions', [
@@ -100,7 +101,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toContain('model_field');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_excluded_fields(): void
     {
         Config::set('gatekeeper.field_discovery.default_excluded', ['id', 'created_at']);
@@ -119,7 +120,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($excluded)->toContain('created_at');
     }
 
-    /** @test */
+    #[Test]
     public function it_identifies_sensitive_fields(): void
     {
         expect($this->discovery->isSensitiveField('password'))->toBeTrue()
@@ -130,7 +131,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($this->discovery->isSensitiveField('email'))->toBeFalse();
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cache(): void
     {
         // Discover fields to populate cache
@@ -145,7 +146,7 @@ class FieldDiscoveryTest extends TestCase
         expect($fields)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_all_cache(): void
     {
         // Discover fields to populate cache
@@ -160,7 +161,7 @@ class FieldDiscoveryTest extends TestCase
         expect($fields)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_exclusions_when_discovering(): void
     {
         Config::set('gatekeeper.field_discovery.excluded', [
@@ -180,7 +181,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toContain('salary');
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_for_model_with_config_source(): void
     {
         Config::set('gatekeeper.field_permissions', [
@@ -198,7 +199,7 @@ class FieldDiscoveryTest extends TestCase
             ->and($fields)->toContain('email');
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_cache_on_subsequent_calls(): void
     {
         $discovery = new FieldDiscovery;

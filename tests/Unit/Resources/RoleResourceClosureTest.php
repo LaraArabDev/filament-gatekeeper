@@ -9,6 +9,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for RoleResource closures that are defined but not invoked by the schema tests.
@@ -23,7 +24,7 @@ class RoleResourceClosureTest extends TestCase
 
     // ── DeleteAction hidden closure ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_hidden_closure_returns_true_for_super_admin_role(): void
     {
         $role = Role::factory()->create([
@@ -37,7 +38,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_hidden_closure_returns_false_for_regular_role(): void
     {
         $role = Role::factory()->create([
@@ -52,7 +53,7 @@ class RoleResourceClosureTest extends TestCase
 
     // ── afterStateUpdated toggle closure ──────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_after_state_updated_when_state_is_true_sets_all_permission_ids(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -79,7 +80,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertContains(Permission::first()->id, $ids['permissions']);
     }
 
-    /** @test */
+    #[Test]
     public function it_after_state_updated_when_state_is_false_clears_permissions(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -105,7 +106,7 @@ class RoleResourceClosureTest extends TestCase
 
     // ── PermissionResource table closures ─────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_permission_description_closure_returns_type_label(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -116,7 +117,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertSame('Resource', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_description_closure_falls_back_to_type_string_when_no_enum(): void
     {
         $permission = new Permission;
@@ -127,7 +128,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertSame('unknown_type', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_state_closure_returns_entity_display_name(): void
     {
         $permission = Permission::factory()->resource()->create([
@@ -141,7 +142,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertSame('User', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_action_state_closure_returns_action_label(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -152,7 +153,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertIsString($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_type_icon_closure_returns_icon(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'view_any_user']);
@@ -163,7 +164,7 @@ class RoleResourceClosureTest extends TestCase
         $this->assertSame('heroicon-o-rectangle-stack', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_permission_type_color_closure_returns_color(): void
     {
         $permission = Permission::factory()->resource()->create(['name' => 'view_any_user']);

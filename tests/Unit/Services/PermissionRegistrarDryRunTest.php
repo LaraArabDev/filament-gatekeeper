@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionRegistrarDryRunTest extends TestCase
 {
@@ -21,7 +22,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->registrar = app(PermissionRegistrar::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_permissions(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email', 'phone']]);
@@ -33,7 +34,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_logs_operations(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -46,7 +47,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertIsArray($log);
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_false_creates_permissions(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -58,7 +59,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertGreaterThan(0, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_column_permissions(): void
     {
         config()->set('gatekeeper.column_permissions', ['User' => ['email', 'salary']]);
@@ -70,7 +71,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::columns()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_resource_permissions(): void
     {
         config()->set('gatekeeper.guards', ['web']);
@@ -81,7 +82,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::resources()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_page_permissions(): void
     {
         config()->set('gatekeeper.guards', ['web']);
@@ -92,7 +93,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::pages()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_widget_permissions(): void
     {
         config()->set('gatekeeper.guards', ['web']);
@@ -103,7 +104,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::widgets()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_action_permissions(): void
     {
         config()->set('gatekeeper.custom_actions', ['User' => ['export', 'import']]);
@@ -115,7 +116,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::actions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_create_relation_permissions(): void
     {
         config()->set('gatekeeper.relation_permissions', ['User' => ['posts', 'roles']]);
@@ -127,7 +128,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertEquals(0, Permission::relations()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_toggle_dry_run_off(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);
@@ -141,7 +142,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertGreaterThan(0, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_logs_field_operations(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email', 'phone']]);
@@ -157,7 +158,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertGreaterThan(0, count($log['field']));
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_logs_action_operations(): void
     {
         config()->set('gatekeeper.custom_actions', ['User' => ['export']]);
@@ -172,7 +173,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertGreaterThan(0, count($log['action']));
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_logs_relation_operations(): void
     {
         config()->set('gatekeeper.relation_permissions', ['User' => ['posts']]);
@@ -187,7 +188,7 @@ class PermissionRegistrarDryRunTest extends TestCase
         $this->assertGreaterThan(0, count($log['relation']));
     }
 
-    /** @test */
+    #[Test]
     public function it_dry_run_does_not_affect_database_on_sync_all(): void
     {
         config()->set('gatekeeper.field_permissions', ['User' => ['email']]);

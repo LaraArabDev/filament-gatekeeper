@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 use Filament\Panel;
 use LaraArabDev\FilamentGatekeeper\GatekeeperPlugin;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for GatekeeperPlugin::register() — previously uncovered branches.
@@ -15,7 +16,7 @@ class GatekeeperPluginRegisterTest extends TestCase
 {
     // ── register() with Panel (has resources() method) ────────────────────
 
-    /** @test */
+    #[Test]
     public function it_registers_both_resources_by_default(): void
     {
         $plugin = GatekeeperPlugin::make();
@@ -27,7 +28,7 @@ class GatekeeperPluginRegisterTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_only_role_resource_when_permission_resource_disabled(): void
     {
         $plugin = GatekeeperPlugin::make()->permissionResource(false);
@@ -39,7 +40,7 @@ class GatekeeperPluginRegisterTest extends TestCase
         $this->assertFalse($plugin->isPermissionResourceEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_only_permission_resource_when_role_resource_disabled(): void
     {
         $plugin = GatekeeperPlugin::make()->roleResource(false);
@@ -51,7 +52,7 @@ class GatekeeperPluginRegisterTest extends TestCase
         $this->assertFalse($plugin->isRoleResourceEnabled());
     }
 
-    /** @test */
+    #[Test]
     public function it_registers_no_resources_when_both_disabled(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -67,7 +68,7 @@ class GatekeeperPluginRegisterTest extends TestCase
 
     // ── boot() ────────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_boots_without_error(): void
     {
         $plugin = GatekeeperPlugin::make();

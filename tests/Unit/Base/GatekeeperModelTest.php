@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Base;
 use Illuminate\Database\Eloquent\Model;
 use LaraArabDev\FilamentGatekeeper\Base\GatekeeperModel;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConcreteModel extends GatekeeperModel
 {
@@ -17,14 +18,14 @@ class ConcreteModel extends GatekeeperModel
 
 class GatekeeperModelTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_has_web_as_default_guard_name(): void
     {
         $model = new ConcreteModel;
         $this->assertSame('web', $model->getGuardName());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_and_get_guard_name(): void
     {
         $model = new ConcreteModel;
@@ -34,7 +35,7 @@ class GatekeeperModelTest extends TestCase
         $this->assertSame($model, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_has_roles_trait(): void
     {
         $model = new ConcreteModel;
@@ -43,7 +44,7 @@ class GatekeeperModelTest extends TestCase
         $this->assertTrue(method_exists($model, 'hasPermissionTo'));
     }
 
-    /** @test */
+    #[Test]
     public function it_is_an_eloquent_model(): void
     {
         $model = new ConcreteModel;

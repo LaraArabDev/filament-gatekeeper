@@ -13,6 +13,7 @@ use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware;
 use LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Branch coverage for middleware that is NOT already covered by the base middleware tests:
@@ -47,7 +48,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – hasResourceParameter() (no route resolver)
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function has_resource_parameter_is_true_when_path_contains_numeric_segment_and_no_route(): void
     {
         // No route resolver – relies on path-based detection: /\d+(\/|$)/
@@ -71,7 +72,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function has_resource_parameter_is_false_when_path_has_no_numeric_segment_and_no_route(): void
     {
         // No route resolver and no numeric segment → view_any_user
@@ -98,7 +99,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – hasResourceParameter() (route exists, params empty, URI has {param})
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function has_resource_parameter_is_true_when_route_has_no_params_but_uri_contains_placeholder(): void
     {
         // Route exists but parameters() is empty, URI template has {user} → true
@@ -128,7 +129,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function has_resource_parameter_is_false_when_route_has_no_params_and_uri_has_no_placeholder(): void
     {
         // Route exists, parameters() is empty, URI has no {placeholder} → false → view_any_user
@@ -161,7 +162,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – resolvePermission() DELETE without route param
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function resolve_permission_delete_without_route_parameter_returns_delete_any(): void
     {
         // DELETE without a route parameter → delete_any_user
@@ -185,7 +186,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         $this->assertEquals('OK', $response->getContent());
     }
 
-    /** @test */
+    #[Test]
     public function resolve_permission_delete_with_route_parameter_returns_delete(): void
     {
         // DELETE with a route parameter → delete_user
@@ -219,7 +220,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – detectGuard() via is('api/*')
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function resource_middleware_detects_api_guard_for_api_path_without_bearer_token(): void
     {
         // No bearer token but path is api/* → guard should be 'api'
@@ -239,7 +240,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         $this->assertEquals(401, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function resource_middleware_detects_web_guard_for_non_api_path_without_bearer_token(): void
     {
         // No bearer token, path is not api/* → guard is 'web'
@@ -260,7 +261,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperApiMiddleware – detectGuard() via is('api/*')
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function api_middleware_detects_api_guard_for_api_path_without_bearer_token(): void
     {
         // Path starts with api/ but no bearer token → detectGuard() returns 'api'
@@ -277,7 +278,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function api_middleware_detects_web_guard_for_non_api_path(): void
     {
         // Path does NOT start with api/ and no bearer token → guard is 'web'
@@ -294,7 +295,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function api_middleware_with_api_path_and_authenticated_user_checks_permission(): void
     {
         $user = $this->createUser();
@@ -321,7 +322,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – unauthenticated user returns 401
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function resource_middleware_returns_401_for_unauthenticated_user(): void
     {
         $request = Request::create('/users', 'POST');
@@ -340,7 +341,7 @@ class MiddlewareGuardAndRouteDetectionTest extends TestCase
     // GatekeeperResourceMiddleware – resolvePermission returns null for unknown method
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function resource_middleware_passes_through_when_permission_cannot_be_resolved(): void
     {
         // HEAD method falls through to 'default => null' in resolvePermission()

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 
 class ClearCacheCommandTest extends TestCase
 {
@@ -20,7 +21,7 @@ class ClearCacheCommandTest extends TestCase
         config()->set('cache.default', 'array');
     }
 
-    /** @test */
+    #[Test]
     public function it_calls_invalidate_all_on_permission_cache(): void
     {
         $mock = Mockery::mock(PermissionCache::class);
@@ -36,7 +37,7 @@ class ClearCacheCommandTest extends TestCase
         $this->artisan('gatekeeper:clear-cache')->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_success_message_after_clearing_cache(): void
     {
         $this->artisan('gatekeeper:clear-cache')
@@ -44,7 +45,7 @@ class ClearCacheCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cache_keys_stored_via_remember(): void
     {
         $cache = app(PermissionCache::class);
@@ -70,7 +71,7 @@ class ClearCacheCommandTest extends TestCase
         $this->assertSame(2, $callCount, 'Cache was not cleared — callback was not invoked after clear');
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cache_for_specific_user(): void
     {
         $user = $this->createUser();
@@ -85,7 +86,7 @@ class ClearCacheCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_throw_when_cache_is_already_empty(): void
     {
         Cache::flush();

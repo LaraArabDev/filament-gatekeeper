@@ -7,12 +7,13 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Commands;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Commands\InstallCommand;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCommandTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_outputs_installation_header(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -20,7 +21,7 @@ class InstallCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_success_message_on_completion(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -28,7 +29,7 @@ class InstallCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_migrations_when_flag_is_set(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])
@@ -36,7 +37,7 @@ class InstallCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_prompt_for_stubs_in_non_interactive_mode(): void
     {
         // Should complete without hanging waiting for input
@@ -44,7 +45,7 @@ class InstallCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_prompts_for_gatekeeper_stubs_in_interactive_mode(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true])
@@ -53,7 +54,7 @@ class InstallCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_outputs_config_publish_message(): void
     {
         $this->artisan(InstallCommand::class, ['--skip-migrations' => true, '--no-interaction' => true])

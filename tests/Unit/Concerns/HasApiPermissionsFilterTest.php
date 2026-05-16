@@ -10,6 +10,7 @@ use LaraArabDev\FilamentGatekeeper\Concerns\HasApiPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for HasApiPermissions::filterByPermissions() with real Model objects.
@@ -21,7 +22,7 @@ class HasApiPermissionsFilterTest extends TestCase
 
     // ── filterByPermissions with real Model ───────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_filter_by_permissions_returns_all_fields_when_no_visible_fields(): void
     {
         $user = $this->createUser();
@@ -40,7 +41,7 @@ class HasApiPermissionsFilterTest extends TestCase
         $this->assertArrayHasKey('email', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_filter_by_permissions_returns_only_visible_fields(): void
     {
         $user = $this->createUser();
@@ -64,7 +65,7 @@ class HasApiPermissionsFilterTest extends TestCase
 
     // ── getGatekeeperModel extraction from class name ─────────────────────
 
-    /** @test */
+    #[Test]
     public function it_extracts_model_name_by_removing_controller_and_api_suffixes(): void
     {
         $controller = new class
@@ -82,7 +83,7 @@ class HasApiPermissionsFilterTest extends TestCase
         $this->assertIsString($result);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_permission_model_property_when_available(): void
     {
         $controller = new class

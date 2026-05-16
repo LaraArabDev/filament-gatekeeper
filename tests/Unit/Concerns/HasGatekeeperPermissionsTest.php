@@ -12,6 +12,7 @@ use LaraArabDev\FilamentGatekeeper\Facades\Gatekeeper;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Permission\PermissionRegistrar;
 
 // Expose InteractsWithGatekeeperCache protected methods for testing
@@ -85,14 +86,14 @@ class HasGatekeeperPermissionsTest extends TestCase
 
     // ── Permission name generation ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_permission_name_for_action(): void
     {
         $name = FakePostResource::getPermissionName('view_any');
         $this->assertSame('view_any_post', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_snake_case_model_name(): void
     {
         config()->set('gatekeeper.generator.snake_case', true);
@@ -100,7 +101,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertSame('create_post', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_camel_case_model_name_when_snake_case_disabled(): void
     {
         config()->set('gatekeeper.generator.snake_case', false);
@@ -110,7 +111,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertSame('create_post', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_extracts_model_name_from_class_basename(): void
     {
         // FakePostResource → $model = 'Post' → basename = 'Post'
@@ -120,7 +121,7 @@ class HasGatekeeperPermissionsTest extends TestCase
 
     // ── Super admin bypass ────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_all_methods_when_super_admin_bypasses(): void
     {
         Gatekeeper::shouldReceive('shouldBypassPermissions')->andReturn(true);
@@ -135,7 +136,7 @@ class HasGatekeeperPermissionsTest extends TestCase
 
     // ── No authenticated user ─────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_no_user_is_authenticated(): void
     {
         $this->assertFalse(FakePostResource::canViewAny());
@@ -145,7 +146,7 @@ class HasGatekeeperPermissionsTest extends TestCase
 
     // ── Authenticated user with permission ────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_user_has_view_any_permission(): void
     {
         $user = $this->createUser();
@@ -156,7 +157,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canViewAny());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_user_lacks_permission(): void
     {
         $user = $this->createUser();
@@ -165,7 +166,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertFalse(FakePostResource::canCreate());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_delete_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -176,7 +177,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canDelete());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_restore_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -187,7 +188,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canRestore());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_force_delete_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -198,7 +199,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canForceDelete());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_replicate_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -209,7 +210,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canReplicate());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_reorder_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -220,7 +221,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canReorder());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_custom_action_permission(): void
     {
         $user = $this->createUser();
@@ -231,7 +232,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canPerformAction('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_custom_route_access(): void
     {
         $user = $this->createUser();
@@ -242,7 +243,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canAccessRoute('dashboard'));
     }
 
-    /** @test */
+    #[Test]
     public function should_register_navigation_matches_can_view_any(): void
     {
         $user = $this->createUser();
@@ -259,7 +260,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertSame(FakePostResource::canViewAny(), FakePostResource::shouldRegisterNavigation());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_update_with_record(): void
     {
         $user = $this->createUser();
@@ -271,7 +272,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canUpdate($record));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_can_update_without_record_when_no_permission(): void
     {
         $user = $this->createUser();
@@ -280,7 +281,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertFalse(FakePostResource::canUpdate());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_view_with_record_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -292,7 +293,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canView($record));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_can_view_with_record_when_no_permission(): void
     {
         $user = $this->createUser();
@@ -302,7 +303,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertFalse(FakePostResource::canView($record));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_can_edit_with_record_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -314,7 +315,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canEdit($record));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_super_admin_can_view_with_record(): void
     {
         Gatekeeper::shouldReceive('shouldBypassPermissions')->andReturn(true);
@@ -323,7 +324,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertTrue(FakePostResource::canView($record));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_super_admin_can_edit_with_record(): void
     {
         Gatekeeper::shouldReceive('shouldBypassPermissions')->andReturn(true);
@@ -334,7 +335,7 @@ class HasGatekeeperPermissionsTest extends TestCase
 
     // ── InteractsWithGatekeeperCache tests ────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_configured_guard_name(): void
     {
         config()->set('gatekeeper.guard', 'api');
@@ -344,7 +345,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertEquals('api', $guardName);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_web_as_default_guard_name(): void
     {
         config()->set('gatekeeper.guard', 'web');
@@ -354,7 +355,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertEquals('web', $guardName);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_permission_matrix_as_array(): void
     {
         $user = $this->createUser();
@@ -365,7 +366,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertIsArray($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_authenticated_user_from_get_auth_user(): void
     {
         $user = $this->createUser();
@@ -377,7 +378,7 @@ class HasGatekeeperPermissionsTest extends TestCase
         $this->assertEquals($user->id, $authUser->getAuthIdentifier());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_from_get_auth_user_when_no_user_authenticated(): void
     {
         $authUser = FakePostResourceWithInteracts::callGetAuthUser();

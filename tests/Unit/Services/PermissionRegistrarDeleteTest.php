@@ -9,6 +9,7 @@ use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\FieldDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the PermissionRegistrar delete methods.
@@ -75,7 +76,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_all_field_permissions_for_model(): void
     {
         $count = $this->registrar->deleteFieldPermissions('User');
@@ -90,7 +91,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('name', 'view_post_title_field')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_specific_field_permissions(): void
     {
         $count = $this->registrar->deleteFieldPermissions('User', ['email']);
@@ -105,7 +106,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('name', 'view_user_salary_field')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_field_permissions_for_specific_guard(): void
     {
         $count = $this->registrar->deleteFieldPermissions('User', null, 'web');
@@ -124,7 +125,7 @@ class PermissionRegistrarDeleteTest extends TestCase
             ->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_all_column_permissions_for_model(): void
     {
         $count = $this->registrar->deleteColumnPermissions('User');
@@ -135,7 +136,7 @@ class PermissionRegistrarDeleteTest extends TestCase
             ->exists())->toBeFalse();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_specific_column_permissions(): void
     {
         $count = $this->registrar->deleteColumnPermissions('User', ['email']);
@@ -149,7 +150,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('name', 'view_user_salary_column')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_all_permissions_for_model(): void
     {
         $count = $this->registrar->deleteModelPermissions('User');
@@ -163,7 +164,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('name', 'view_post_title_field')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_dry_run_for_field_delete(): void
     {
         $initialCount = Permission::where('type', Permission::TYPE_FIELD)->count();
@@ -174,7 +175,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('type', Permission::TYPE_FIELD)->count())->toBe($initialCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_dry_run_for_column_delete(): void
     {
         $initialCount = Permission::where('type', Permission::TYPE_COLUMN)->count();
@@ -185,7 +186,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::where('type', Permission::TYPE_COLUMN)->count())->toBe($initialCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_respects_dry_run_for_model_delete(): void
     {
         $initialCount = Permission::count();
@@ -196,7 +197,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect(Permission::count())->toBe($initialCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_logs_delete_operations(): void
     {
         $this->registrar->deleteFieldPermissions('User');
@@ -207,7 +208,7 @@ class PermissionRegistrarDeleteTest extends TestCase
             ->and($log['delete_field'])->not->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_zero_when_no_permissions_match(): void
     {
         $count = $this->registrar->deleteFieldPermissions('NonExistentModel');
@@ -215,7 +216,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect($count)->toBe(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_provides_access_to_field_discovery(): void
     {
         $fieldDiscovery = $this->registrar->getFieldDiscovery();
@@ -223,7 +224,7 @@ class PermissionRegistrarDeleteTest extends TestCase
         expect($fieldDiscovery)->toBeInstanceOf(FieldDiscovery::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_provides_access_to_column_discovery(): void
     {
         $columnDiscovery = $this->registrar->getColumnDiscovery();

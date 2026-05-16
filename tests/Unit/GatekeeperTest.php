@@ -12,6 +12,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionCache;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Permission\PermissionRegistrar;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -28,7 +29,7 @@ class GatekeeperTest extends TestCase
         $this->shieldManager = new Gatekeeper(new PermissionCache);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_permission(): void
     {
         $user = $this->createUser();
@@ -45,7 +46,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->can('create_user'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_authorize_permission(): void
     {
         $user = $this->createUser();
@@ -63,7 +64,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_exception_when_unauthorized(): void
     {
         $user = $this->createUser();
@@ -75,7 +76,7 @@ class GatekeeperTest extends TestCase
         $this->shieldManager->authorize('view_any_user');
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -88,7 +89,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue($this->shieldManager->can('any_permission_that_does_not_exist'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_super_admin_status(): void
     {
         $superAdmin = $this->createSuperAdmin();
@@ -101,7 +102,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->isSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_change_guard(): void
     {
         // Create user with web guard
@@ -161,7 +162,7 @@ class GatekeeperTest extends TestCase
         // The key test is that Gatekeeper can change guards and check permissions correctly.
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_current_guard(): void
     {
         $this->assertEquals('web', $this->shieldManager->getGuard());
@@ -170,7 +171,7 @@ class GatekeeperTest extends TestCase
         $this->assertEquals('api', $this->shieldManager->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_works_via_facade(): void
     {
         $user = $this->createUser();
@@ -187,7 +188,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse(GatekeeperFacade::can('create_user'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_field_permission(): void
     {
         $user = $this->createUser();
@@ -204,7 +205,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->canViewField('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_update_field_permission(): void
     {
         $user = $this->createUser();
@@ -221,7 +222,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->canUpdateField('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_column_permission(): void
     {
         $user = $this->createUser();
@@ -238,7 +239,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->canViewColumn('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_action_permission(): void
     {
         $user = $this->createUser();
@@ -255,7 +256,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->canExecuteAction('User', 'delete'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_relation_permission(): void
     {
         $user = $this->createUser();
@@ -272,7 +273,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->canViewRelation('User', 'posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_fields(): void
     {
         $user = $this->createUser();
@@ -293,7 +294,7 @@ class GatekeeperTest extends TestCase
         $this->assertContains('phone', $visibleFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_columns(): void
     {
         $user = $this->createUser();
@@ -314,7 +315,7 @@ class GatekeeperTest extends TestCase
         $this->assertContains('created_at', $visibleColumns);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_clear_cache(): void
     {
         // This should not throw any exceptions
@@ -322,32 +323,32 @@ class GatekeeperTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_no_user_authenticated(): void
     {
         // Not acting as any user
         $this->assertNull($this->shieldManager->user());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->can('view_any_user'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_api_convenience_method(): void
     {
         $this->assertEquals('api', $this->shieldManager->api()->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_web_convenience_method(): void
     {
         $this->assertEquals('web', $this->shieldManager->web()->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_supports_or_logic_in_permissions(): void
     {
         $user = $this->createUser();
@@ -364,7 +365,7 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->can('delete_user|create_user'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_permission_matrix_when_no_user(): void
     {
         $matrix = $this->shieldManager->getPermissionMatrix();
@@ -372,55 +373,55 @@ class GatekeeperTest extends TestCase
         $this->assertEmpty($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_access_cache_instance(): void
     {
         $this->assertInstanceOf(PermissionCache::class, $this->shieldManager->cache());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_field_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewField('User', 'email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_field_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canUpdateField('User', 'email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_column_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewColumn('User', 'email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_execute_action_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canExecuteAction('User', 'export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_relation_returns_false_when_no_user(): void
     {
         $this->assertFalse($this->shieldManager->canViewRelation('User', 'posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_fields_returns_empty_when_no_user(): void
     {
         $this->assertEmpty($this->shieldManager->getVisibleFields('User'));
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_columns_returns_empty_when_no_user(): void
     {
         $this->assertEmpty($this->shieldManager->getVisibleColumns('User'));
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_fields_returns_all_fields_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -435,7 +436,7 @@ class GatekeeperTest extends TestCase
         $this->assertContains('salary', $fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_columns_returns_all_columns_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -450,7 +451,7 @@ class GatekeeperTest extends TestCase
         $this->assertContains('created_at', $columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_fields_returns_empty_when_no_config(): void
     {
         $user = $this->createUser();
@@ -462,7 +463,7 @@ class GatekeeperTest extends TestCase
         $this->assertEmpty($fields);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_visible_columns_returns_empty_when_no_config(): void
     {
         $user = $this->createUser();
@@ -474,7 +475,7 @@ class GatekeeperTest extends TestCase
         $this->assertEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_bypass_permissions_returns_false_when_super_admin_disabled(): void
     {
         // Create super admin first (createSuperAdmin sets enabled=true internally)
@@ -486,13 +487,13 @@ class GatekeeperTest extends TestCase
         $this->assertFalse($this->shieldManager->shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_bypass_permissions_returns_false_with_no_user(): void
     {
         $this->assertFalse($this->shieldManager->shouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_field_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -502,7 +503,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue($this->shieldManager->canUpdateField('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_column_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -511,7 +512,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue($this->shieldManager->canViewColumn('User', 'salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_execute_action_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -520,7 +521,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue($this->shieldManager->canExecuteAction('User', 'export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_view_relation_bypasses_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -529,7 +530,7 @@ class GatekeeperTest extends TestCase
         $this->assertTrue($this->shieldManager->canViewRelation('User', 'posts'));
     }
 
-    /** @test */
+    #[Test]
     public function it_detects_api_guard_from_bearer_token(): void
     {
         // Inject a request with a bearer token to trigger API guard detection
@@ -544,7 +545,7 @@ class GatekeeperTest extends TestCase
         $this->assertEquals('api', $gatekeeper->getGuard());
     }
 
-    /** @test */
+    #[Test]
     public function it_detects_api_guard_from_json_expectation(): void
     {
         $request = Request::create('/some-route', 'GET');

@@ -8,19 +8,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class SyncPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_syncs_permissions_successfully(): void
     {
         $this->artisan('gatekeeper:sync')
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_super_admin_role(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -35,7 +36,7 @@ class SyncPermissionsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_dry_run(): void
     {
         $initialCount = Permission::count();
@@ -47,28 +48,28 @@ class SyncPermissionsTest extends TestCase
         $this->assertEquals($initialCount, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_resources(): void
     {
         $this->artisan('gatekeeper:sync', ['--only' => 'resources'])
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_pages(): void
     {
         $this->artisan('gatekeeper:sync', ['--only' => 'pages'])
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_widgets(): void
     {
         $this->artisan('gatekeeper:sync', ['--only' => 'widgets'])
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_models(): void
     {
         config()->set('gatekeeper.discovery.discover_models', true);
@@ -77,7 +78,7 @@ class SyncPermissionsTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_fields(): void
     {
         config()->set('gatekeeper.field_permissions', [
@@ -90,7 +91,7 @@ class SyncPermissionsTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_email_field']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_columns(): void
     {
         config()->set('gatekeeper.column_permissions', [
@@ -103,7 +104,7 @@ class SyncPermissionsTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_email_column']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_actions(): void
     {
         config()->set('gatekeeper.custom_actions', [
@@ -116,7 +117,7 @@ class SyncPermissionsTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'execute_user_export_action']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_only_relations(): void
     {
         config()->set('gatekeeper.relation_permissions', [
@@ -129,7 +130,7 @@ class SyncPermissionsTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_posts_relation']);
     }
 
-    /** @test */
+    #[Test]
     public function it_assigns_all_permissions_to_super_admin(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -149,7 +150,7 @@ class SyncPermissionsTest extends TestCase
         $this->assertEquals($totalPermissions, $superAdmin->permissions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_force_resync(): void
     {
         // Create an existing permission
@@ -163,7 +164,7 @@ class SyncPermissionsTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_output_information(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);

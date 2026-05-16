@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the ColumnDiscovery class.
@@ -23,13 +24,13 @@ class ColumnDiscoveryTest extends TestCase
         $this->discovery = new ColumnDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         expect($this->discovery)->toBeInstanceOf(ColumnDiscovery::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_available_sources(): void
     {
         $sources = ColumnDiscovery::getAvailableSources();
@@ -40,7 +41,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($sources)->toHaveKey(ColumnDiscovery::SOURCE_RESOURCE);
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_columns_from_config(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -55,7 +56,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toContain('column3');
     }
 
-    /** @test */
+    #[Test]
     public function it_merges_global_columns_from_config(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -70,7 +71,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toContain('model_column');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_excluded_columns(): void
     {
         Config::set('gatekeeper.column_discovery.default_excluded', ['password', 'remember_token']);
@@ -89,7 +90,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($excluded)->toContain('remember_token');
     }
 
-    /** @test */
+    #[Test]
     public function it_identifies_sensitive_columns(): void
     {
         config()->set('gatekeeper.column_discovery.sensitive_patterns', [
@@ -117,7 +118,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($this->discovery->isSensitiveColumn('email'))->toBeFalse();
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_cache(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -136,7 +137,7 @@ class ColumnDiscoveryTest extends TestCase
         expect($columns)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_clears_all_cache(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -155,7 +156,7 @@ class ColumnDiscoveryTest extends TestCase
         expect($columns)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_exclusions_when_discovering(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -176,7 +177,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toContain('salary');
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_for_model_with_config_source(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -195,7 +196,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toContain('created_at');
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_cache_on_subsequent_calls(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -214,7 +215,7 @@ class ColumnDiscoveryTest extends TestCase
         expect($columns1)->toBe($columns2);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_existent_class_from_database(): void
     {
         $columns = $this->discovery->discoverFromDatabase('NonExistentClass');
@@ -223,7 +224,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_model_class_from_database(): void
     {
         $columns = $this->discovery->discoverFromDatabase(ColumnTestNonModelClass::class);
@@ -232,7 +233,7 @@ class ColumnDiscoveryTest extends TestCase
             ->and($columns)->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_non_existent_class_from_resource(): void
     {
         $columns = $this->discovery->discoverFromResource('NonExistentClass');

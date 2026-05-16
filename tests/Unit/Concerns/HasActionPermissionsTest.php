@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasActionPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasActionPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_execute_action_permission(): void
     {
         $user = $this->createUser();
@@ -31,7 +32,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertTrue($testClass::canExecuteAction('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_execute_action_without_permission(): void
     {
         $user = $this->createUser();
@@ -43,7 +44,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertFalse($testClass::canExecuteAction('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_multiple_action_permissions(): void
     {
         $user = $this->createUser();
@@ -62,7 +63,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertFalse($testClass::canExecuteAction('delete'));
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_action_permissions_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -76,7 +77,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertTrue($testClass::canExecuteAction('any_action'));
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_action_permission_names(): void
     {
         $testClass = $this->createTestResourceWithActionPermissions();
@@ -85,7 +86,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertEquals('execute_test_model_import_action', $testClass::getActionPermissionName('import'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_all_action_permissions(): void
     {
         config()->set('gatekeeper.custom_actions.TestModel', ['export', 'import', 'approve']);
@@ -99,7 +100,7 @@ class HasActionPermissionsTest extends TestCase
         $this->assertContains('execute_test_model_approve_action', $permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permitted_actions(): void
     {
         $user = $this->createUser();
@@ -153,7 +154,7 @@ class HasActionPermissionsExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_is_action_hidden_when_no_permission(): void
     {
         $user = $this->createUser();
@@ -162,7 +163,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertTrue(TestResourceWithActions::isActionHidden('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_is_action_hidden_when_has_permission(): void
     {
         $user = $this->createUser();
@@ -175,7 +176,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertFalse(TestResourceWithActions::isActionHidden('export'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_configured_actions_for_super_admin_in_get_available_actions(): void
     {
         $user = $this->createSuperAdmin();
@@ -190,7 +191,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertContains('approve', $actions);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_actions_for_regular_user_in_get_available_actions(): void
     {
         $user = $this->createUser();
@@ -206,7 +207,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertNotContains('import', $actions);
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_action_permissions_to_objects_with_get_name_and_visible(): void
     {
         $user = $this->createUser();
@@ -239,7 +240,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertNotNull($action->visibleCallback);
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_action_permissions_to_plain_objects_without_get_name(): void
     {
         $plainObject = new \stdClass;
@@ -250,7 +251,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertSame($plainObject, $result[0]);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_actions_by_permission_for_objects_with_get_name(): void
     {
         $user = $this->createUser();
@@ -279,7 +280,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertSame($allowedAction, array_values($result)[0]);
     }
 
-    /** @test */
+    #[Test]
     public function it_keeps_plain_objects_without_get_name_in_filter_actions(): void
     {
         $user = $this->createUser();
@@ -292,7 +293,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertCount(1, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_bulk_action_permission(): void
     {
         $user = $this->createUser();
@@ -303,7 +304,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertTrue(TestResourceWithActions::canExecuteBulkAction('delete'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_bulk_action_without_permission(): void
     {
         $user = $this->createUser();
@@ -312,7 +313,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertFalse(TestResourceWithActions::canExecuteBulkAction('delete'));
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_model_property_for_action_permission_model_name_when_no_get_model_name(): void
     {
         // Class has $model property but NO getModelName() method
@@ -320,7 +321,7 @@ class HasActionPermissionsExtendedTest extends TestCase
         $this->assertStringContainsString('test_model_for_actions_prop', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_class_basename_for_action_permission_model_name(): void
     {
         // Class has neither getModelName() nor $model property

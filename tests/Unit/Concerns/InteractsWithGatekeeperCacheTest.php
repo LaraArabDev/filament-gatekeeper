@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\InteractsWithGatekeeperCache;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Direct tests for InteractsWithGatekeeperCache trait methods.
@@ -51,14 +52,14 @@ class InteractsWithGatekeeperCacheTest extends TestCase
 
     // ── shouldBypassPermissions ────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_should_bypass_permissions_returns_false_when_no_user(): void
     {
         // No user authenticated
         $this->assertFalse(ExposedCacheInteractor::publicShouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_bypass_permissions_returns_true_for_super_admin(): void
     {
         $superAdmin = $this->createSuperAdmin();
@@ -67,7 +68,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
         $this->assertTrue(ExposedCacheInteractor::publicShouldBypassPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_bypass_permissions_returns_false_for_regular_user(): void
     {
         $user = $this->createUser();
@@ -78,14 +79,14 @@ class InteractsWithGatekeeperCacheTest extends TestCase
 
     // ── getAuthUser ────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_get_auth_user_returns_null_when_not_authenticated(): void
     {
         $user = ExposedCacheInteractor::publicGetAuthUser();
         $this->assertNull($user);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_auth_user_returns_user_when_authenticated(): void
     {
         $user = $this->createUser();
@@ -98,7 +99,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
 
     // ── getPermissionMatrix ────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_get_permission_matrix_returns_empty_when_no_user(): void
     {
         $matrix = ExposedCacheInteractor::publicGetPermissionMatrix();
@@ -106,7 +107,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
         $this->assertEmpty($matrix);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_permission_matrix_returns_array_when_authenticated(): void
     {
         $user = $this->createUser();
@@ -118,7 +119,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
 
     // ── getGuardName ───────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_get_guard_name_returns_configured_guard(): void
     {
         config()->set('gatekeeper.guard', 'web');
@@ -127,7 +128,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
         $this->assertEquals('web', $guard);
     }
 
-    /** @test */
+    #[Test]
     public function it_get_guard_name_defaults_to_web(): void
     {
         config()->set('gatekeeper.guard', null);
@@ -142,13 +143,13 @@ class InteractsWithGatekeeperCacheTest extends TestCase
 
     // ── userCan ────────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_user_can_returns_false_when_no_user(): void
     {
         $this->assertFalse(ExposedCacheInteractor::publicUserCan('view_any_post'));
     }
 
-    /** @test */
+    #[Test]
     public function it_user_can_returns_true_when_bypass_enabled(): void
     {
         $superAdmin = $this->createSuperAdmin();
@@ -157,7 +158,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
         $this->assertTrue(ExposedCacheInteractor::publicUserCan('any_permission_whatsoever'));
     }
 
-    /** @test */
+    #[Test]
     public function it_user_can_returns_true_when_user_has_permission(): void
     {
         $user = $this->createUser();
@@ -168,7 +169,7 @@ class InteractsWithGatekeeperCacheTest extends TestCase
         $this->assertTrue(ExposedCacheInteractor::publicUserCan('view_any_post'));
     }
 
-    /** @test */
+    #[Test]
     public function it_user_can_returns_false_when_user_lacks_permission(): void
     {
         $user = $this->createUser();

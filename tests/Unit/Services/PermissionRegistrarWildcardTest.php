@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit\Services;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionRegistrarWildcardTest extends TestCase
 {
@@ -28,7 +29,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         config()->set('gatekeeper.column_discovery.enabled', false);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_wildcard_key_in_field_permissions(): void
     {
         config()->set('gatekeeper.field_permissions', [
@@ -45,7 +46,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_email_field']);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_wildcard_key_in_column_permissions(): void
     {
         config()->set('gatekeeper.column_permissions', [
@@ -59,7 +60,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_post_title_column']);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_wildcard_key_in_action_permissions(): void
     {
         config()->set('gatekeeper.custom_actions', [
@@ -73,7 +74,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'execute_order_ship_action']);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_wildcard_key_in_relation_permissions(): void
     {
         config()->set('gatekeeper.relation_permissions', [
@@ -87,7 +88,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_product_reviews_relation']);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_field_discovery_when_enabled_with_missing_models_path(): void
     {
         // When field_discovery.enabled = true but the model path doesn't exist,
@@ -102,7 +103,7 @@ class PermissionRegistrarWildcardTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_email_field']);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_column_discovery_when_enabled_with_missing_models_path(): void
     {
         config()->set('gatekeeper.column_discovery.enabled', true);

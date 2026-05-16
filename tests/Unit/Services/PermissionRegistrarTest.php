@@ -9,6 +9,7 @@ use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Services\PermissionRegistrar;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PermissionRegistrarTest extends TestCase
 {
@@ -23,7 +24,7 @@ class PermissionRegistrarTest extends TestCase
         $this->registrar = app(PermissionRegistrar::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_permission(): void
     {
         $this->registrar->createOrUpdatePermission(
@@ -39,7 +40,7 @@ class PermissionRegistrarTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_existing_permission(): void
     {
         // Create initial permission using factory
@@ -60,7 +61,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertEquals(1, Permission::count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_super_admin_role(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -80,7 +81,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertEquals(3, $superAdmin->permissions()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_create_super_admin_when_disabled(): void
     {
         config()->set('gatekeeper.super_admin.enabled', false);
@@ -92,7 +93,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertNull($superAdmin);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_resource_permissions(): void
     {
         // This test would require mocking the resource discovery
@@ -102,7 +103,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_page_permissions(): void
     {
         $this->registrar->syncPagePermissions();
@@ -110,7 +111,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_widget_permissions(): void
     {
         $this->registrar->syncWidgetPermissions();
@@ -118,7 +119,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_model_permissions(): void
     {
         config()->set('gatekeeper.discovery.discover_models', true);
@@ -128,7 +129,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_field_permissions(): void
     {
         config()->set('gatekeeper.field_permissions', [
@@ -143,7 +144,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'update_user_phone_field']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_column_permissions(): void
     {
         config()->set('gatekeeper.column_permissions', [
@@ -156,7 +157,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_phone_column']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_action_permissions(): void
     {
         config()->set('gatekeeper.custom_actions', [
@@ -169,7 +170,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'execute_user_import_action']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_relation_permissions(): void
     {
         config()->set('gatekeeper.relation_permissions', [
@@ -182,7 +183,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_roles_relation']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_all_permissions(): void
     {
         config()->set('gatekeeper.super_admin.enabled', true);
@@ -209,7 +210,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertDatabaseHas('permissions', ['name' => 'view_user_posts_relation']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permission_prefixes(): void
     {
         $prefixes = $this->registrar->getPermissionPrefixes('resource');
@@ -221,7 +222,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertContains('delete', $prefixes);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_configured_permission_prefixes(): void
     {
         config()->set('gatekeeper.permission_prefixes.resource', [
@@ -236,7 +237,7 @@ class PermissionRegistrarTest extends TestCase
         $this->assertContains('custom_action', $prefixes);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_clean_orphaned_permissions(): void
     {
         // Create some permissions using factory

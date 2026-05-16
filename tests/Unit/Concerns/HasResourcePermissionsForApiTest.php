@@ -11,12 +11,13 @@ use LaraArabDev\FilamentGatekeeper\Concerns\HasResourcePermissions as HasApiReso
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasResourcePermissionsForApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_column_visibility_in_api_resource(): void
     {
         $user = $this->createUser();
@@ -46,7 +47,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertEquals('test@example.com', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_no_column_permission(): void
     {
         $user = $this->createUser();
@@ -61,7 +62,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertNotEquals('test@example.com', $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_relation_loading_in_api_resource(): void
     {
         $user = $this->createUser([], 'api');
@@ -90,7 +91,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertTrue($resource->canViewRelation('roles'));
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_load_relation_without_permission(): void
     {
         $user = $this->createUser();
@@ -103,7 +104,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertFalse($resource->canViewRelation('roles'));
     }
 
-    /** @test */
+    #[Test]
     public function super_admin_can_view_all_columns(): void
     {
         $user = $this->createSuperAdmin();
@@ -117,7 +118,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertEquals(100000, $result);
     }
 
-    /** @test */
+    #[Test]
     public function super_admin_can_load_all_relations(): void
     {
         $user = $this->createSuperAdmin();
@@ -130,7 +131,7 @@ class HasResourcePermissionsForApiTest extends TestCase
         $this->assertTrue($resource->canViewRelation('any_relation'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_permitted_attributes(): void
     {
         $user = $this->createUser([], 'api');

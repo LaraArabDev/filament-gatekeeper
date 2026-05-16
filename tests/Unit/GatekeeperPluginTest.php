@@ -7,12 +7,13 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\GatekeeperPlugin;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class GatekeeperPluginTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         $plugin = GatekeeperPlugin::make();
@@ -20,7 +21,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertInstanceOf(GatekeeperPlugin::class, $plugin);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_correct_id(): void
     {
         $plugin = GatekeeperPlugin::make();
@@ -28,7 +29,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertEquals('gatekeeper', $plugin->getId());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_super_admin_role(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -37,7 +38,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertEquals('admin', $plugin->getSuperAdminRole());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_bypass_for_super_admin(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -46,7 +47,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertTrue($plugin->shouldBypassForSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_bypass_for_super_admin(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -55,7 +56,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertFalse($plugin->shouldBypassForSuperAdmin());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_field_permissions(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -64,7 +65,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertTrue($plugin->hasFieldPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_column_permissions(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -73,7 +74,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertTrue($plugin->hasColumnPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_action_permissions(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -82,7 +83,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertTrue($plugin->hasActionPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_enable_relation_permissions(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -91,7 +92,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertTrue($plugin->hasRelationPermissions());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_navigation_group(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -100,7 +101,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertEquals('Access Control', $plugin->getNavigationGroup());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_navigation_sort(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -109,7 +110,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertEquals(5, $plugin->getNavigationSort());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_chain_configuration_methods(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -132,7 +133,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertEquals(1, $plugin->getNavigationSort());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_role_resource(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -141,7 +142,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertFalse($plugin->hasRoleResource());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_disable_permission_resource(): void
     {
         $plugin = GatekeeperPlugin::make()
@@ -150,7 +151,7 @@ class GatekeeperPluginTest extends TestCase
         $this->assertFalse($plugin->hasPermissionResource());
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_default_values(): void
     {
         $plugin = GatekeeperPlugin::make();

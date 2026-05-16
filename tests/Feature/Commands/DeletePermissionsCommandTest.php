@@ -6,6 +6,7 @@ namespace LaraArabDev\FilamentGatekeeper\Tests\Feature\Commands;
 
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for the DeletePermissionsCommand.
@@ -66,7 +67,7 @@ class DeletePermissionsCommandTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_field_permissions_for_model(): void
     {
         $initialCount = Permission::where('type', Permission::TYPE_FIELD)->count();
@@ -85,7 +86,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect($remainingCount)->toBe(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_specific_field_permissions(): void
     {
         $this->artisan('gatekeeper:delete', [
@@ -103,7 +104,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect(Permission::where('name', 'view_user_salary_field')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_column_permissions_for_model(): void
     {
         $initialCount = Permission::where('type', Permission::TYPE_COLUMN)->count();
@@ -122,7 +123,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect($remainingCount)->toBe(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_specific_column_permissions(): void
     {
         $this->artisan('gatekeeper:delete', [
@@ -139,7 +140,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect(Permission::where('name', 'view_user_salary_column')->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_all_model_permissions(): void
     {
         $initialCount = Permission::where('name', 'like', '%_user%')->count();
@@ -155,7 +156,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect($remainingCount)->toBe(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_supports_dry_run_mode(): void
     {
         $initialCount = Permission::where('type', Permission::TYPE_FIELD)->count();
@@ -173,7 +174,7 @@ class DeletePermissionsCommandTest extends TestCase
         expect($afterCount)->toBe($initialCount);
     }
 
-    /** @test */
+    #[Test]
     public function it_deletes_permissions_for_specific_guard(): void
     {
         // Create API guard permissions
@@ -200,7 +201,7 @@ class DeletePermissionsCommandTest extends TestCase
             ->exists())->toBeTrue();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_invalid_type_gracefully(): void
     {
         $this->artisan('gatekeeper:delete', [

@@ -8,12 +8,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Concerns\HasFieldPermissions;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HasFieldPermissionsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_check_view_field_permission(): void
     {
         $user = $this->createUser();
@@ -31,7 +32,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertTrue($testClass::canViewField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_denies_view_field_without_permission(): void
     {
         $user = $this->createUser();
@@ -43,7 +44,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_update_field_permission(): void
     {
         $user = $this->createUser();
@@ -61,7 +62,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertTrue($testClass::canUpdateField('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_multiple_field_permissions(): void
     {
         $user = $this->createUser();
@@ -87,7 +88,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertFalse($testClass::canViewField('salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_bypasses_field_permissions_for_super_admin(): void
     {
         $user = $this->createSuperAdmin();
@@ -102,7 +103,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertTrue($testClass::canUpdateField('salary'));
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_correct_field_permission_names(): void
     {
         $testClass = $this->createTestResourceWithFieldPermissions();
@@ -111,7 +112,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertEquals('update_test_model_email_field', $testClass::getFieldPermissionName('update', 'email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_all_field_permissions(): void
     {
         config()->set('gatekeeper.field_permissions.TestModel', ['email', 'phone', 'salary']);
@@ -126,7 +127,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertContains('update_test_model_phone_field', $permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_visible_fields(): void
     {
         $user = $this->createUser();
@@ -149,7 +150,7 @@ class HasFieldPermissionsTest extends TestCase
         $this->assertNotContains('salary', $visibleFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_editable_fields(): void
     {
         $user = $this->createUser();
@@ -204,7 +205,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_is_field_disabled_when_no_update_permission(): void
     {
         $user = $this->createUser();
@@ -213,7 +214,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertTrue(TestResourceWithFields::isFieldDisabled('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_is_field_disabled_when_has_update_permission(): void
     {
         $user = $this->createUser();
@@ -224,7 +225,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertFalse(TestResourceWithFields::isFieldDisabled('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_for_is_field_hidden_when_no_view_permission(): void
     {
         $user = $this->createUser();
@@ -233,7 +234,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertTrue(TestResourceWithFields::isFieldHidden('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_for_is_field_hidden_when_has_view_permission(): void
     {
         $user = $this->createUser();
@@ -244,7 +245,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertFalse(TestResourceWithFields::isFieldHidden('email'));
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_field_permissions_to_objects_with_get_name_visible_and_disabled(): void
     {
         $user = $this->createUser();
@@ -288,7 +289,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertNotNull($component->disabledCallback);
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_field_permissions_to_plain_objects_without_get_name(): void
     {
         $plainObject = new \stdClass;
@@ -299,7 +300,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertSame($plainObject, $result[0]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_configured_fields_for_super_admin_in_get_editable_fields(): void
     {
         $user = $this->createSuperAdmin();
@@ -314,7 +315,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertContains('salary', $editableFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_for_get_editable_fields_when_no_fields_configured(): void
     {
         $user = $this->createUser();
@@ -327,7 +328,7 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertEmpty($editableFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_configured_fields_for_super_admin_in_get_visible_fields(): void
     {
         $user = $this->createSuperAdmin();
@@ -342,14 +343,14 @@ class HasFieldPermissionsExtendedTest extends TestCase
         $this->assertContains('salary', $visibleFields);
     }
 
-    /** @test */
+    #[Test]
     public function it_uses_model_property_for_field_permission_model_name_when_no_get_model_name(): void
     {
         $name = TestResourceFieldsWithModelProp::getFieldPermissionName('view', 'email');
         $this->assertStringContainsString('test_model_for_fields_prop', $name);
     }
 
-    /** @test */
+    #[Test]
     public function it_falls_back_to_class_basename_for_field_permission_model_name(): void
     {
         $name = TestResourceFieldsNoModel::getFieldPermissionName('view', 'email');

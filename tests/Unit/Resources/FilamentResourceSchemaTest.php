@@ -13,8 +13,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use LaraArabDev\FilamentGatekeeper\Models\Permission;
 use LaraArabDev\FilamentGatekeeper\Resources\PermissionResource;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource;
+use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Forms\RoleForm;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Spatie\Permission\PermissionRegistrar;
 
 class FilamentResourceSchemaTest extends TestCase
@@ -41,7 +43,7 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── RoleResource::form() ──────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function role_resource_form_returns_form_instance_with_empty_db(): void
     {
         $form = Form::make($this->mockForms);
@@ -50,7 +52,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertInstanceOf(Form::class, $result);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_form_covers_grouped_sections_with_resource_permissions(): void
     {
         // Populate resource type permissions to cover makeSectionForEntity()
@@ -64,7 +66,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertInstanceOf(Form::class, $result);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_form_covers_all_permission_types(): void
     {
         // Create permissions for each type to cover all branches in getGroupedPermissionsSection
@@ -85,7 +87,7 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── RoleResource::table() ─────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function role_resource_table_returns_table_instance(): void
     {
         $table = Table::make($this->mockTable);
@@ -96,7 +98,7 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── PermissionResource::form() ────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function permission_resource_form_returns_form_instance(): void
     {
         $form = Form::make($this->mockForms);
@@ -107,7 +109,7 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── PermissionResource::table() ───────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function permission_resource_table_returns_table_instance(): void
     {
         $table = Table::make($this->mockTable);
@@ -118,10 +120,10 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── RoleResource protected methods via reflection ─────────────────────────
 
-    /** @test */
+    #[Test]
     public function role_resource_get_permission_type_config_returns_all_eight_types(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getPermissionTypeConfig');
+        $method = new \ReflectionMethod(RoleForm::class, 'getPermissionTypeConfig');
         $method->setAccessible(true);
         $config = $method->invoke(null);
 
@@ -137,10 +139,10 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertCount(8, $config);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_types_with_entity_in_title_returns_correct_types(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getTypesWithEntityInTitle');
+        $method = new \ReflectionMethod(RoleForm::class, 'getTypesWithEntityInTitle');
         $method->setAccessible(true);
         $types = $method->invoke(null);
 
@@ -150,10 +152,10 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertNotContains(Permission::TYPE_RESOURCE, $types);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_grouped_permissions_section_returns_placeholder_when_empty(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getGroupedPermissionsSection');
+        $method = new \ReflectionMethod(RoleForm::class, 'getGroupedPermissionsSection');
         $method->setAccessible(true);
         $sections = $method->invoke(null, Permission::TYPE_RESOURCE);
 
@@ -161,7 +163,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertCount(1, $sections);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_grouped_permissions_section_returns_sections_with_data(): void
     {
         Permission::factory()->resource()->create(['name' => 'view_any_post', 'entity' => 'post']);
@@ -170,7 +172,7 @@ class FilamentResourceSchemaTest extends TestCase
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $method = new \ReflectionMethod(RoleResource::class, 'getGroupedPermissionsSection');
+        $method = new \ReflectionMethod(RoleForm::class, 'getGroupedPermissionsSection');
         $method->setAccessible(true);
         $sections = $method->invoke(null, Permission::TYPE_RESOURCE);
 
@@ -178,20 +180,20 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($sections));
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_make_empty_permissions_placeholder_returns_section(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'makeEmptyPermissionsPlaceholder');
+        $method = new \ReflectionMethod(RoleForm::class, 'makeEmptyPermissionsPlaceholder');
         $method->setAccessible(true);
         $section = $method->invoke(null);
 
         $this->assertInstanceOf(Section::class, $section);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_format_permission_label(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'formatPermissionLabel');
+        $method = new \ReflectionMethod(RoleForm::class, 'formatPermissionLabel');
         $method->setAccessible(true);
 
         $label = $method->invoke(null, 'view_any_post', 'post');
@@ -201,10 +203,10 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertSame('Create User', $label);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_model_path_returns_correct_path_for_each_type(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getModelPath');
+        $method = new \ReflectionMethod(RoleForm::class, 'getModelPath');
         $method->setAccessible(true);
 
         $this->assertStringContainsString('PostResource', $method->invoke(null, 'post', Permission::TYPE_RESOURCE));
@@ -218,10 +220,10 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertSame('', $method->invoke(null, 'post', 'unknown'));
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_entity_icon_returns_icon_for_each_type(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getEntityIcon');
+        $method = new \ReflectionMethod(RoleForm::class, 'getEntityIcon');
         $method->setAccessible(true);
 
         $this->assertSame('heroicon-o-rectangle-stack', $method->invoke(null, Permission::TYPE_RESOURCE));
@@ -235,10 +237,10 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertSame('heroicon-o-shield-check', $method->invoke(null, 'unknown_type'));
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_permission_descriptions_returns_array_for_all_actions(): void
     {
-        $method = new \ReflectionMethod(RoleResource::class, 'getPermissionDescriptions');
+        $method = new \ReflectionMethod(RoleForm::class, 'getPermissionDescriptions');
         $method->setAccessible(true);
 
         $permissions = collect([
@@ -260,7 +262,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertCount(10, $descriptions);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_get_guard_options_returns_enabled_guards(): void
     {
         config()->set('gatekeeper.guards', [
@@ -268,7 +270,7 @@ class FilamentResourceSchemaTest extends TestCase
             'api' => ['enabled' => false],
         ]);
 
-        $method = new \ReflectionMethod(RoleResource::class, 'getGuardOptions');
+        $method = new \ReflectionMethod(RoleForm::class, 'getGuardOptions');
         $method->setAccessible(true);
         $options = $method->invoke(null);
 
@@ -276,13 +278,13 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertArrayNotHasKey('api', $options);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_make_section_for_entity_returns_section(): void
     {
         $p1 = Permission::factory()->resource()->create(['name' => 'view_any_post', 'entity' => 'post']);
         $p2 = Permission::factory()->resource()->create(['name' => 'create_post', 'entity' => 'post']);
 
-        $method = new \ReflectionMethod(RoleResource::class, 'makeSectionForEntity');
+        $method = new \ReflectionMethod(RoleForm::class, 'makeSectionForEntity');
         $method->setAccessible(true);
 
         $section = $method->invoke(
@@ -298,12 +300,12 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertInstanceOf(Section::class, $section);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_make_section_for_entity_with_entity_in_title(): void
     {
         $p1 = Permission::factory()->create(['name' => 'view_user_email_field', 'type' => Permission::TYPE_FIELD, 'entity' => 'user', 'guard_name' => 'web']);
 
-        $method = new \ReflectionMethod(RoleResource::class, 'makeSectionForEntity');
+        $method = new \ReflectionMethod(RoleForm::class, 'makeSectionForEntity');
         $method->setAccessible(true);
 
         $section = $method->invoke(
@@ -321,7 +323,7 @@ class FilamentResourceSchemaTest extends TestCase
 
     // ── PermissionResource protected methods via reflection ───────────────────
 
-    /** @test */
+    #[Test]
     public function permission_resource_get_form_fields_returns_array(): void
     {
         $method = new \ReflectionMethod(PermissionResource::class, 'getFormFields');
@@ -332,7 +334,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertNotEmpty($fields);
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_get_guard_options_returns_enabled_guards(): void
     {
         config()->set('gatekeeper.guards', [
@@ -348,7 +350,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertArrayHasKey('api', $options);
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_get_guard_badge_color_returns_correct_colors(): void
     {
         $method = new \ReflectionMethod(PermissionResource::class, 'getGuardBadgeColor');
@@ -360,7 +362,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertSame('gray', $method->invoke(null, 'custom_guard'));
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_get_table_columns_returns_array(): void
     {
         $method = new \ReflectionMethod(PermissionResource::class, 'getTableColumns');
@@ -371,7 +373,7 @@ class FilamentResourceSchemaTest extends TestCase
         $this->assertNotEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_get_table_filters_returns_array(): void
     {
         $method = new \ReflectionMethod(PermissionResource::class, 'getTableFilters');

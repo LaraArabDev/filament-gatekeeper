@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\ColumnDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
 use LaraArabDev\FilamentGatekeeper\Tests\TestUser;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Branch coverage tests for ColumnDiscovery:
@@ -38,7 +39,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     // discoverFromResource()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function discover_from_resource_returns_empty_when_no_resource_class_found(): void
     {
         // No resource classes exist for a made-up model
@@ -48,7 +49,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function discover_from_resource_returns_empty_for_non_existent_class(): void
     {
         $columns = $this->discovery->discoverFromResource('DefinitelyDoesNotExist');
@@ -61,7 +62,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     // discoverFromDatabase()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function discover_from_database_returns_columns_for_real_model(): void
     {
         // TestUser extends Authenticatable (which extends Model) and uses the 'users' table
@@ -75,7 +76,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertContains('email', $columns);
     }
 
-    /** @test */
+    #[Test]
     public function discover_from_database_returns_empty_for_non_existent_class(): void
     {
         $columns = $this->discovery->discoverFromDatabase('App\\Models\\CompletlyNonExistent');
@@ -84,7 +85,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertEmpty($columns);
     }
 
-    /** @test */
+    #[Test]
     public function discover_from_database_returns_empty_for_non_model_class(): void
     {
         // stdClass does not extend Model
@@ -98,13 +99,13 @@ class ColumnDiscoverySourcesTest extends TestCase
     // isSensitiveColumn()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function is_sensitive_column_returns_true_for_password(): void
     {
         $this->assertTrue($this->discovery->isSensitiveColumn('password'));
     }
 
-    /** @test */
+    #[Test]
     public function is_sensitive_column_returns_true_for_partial_match(): void
     {
         $this->assertTrue($this->discovery->isSensitiveColumn('user_password'));
@@ -112,7 +113,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertTrue($this->discovery->isSensitiveColumn('annual_salary'));
     }
 
-    /** @test */
+    #[Test]
     public function is_sensitive_column_returns_false_for_normal_column(): void
     {
         $this->assertFalse($this->discovery->isSensitiveColumn('name'));
@@ -120,7 +121,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertFalse($this->discovery->isSensitiveColumn('created_at'));
     }
 
-    /** @test */
+    #[Test]
     public function is_sensitive_column_is_case_insensitive(): void
     {
         $this->assertTrue($this->discovery->isSensitiveColumn('PASSWORD'));
@@ -132,7 +133,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     // clearCache()
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function clear_cache_for_specific_model_removes_only_that_model(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -157,7 +158,7 @@ class ColumnDiscoverySourcesTest extends TestCase
         $this->assertContains('col_b', $colsB);
     }
 
-    /** @test */
+    #[Test]
     public function clear_cache_for_null_removes_all_cache(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -182,7 +183,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     // discoverForModel() – cache hit
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function discover_for_model_uses_cached_result_on_second_call(): void
     {
         Config::set('gatekeeper.column_permissions', [
@@ -212,7 +213,7 @@ class ColumnDiscoverySourcesTest extends TestCase
     // discoverFromDatabase() with table that does not exist
     // ---------------------------------------------------------------------------
 
-    /** @test */
+    #[Test]
     public function discover_from_database_returns_empty_when_table_does_not_exist(): void
     {
         // Create an anonymous subclass of Model with a non-existent table

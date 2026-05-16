@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use LaraArabDev\FilamentGatekeeper\Support\Discovery\PageDiscovery;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PageDiscoveryTest extends TestCase
 {
@@ -20,13 +21,13 @@ class PageDiscoveryTest extends TestCase
         $this->discovery = new PageDiscovery;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_instantiated(): void
     {
         expect($this->discovery)->toBeInstanceOf(PageDiscovery::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_no_paths_configured(): void
     {
         Config::set('gatekeeper.discovery.pages', []);
@@ -36,7 +37,7 @@ class PageDiscoveryTest extends TestCase
         expect($pages)->toBeArray()->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_array_when_path_does_not_exist(): void
     {
         Config::set('gatekeeper.discovery.pages', ['app/Filament/Pages/NonExistent']);
@@ -46,7 +47,7 @@ class PageDiscoveryTest extends TestCase
         expect($pages)->toBeArray()->toBeEmpty();
     }
 
-    /** @test */
+    #[Test]
     public function it_discovers_pages_from_directory(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
@@ -72,7 +73,7 @@ class PageDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_resource_page_files(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
@@ -104,7 +105,7 @@ class PageDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_unique_pages(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
@@ -132,7 +133,7 @@ class PageDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_excludes_configured_excluded_pages(): void
     {
         $tempDir = sys_get_temp_dir().'/gatekeeper_pages_test_'.uniqid();
@@ -151,7 +152,7 @@ class PageDiscoveryTest extends TestCase
         File::deleteDirectory($tempDir);
     }
 
-    /** @test */
+    #[Test]
     public function it_skips_module_discovery_when_disabled(): void
     {
         Config::set('gatekeeper.modules.enabled', false);
@@ -162,7 +163,7 @@ class PageDiscoveryTest extends TestCase
         expect($pages)->toBeArray();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_non_existent_directory_in_scan_directory(): void
     {
         $reflection = new \ReflectionClass($this->discovery);

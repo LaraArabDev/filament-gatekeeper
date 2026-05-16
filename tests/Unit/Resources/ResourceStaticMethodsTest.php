@@ -13,39 +13,40 @@ use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\CreateRole;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\EditRole;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\ListRoles;
 use LaraArabDev\FilamentGatekeeper\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ResourceStaticMethodsTest extends TestCase
 {
     // ── RoleResource ─────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function role_resource_uses_role_model(): void
     {
         $this->assertSame(Role::class, RoleResource::getModel());
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_has_navigation_label(): void
     {
         $this->assertIsString(RoleResource::getNavigationLabel());
         $this->assertNotEmpty(RoleResource::getNavigationLabel());
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_has_model_label(): void
     {
         $this->assertIsString(RoleResource::getModelLabel());
         $this->assertNotEmpty(RoleResource::getModelLabel());
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_has_plural_model_label(): void
     {
         $this->assertIsString(RoleResource::getPluralModelLabel());
         $this->assertNotEmpty(RoleResource::getPluralModelLabel());
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_returns_navigation_group_from_config(): void
     {
         config()->set('gatekeeper.navigation.group', 'Security');
@@ -53,7 +54,7 @@ class ResourceStaticMethodsTest extends TestCase
         $this->assertSame('Security', RoleResource::getNavigationGroup());
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_returns_correct_pages(): void
     {
         $pages = RoleResource::getPages();
@@ -63,7 +64,7 @@ class ResourceStaticMethodsTest extends TestCase
         $this->assertArrayHasKey('edit', $pages);
     }
 
-    /** @test */
+    #[Test]
     public function role_resource_returns_empty_relations(): void
     {
         $this->assertSame([], RoleResource::getRelations());
@@ -71,34 +72,34 @@ class ResourceStaticMethodsTest extends TestCase
 
     // ── PermissionResource ────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function permission_resource_uses_permission_model(): void
     {
         $this->assertSame(Permission::class, PermissionResource::getModel());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_has_navigation_label(): void
     {
         $this->assertIsString(PermissionResource::getNavigationLabel());
         $this->assertNotEmpty(PermissionResource::getNavigationLabel());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_has_model_label(): void
     {
         $this->assertIsString(PermissionResource::getModelLabel());
         $this->assertNotEmpty(PermissionResource::getModelLabel());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_has_plural_model_label(): void
     {
         $this->assertIsString(PermissionResource::getPluralModelLabel());
         $this->assertNotEmpty(PermissionResource::getPluralModelLabel());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_returns_navigation_group_from_config(): void
     {
         config()->set('gatekeeper.navigation.group', 'Access Control');
@@ -106,19 +107,19 @@ class ResourceStaticMethodsTest extends TestCase
         $this->assertSame('Access Control', PermissionResource::getNavigationGroup());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_navigation_badge_color_is_primary(): void
     {
         $this->assertSame('primary', PermissionResource::getNavigationBadgeColor());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_cannot_create(): void
     {
         $this->assertFalse(PermissionResource::canCreate());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_returns_correct_pages(): void
     {
         $pages = PermissionResource::getPages();
@@ -126,7 +127,7 @@ class ResourceStaticMethodsTest extends TestCase
         $this->assertArrayHasKey('index', $pages);
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_returns_empty_relations(): void
     {
         $this->assertSame([], PermissionResource::getRelations());
@@ -134,31 +135,31 @@ class ResourceStaticMethodsTest extends TestCase
 
     // ── Page classes ──────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function create_role_page_uses_role_resource(): void
     {
         $this->assertSame(RoleResource::class, CreateRole::getResource());
     }
 
-    /** @test */
+    #[Test]
     public function edit_role_page_uses_role_resource(): void
     {
         $this->assertSame(RoleResource::class, EditRole::getResource());
     }
 
-    /** @test */
+    #[Test]
     public function list_roles_page_uses_role_resource(): void
     {
         $this->assertSame(RoleResource::class, ListRoles::getResource());
     }
 
-    /** @test */
+    #[Test]
     public function list_permissions_page_uses_permission_resource(): void
     {
         $this->assertSame(PermissionResource::class, ListPermissions::getResource());
     }
 
-    /** @test */
+    #[Test]
     public function permission_resource_returns_navigation_badge_count(): void
     {
         // No permissions → count = 0
