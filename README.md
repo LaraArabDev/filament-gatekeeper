@@ -1,11 +1,23 @@
-# Filament Gatekeeper 🛡️
+<div align="center">
+
+<img src="art/banner.png" alt="Filament Gatekeeper" width="100%">
+
+<br><br>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![Total Downloads](https://img.shields.io/packagist/dt/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![License](https://img.shields.io/packagist/l/laraarabdev/filament-gatekeeper.svg?style=flat-square)](https://packagist.org/packages/laraarabdev/filament-gatekeeper)
 [![codecov](https://codecov.io/gh/laraarabdev/filament-gatekeeper/branch/main/graph/badge.svg)](https://codecov.io/gh/laraarabdev/filament-gatekeeper)
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue?style=flat-square)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-10.x%20|%2011.x%20|%2012.x-red?style=flat-square)](https://laravel.com)
+[![Filament](https://img.shields.io/badge/Filament-3.x-orange?style=flat-square)](https://filamentphp.com)
 
-Advanced Role and Permission management for Laravel Filament 3.x with Spatie Permission integration. A comprehensive solution for managing access control across your entire application - from Filament admin panels to API endpoints.
+**Advanced Role and Permission management for Laravel Filament 3.x with Spatie Permission integration.**
+A comprehensive solution for managing access control across your entire application — from Filament admin panels to API endpoints.
+
+</div>
+
+---
 
 ## Table of Contents
 
@@ -24,45 +36,55 @@ Advanced Role and Permission management for Laravel Filament 3.x with Spatie Per
 - [Contributing](#contributing)
 - [License](#license)
 
+---
+
 ## Features
 
 ### Filament Admin Panel
 
-- ✅ **Resource Permissions** - Full CRUD + restore, force delete, replicate, reorder
-- ✅ **Field Permissions** - Control form field visibility and editability
-- ✅ **Column Permissions** - Control table column visibility
-- ✅ **Action Permissions** - Control custom action execution
-- ✅ **Page Permissions** - Control page access
-- ✅ **Widget Permissions** - Control widget visibility
-- ✅ **Relation Permissions** - Control relation manager access
+| Feature | Description |
+|---|---|
+| **Resource Permissions** | Full CRUD + restore, force delete, replicate, reorder |
+| **Field Permissions** | Control form field visibility and editability |
+| **Column Permissions** | Control table column visibility |
+| **Action Permissions** | Control custom action execution |
+| **Page Permissions** | Control page access |
+| **Widget Permissions** | Control widget visibility |
+| **Relation Permissions** | Control relation manager access |
 
 ### API & Backend
 
-- ✅ **API Middleware** - Route-level permission checking
-- ✅ **Controller Traits** - Easy permission checks in controllers
-- ✅ **API Resource Permissions** - Field/relation visibility in JSON responses
-- ✅ **Model Permissions** - Permissions for models without Filament resources
+| Feature | Description |
+|---|---|
+| **API Middleware** | Route-level permission checking |
+| **Controller Traits** | Easy permission checks in controllers |
+| **API Resource Permissions** | Field/relation visibility in JSON responses |
+| **Model Permissions** | Permissions for models without Filament resources |
 
 ### System Features
 
-- ✅ **Super Admin Bypass** - Configurable super admin role that bypasses all checks
-- ✅ **Multi-Guard Support** - Web, API, and custom guards with auto-detection
-- ✅ **HMVC Module Support** - Works with nwidart/laravel-modules
-- ✅ **Performance Caching** - Cached permission matrix for fast lookups
-- ✅ **Localization** - English and Arabic out of the box
+| Feature | Description |
+|---|---|
+| **Super Admin Bypass** | Configurable super admin role that bypasses all checks |
+| **Multi-Guard Support** | Web, API, and custom guards with auto-detection |
+| **HMVC Module Support** | Works with `nwidart/laravel-modules` |
+| **Performance Caching** | Cached permission matrix for fast lookups |
+| **Localization** | English and Arabic out of the box |
+
+---
 
 ## Requirements
 
-- PHP 8.2+
-- Laravel 10.x, 11.x, or 12.x
-- Filament 3.x
-- **Spatie Laravel Permission 6.x** (must be installed and configured)
+- **PHP** 8.2+
+- **Laravel** 10.x, 11.x, or 12.x
+- **Filament** 3.x
+- **Spatie Laravel Permission** 6.x _(must be installed and configured)_
+
+---
 
 ## Installation
 
 ### Step 1: Install Spatie Laravel Permission
-
-This package requires Spatie Laravel Permission to be installed first:
 
 ```bash
 composer require spatie/laravel-permission
@@ -89,17 +111,7 @@ php artisan vendor:publish --tag=gatekeeper-config
 
 ### Step 4: Publish and Run Migrations
 
-
-
-
-
-
-
-
-
 ```bash
-
-
 php artisan vendor:publish --tag=gatekeeper-migrations
 php artisan migrate
 ```
@@ -115,23 +127,25 @@ Update your `config/permission.php` to use Gatekeeper's models:
 ],
 ```
 
-### Step 6 (Optional): Publish stubs for Resources, Pages, Widgets
+### Step 6 (Optional): Publish Stubs for Resources, Pages & Widgets
 
-To have Filament’s make commands generate Gatekeeper-aware classes (e.g. extending `GatekeeperResource`, using `HasPagePermissions`), publish the stubs:
+To have Filament's `make` commands generate Gatekeeper-aware classes, publish the stubs:
 
 ```bash
 php artisan vendor:publish --tag=gatekeeper-stubs
 ```
 
-Then use `make:filament-resource`, `make:filament-page`, and `make:filament-widget` as usual; they will use the published stubs from `stubs/filament/`. See [Commands](#commands) for details.
+Then use `make:filament-resource`, `make:filament-page`, and `make:filament-widget` as usual — they will use the published stubs from `stubs/filament/`.
 
-### Alternative: Use Install Command
+### Alternative: Use the Install Command
 
 Run the install command which handles all steps automatically:
 
 ```bash
 php artisan gatekeeper:install
 ```
+
+---
 
 ## Quick Start
 
@@ -221,7 +235,9 @@ Or use the dashboard action in the Role Resource.
 
 ### 5. Assign Roles to Users
 
-Navigate to the Roles page in your Filament panel and assign permissions to roles, then assign roles to users.
+Navigate to the **Roles** page in your Filament panel, assign permissions to roles, then assign roles to users.
+
+---
 
 ## Configuration
 
@@ -267,7 +283,7 @@ return [
 ];
 ```
 
-See the full configuration file for all available options.
+---
 
 ## Default Setup Options
 
@@ -394,18 +410,19 @@ All options are in `config/gatekeeper.php`. Below is a complete reference of eve
 
 When using `HasResourcePermissions` trait or extending `GatekeeperResource`, these methods are automatically implemented:
 
-- `canViewAny()` - Check if user can view any records
-- `canView($record)` - Check if user can view a specific record
-- `canCreate()` - Check if user can create records
-- `canEdit($record)` - Check if user can edit a record
-- `canDelete($record)` - Check if user can delete a record
-- `canRestore($record)` - Check if user can restore a record
-- `canForceDelete($record)` - Check if user can force delete a record
-- `canReplicate($record)` - Check if user can replicate a record
-- `canReorder()` - Check if user can reorder records
+| Method | Description |
+|---|---|
+| `canViewAny()` | Check if user can view any records |
+| `canView($record)` | Check if user can view a specific record |
+| `canCreate()` | Check if user can create records |
+| `canEdit($record)` | Check if user can edit a record |
+| `canDelete($record)` | Check if user can delete a record |
+| `canRestore($record)` | Check if user can restore a record |
+| `canForceDelete($record)` | Check if user can force delete a record |
+| `canReplicate($record)` | Check if user can replicate a record |
+| `canReorder()` | Check if user can reorder records |
 
-**Generated Permissions:**
-- `view_any_user`, `view_user`, `create_user`, `update_user`, `delete_user`, `restore_user`, `force_delete_user`, `replicate_user`, `reorder_user`
+**Generated permissions:** `view_any_user`, `view_user`, `create_user`, `update_user`, `delete_user`, `restore_user`, `force_delete_user`, `replicate_user`, `reorder_user`
 
 ### Field Permissions
 
@@ -435,8 +452,7 @@ class UserResource extends Resource
 }
 ```
 
-**Generated Permissions:**
-- `view_field_user_email`, `update_field_user_email`, `view_field_user_salary`, `update_field_user_salary`
+**Generated permissions:** `view_field_user_email`, `update_field_user_email`, `view_field_user_salary`, `update_field_user_salary`
 
 ### Column Permissions
 
@@ -464,8 +480,7 @@ class UserResource extends Resource
 }
 ```
 
-**Generated Permissions:**
-- `view_column_user_email`, `view_column_user_salary`
+**Generated permissions:** `view_column_user_email`, `view_column_user_salary`
 
 ### Action Permissions
 
@@ -488,8 +503,7 @@ class UserResource extends Resource
 }
 ```
 
-**Generated Permissions:**
-- `execute_user_export_action`
+**Generated permissions:** `execute_user_export_action`
 
 ### Page Permissions
 
@@ -505,8 +519,7 @@ class SettingsPage extends GatekeeperPage
 }
 ```
 
-**Generated Permissions:**
-- `view_settings_page`
+**Generated permissions:** `view_settings_page`
 
 ### Widget Permissions
 
@@ -521,8 +534,7 @@ class StatsOverview extends GatekeeperWidget
 }
 ```
 
-**Generated Permissions:**
-- `view_stats_overview_widget`
+**Generated permissions:** `view_stats_overview_widget`
 
 ### Relation Permissions
 
@@ -545,16 +557,15 @@ class UserResource extends Resource
 }
 ```
 
-**Generated Permissions:**
-- `view_relation_user_roles`, `view_relation_user_posts`
+**Generated permissions:** `view_relation_user_roles`, `view_relation_user_posts`
+
+---
 
 ## Auto-Discovery
 
 Filament Gatekeeper can automatically discover fields and columns from your models, database schema, or Filament resources.
 
 ### Field Discovery
-
-Auto-detect form fields for permission management:
 
 ```php
 'field_discovery' => [
@@ -563,15 +574,14 @@ Auto-detect form fields for permission management:
 ],
 ```
 
-**Sources:**
-- `config` - Read from `field_permissions` array
-- `fillable` - Read from model's `$fillable` property (Recommended)
-- `database` - Read all columns from database schema
-- `resource` - Parse from Filament Resource `form()` method
+| Source | Best For |
+|---|---|
+| `config` | Read from `field_permissions` array |
+| `fillable` | Read from model's `$fillable` property **(Recommended)** |
+| `database` | Read all columns from database schema |
+| `resource` | Parse from Filament Resource `form()` method |
 
 ### Column Discovery
-
-Auto-detect table columns for permission management:
 
 ```php
 'column_discovery' => [
@@ -580,24 +590,13 @@ Auto-detect table columns for permission management:
 ],
 ```
 
-**Sources:**
-- `config` - Read from `column_permissions` array
-- `database` - Read all columns from database schema (Recommended)
-- `resource` - Parse from Filament Resource `table()` method
+| Source | Best For |
+|---|---|
+| `config` | Read from `column_permissions` array |
+| `database` | Read all columns from database schema **(Recommended)** |
+| `resource` | Parse from Filament Resource `table()` method |
 
-### Recommended Configuration
-
-```php
-'field_discovery' => [
-    'enabled' => true,
-    'sources' => ['config', 'fillable'],
-],
-
-'column_discovery' => [
-    'enabled' => true,
-    'sources' => ['config', 'database'],
-],
-```
+---
 
 ## Permission Management
 
@@ -629,11 +628,13 @@ php artisan gatekeeper:sync --only=fields
 php artisan gatekeeper:sync --only=columns
 ```
 
+---
+
 ## API Permissions
 
 ### Middleware
 
-**Gatekeeper API Middleware** - Single permission check:
+**Single permission check:**
 
 ```php
 Route::middleware(['auth:sanctum', 'gatekeeper.api:view_any_user'])->group(function () {
@@ -641,7 +642,7 @@ Route::middleware(['auth:sanctum', 'gatekeeper.api:view_any_user'])->group(funct
 });
 ```
 
-**Gatekeeper Resource Middleware** - Auto CRUD permissions:
+**Auto CRUD permissions:**
 
 ```php
 Route::middleware(['auth:sanctum', 'gatekeeper.resource:user'])->group(function () {
@@ -655,7 +656,7 @@ Register middleware in `bootstrap/app.php` (Laravel 11+):
 ```php
 ->withMiddleware(function (Middleware $middleware) {
     $middleware->alias([
-        'gatekeeper.api' => \LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware::class,
+        'gatekeeper.api'      => \LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperApiMiddleware::class,
         'gatekeeper.resource' => \LaraArabDev\FilamentGatekeeper\Http\Middleware\GatekeeperResourceMiddleware::class,
     ]);
 })
@@ -663,29 +664,22 @@ Register middleware in `bootstrap/app.php` (Laravel 11+):
 
 ### Controller Permissions
 
-There are four ways to handle permissions in controllers, ranging from fully automatic to fully manual. Choose the approach that fits your needs.
+There are four ways to handle permissions in controllers — choose the approach that fits your needs.
 
 ---
 
-#### Option 1: Route-Level Middleware (Recommended — zero controller code)
+#### Option 1: Route-Level Middleware (Recommended)
 
-Apply `gatekeeper.resource:ModelName` on your `apiResource` route. It reads the HTTP method and URL pattern and automatically maps them to the correct permission — no code needed inside the controller.
+Zero controller code — apply `gatekeeper.resource:ModelName` on your `apiResource` route:
 
 ```php
-// routes/api.php
 Route::apiResource('users', UserController::class)
     ->middleware(['auth:sanctum', 'gatekeeper.resource:User']);
-
-// Group multiple resources
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('users', UserController::class)->middleware('gatekeeper.resource:User');
-    Route::apiResource('posts', PostController::class)->middleware('gatekeeper.resource:Post');
-});
 ```
 
 **Auto-mapping:**
 
-| HTTP Method | URL | Permission checked |
+| HTTP Method | URL | Permission Checked |
 |---|---|---|
 | `GET` | `/users` | `view_any_user` |
 | `GET` | `/users/{id}` | `view_user` |
@@ -698,7 +692,7 @@ Your controller stays completely clean:
 ```php
 class UserController extends Controller
 {
-    public function index() { return User::paginate(); }
+    public function index()  { return User::paginate(); }
     public function store(Request $request) { return User::create($request->validated()); }
     public function show(User $user) { return $user; }
     public function update(Request $request, User $user) { $user->update($request->validated()); return $user; }
@@ -708,55 +702,43 @@ class UserController extends Controller
 
 ---
 
-#### Option 2: Constructor-Level Middleware (one place per controller)
+#### Option 2: Constructor-Level Middleware
 
-Use `$this->middleware()` in the constructor to apply permissions once for the whole controller, instead of repeating calls in every method.
+Use `$this->middleware()` in the constructor to apply permissions once for the whole controller:
 
 ```php
 class UserController extends Controller
 {
     public function __construct()
     {
-        // Cover all methods at once
         $this->middleware('gatekeeper.resource:User');
 
         // Or map specific methods manually
         $this->middleware('gatekeeper.api:view_any_user')->only('index');
         $this->middleware('gatekeeper.api:create_user')->only('store');
-        $this->middleware('gatekeeper.api:view_user')->only('show');
-        $this->middleware('gatekeeper.api:update_user')->only(['update']);
-        $this->middleware('gatekeeper.api:delete_user')->only('destroy');
     }
-
-    // No authorize calls needed in any method
-    public function index() { return User::paginate(); }
-    public function store(Request $request) { return User::create($request->validated()); }
 }
 ```
 
 ---
 
-#### Option 3: Per-Route Middleware (specific or non-resourceful routes)
+#### Option 3: Per-Route Middleware
 
-Use `gatekeeper.api:permission` directly on individual routes when you have custom or non-standard routes.
+Use `gatekeeper.api:permission` directly on individual routes for custom or non-standard routes:
 
 ```php
-// routes/api.php
 Route::get('/users/export', [UserController::class, 'export'])
     ->middleware(['auth:sanctum', 'gatekeeper.api:execute_user_export_action']);
 
 Route::post('/users/bulk-delete', [UserController::class, 'bulkDelete'])
     ->middleware(['auth:sanctum', 'gatekeeper.api:delete_user']);
-
-Route::post('/users/{user}/suspend', [UserController::class, 'suspend'])
-    ->middleware(['auth:sanctum', 'gatekeeper.api:update_user']);
 ```
 
 ---
 
-#### Option 4: Per-Method (manual, using the trait)
+#### Option 4: Per-Method (Manual Trait)
 
-Use `HasApiPermissions` trait when you need full control inside each method, for example to check permissions conditionally or pass a model instance.
+Use `HasApiPermissions` trait for full control inside each method:
 
 ```php
 use LaraArabDev\FilamentGatekeeper\Concerns\HasApiPermissions;
@@ -803,7 +785,7 @@ class UserController extends Controller
 
 **Available trait methods:**
 
-| Method | Permission checked |
+| Method | Permission Checked |
 |---|---|
 | `$this->authorizeIndex()` | `view_any_{model}` |
 | `$this->authorizeShow($model)` | `view_{model}` |
@@ -829,9 +811,9 @@ class UserController extends Controller
 | Approach | When to use |
 |---|---|
 | Route middleware (`gatekeeper.resource`) | Standard `apiResource` routes — cleanest, no controller code |
-| Constructor middleware | Non-resourceful controllers or when you want explicit per-method mapping in one place |
+| Constructor middleware | Non-resourceful controllers or explicit per-method mapping in one place |
 | Per-route middleware (`gatekeeper.api`) | Custom/non-standard routes with specific permissions |
-| Trait per-method | When you need conditional logic, model-instance checks, or field/column permission filtering inside the method |
+| Trait per-method | When you need conditional logic, model-instance checks, or field/column filtering |
 
 ### API Resources
 
@@ -847,11 +829,11 @@ class UserResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->whenCanViewColumn('email', $this->email),
+            'id'     => $this->id,
+            'name'   => $this->name,
+            'email'  => $this->whenCanViewColumn('email', $this->email),
             'salary' => $this->whenCanViewColumn('salary', $this->salary),
-            'roles' => $this->whenCanLoadRelation('roles', fn () => $this->roles),
+            'roles'  => $this->whenCanLoadRelation('roles', fn () => $this->roles),
         ];
     }
 }
@@ -874,81 +856,87 @@ Gatekeeper::authorize('create_user');
 Gatekeeper::guard('api')->can('view_user');
 
 // Get visible fields/columns
-$fields = Gatekeeper::getVisibleFields('User');
+$fields  = Gatekeeper::getVisibleFields('User');
 $columns = Gatekeeper::getVisibleColumns('User');
 ```
 
+---
+
 ## Commands
 
-| Command              | Description                           |
-| -------------------- | ------------------------------------- |
-| `gatekeeper:sync`        | Synchronize all permissions           |
-| `gatekeeper:delete`      | Delete field/column/model permissions |
-| `gatekeeper:clear-cache` | Clear permission cache                |
-| `gatekeeper:install`     | Run complete installation             |
+| Command | Description |
+|---|---|
+| `gatekeeper:install` | Run complete installation |
+| `gatekeeper:sync` | Synchronize all permissions |
+| `gatekeeper:delete` | Delete field/column/model permissions |
+| `gatekeeper:clear-cache` | Clear permission cache |
 
-### Creating Resources, Pages & Widgets (use Filament + published stubs)
+### Creating Resources, Pages & Widgets
 
-Filament Gatekeeper does not ship its own make commands. Use Filament’s and Laravel’s built-in commands after publishing Gatekeeper’s stubs so generated classes include Gatekeeper permissions:
+Filament Gatekeeper does not ship its own make commands. Use Filament's built-in commands after publishing Gatekeeper's stubs so generated classes include Gatekeeper permissions:
 
-1. **Publish stubs** (once):
-   ```bash
-   php artisan vendor:publish --tag=gatekeeper-stubs
-   ```
-   This publishes to `stubs/filament/` so Filament’s make commands use Gatekeeper’s versions when present.
+**1. Publish stubs (once):**
 
-2. **Create with Filament / Laravel:**
-   - **Page:** `php artisan make:filament-page YourPage` — uses `stubs/filament/Page.stub` (adds `HasPagePermissions`).
-   - **Resource:** `php artisan make:filament-resource ModelName` — uses `stubs/filament/Resource.stub` (extends `GatekeeperResource`).
-   - **Widget:** `php artisan make:filament-widget WidgetName` — uses `stubs/filament/Widget.stub` if published.
-   - **Model:** `php artisan make:model ModelName` — only **User** (and Admin if you have one) need roles: add `HasRoles` or extend `GatekeeperAuthenticatable` manually. Other models stay plain Eloquent.
+```bash
+php artisan vendor:publish --tag=gatekeeper-stubs
+```
 
-See [Quick Start](#quick-start) for extending `GatekeeperResource`, `GatekeeperPage`, and `GatekeeperWidget` manually.
+**2. Create with Filament / Laravel:**
+
+| Command | Stub Used | Result |
+|---|---|---|
+| `php artisan make:filament-resource ModelName` | `stubs/filament/Resource.stub` | Extends `GatekeeperResource` |
+| `php artisan make:filament-page YourPage` | `stubs/filament/Page.stub` | Adds `HasPagePermissions` |
+| `php artisan make:filament-widget WidgetName` | `stubs/filament/Widget.stub` | Adds `HasWidgetPermissions` |
+
+---
 
 ## Quick Reference
 
 ### Permission Types
 
-| Type       | Description            | Example                      |
-| ---------- | ---------------------- | ---------------------------- |
-| `resource` | Filament resource CRUD | `view_any_user`              |
-| `page`     | Filament custom pages  | `view_settings_page`         |
-| `widget`   | Filament widgets       | `view_stats_overview_widget` |
-| `field`    | Form field access      | `view_field_user_email`      |
-| `column`   | Table column access    | `view_column_user_salary`    |
-| `action`   | Custom actions         | `execute_user_export_action` |
-| `relation` | Relation managers      | `view_relation_user_roles`   |
-| `model`    | API-only models        | `view_product`               |
+| Type | Description | Example |
+|---|---|---|
+| `resource` | Filament resource CRUD | `view_any_user` |
+| `page` | Filament custom pages | `view_settings_page` |
+| `widget` | Filament widgets | `view_stats_overview_widget` |
+| `field` | Form field access | `view_field_user_email` |
+| `column` | Table column access | `view_column_user_salary` |
+| `action` | Custom actions | `execute_user_export_action` |
+| `relation` | Relation managers | `view_relation_user_roles` |
+| `model` | API-only models | `view_product` |
 
 ### Traits Reference
 
-| Trait                    | Purpose                        |
-| ------------------------ | ------------------------------ |
-| `HasResourcePermissions` | Resource CRUD permissions      |
-| `HasFieldPermissions`    | Form field permissions         |
-| `HasColumnPermissions`   | Table column permissions       |
-| `HasActionPermissions`   | Custom action permissions      |
-| `HasRelationPermissions` | Relation manager permissions   |
-| `HasPagePermissions`     | Page access permissions        |
-| `HasWidgetPermissions`   | Widget visibility permissions  |
-| `HasApiPermissions`      | Controller permission helpers  |
+| Trait | Purpose |
+|---|---|
+| `HasResourcePermissions` | Resource CRUD permissions |
+| `HasFieldPermissions` | Form field permissions |
+| `HasColumnPermissions` | Table column permissions |
+| `HasActionPermissions` | Custom action permissions |
+| `HasRelationPermissions` | Relation manager permissions |
+| `HasPagePermissions` | Page access permissions |
+| `HasWidgetPermissions` | Widget visibility permissions |
+| `HasApiPermissions` | Controller permission helpers |
 
 ### Base Classes
 
-| Class                   | Extends                       | Purpose                        |
-| ----------------------- | ----------------------------- | ------------------------------ |
-| `GatekeeperResource`        | `Filament\Resources\Resource` | Resources with permissions     |
-| `GatekeeperPage`            | `Filament\Pages\Page`         | Pages with permissions         |
-| `GatekeeperWidget`          | `Filament\Widgets\Widget`     | Widgets with permissions       |
-| `GatekeeperAuthenticatable` | `Authenticatable`             | User model with HasRoles       |
-| `GatekeeperApiResource`     | `JsonResource`                | API resources with permissions |
+| Class | Extends | Purpose |
+|---|---|---|
+| `GatekeeperResource` | `Filament\Resources\Resource` | Resources with permissions |
+| `GatekeeperPage` | `Filament\Pages\Page` | Pages with permissions |
+| `GatekeeperWidget` | `Filament\Widgets\Widget` | Widgets with permissions |
+| `GatekeeperAuthenticatable` | `Authenticatable` | User model with HasRoles |
+| `GatekeeperApiResource` | `JsonResource` | API resources with permissions |
 
 ### Middleware
 
-| Middleware                 | Alias             | Purpose                 |
-| -------------------------- | ----------------- | ----------------------- |
-| `GatekeeperApiMiddleware`      | `gatekeeper.api`      | Single permission check |
-| `GatekeeperResourceMiddleware` | `gatekeeper.resource` | Auto CRUD permissions   |
+| Middleware | Alias | Purpose |
+|---|---|---|
+| `GatekeeperApiMiddleware` | `gatekeeper.api` | Single permission check |
+| `GatekeeperResourceMiddleware` | `gatekeeper.resource` | Auto CRUD permissions |
+
+---
 
 ## Contributing
 
@@ -956,7 +944,7 @@ Please see [DEVELOPMENT.md](DEVELOPMENT.md) for details on package architecture,
 
 ## Security
 
-If you discover any security-related issues, please email security@laraarab.dev instead of using the issue tracker.
+If you discover any security-related issues, please email [security@laraarab.dev](mailto:security@laraarab.dev) instead of using the issue tracker.
 
 ## Credits
 
@@ -965,4 +953,4 @@ If you discover any security-related issues, please email security@laraarab.dev 
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+The MIT License (MIT). Please see the [License File](LICENSE) for more information.
