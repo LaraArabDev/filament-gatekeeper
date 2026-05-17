@@ -107,7 +107,7 @@ trait HasActionPermissions
             return $configuredActions;
         }
 
-        return array_filter($configuredActions, fn ($action) => static::canExecuteAction($action));
+        return array_filter($configuredActions, static::canExecuteAction(...));
     }
 
     /**
@@ -148,7 +148,7 @@ trait HasActionPermissions
             return $configuredActions;
         }
 
-        return array_filter($configuredActions, fn ($action) => static::canExecuteAction($action));
+        return array_filter($configuredActions, static::canExecuteAction(...));
     }
 
     /**
@@ -164,7 +164,7 @@ trait HasActionPermissions
                 $actionName = $action->getName();
 
                 if (method_exists($action, 'visible')) {
-                    $action->visible(fn () => static::canExecuteAction($actionName));
+                    $action->visible(fn (): bool => static::canExecuteAction($actionName));
                 }
             }
 
@@ -180,7 +180,7 @@ trait HasActionPermissions
      */
     public static function filterActions(array $actions): array
     {
-        return array_filter($actions, function ($action) {
+        return array_filter($actions, function ($action): bool {
             if (method_exists($action, 'getName')) {
                 return static::canExecuteAction($action->getName());
             }

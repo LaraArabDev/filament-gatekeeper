@@ -88,7 +88,7 @@ class RoleTable
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->requiresConfirmation()
-                ->action(function () {
+                ->action(function (): void {
                     Artisan::call('gatekeeper:sync');
 
                     Notification::make()
@@ -107,7 +107,7 @@ class RoleTable
         return [
             Tables\Actions\EditAction::make(),
             Tables\Actions\DeleteAction::make()
-                ->hidden(fn (Role $record) => $record->isSuperAdmin()),
+                ->hidden(fn (Role $record): bool => $record->isSuperAdmin()),
         ];
     }
 

@@ -7,6 +7,7 @@ namespace LaraArabDev\FilamentGatekeeper\Resources;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use LaraArabDev\FilamentGatekeeper\Models\Role;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Forms\RoleForm;
 use LaraArabDev\FilamentGatekeeper\Resources\RoleResource\Pages\CreateRole;
@@ -20,7 +21,7 @@ class RoleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function getNavigationIcon(): \Illuminate\Contracts\Support\Htmlable|string|null
+    public static function getNavigationIcon(): Htmlable|string|null
     {
         return 'heroicon-o-shield-check';
     }

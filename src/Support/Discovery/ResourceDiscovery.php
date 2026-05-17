@@ -40,7 +40,7 @@ class ResourceDiscovery
             $resources = array_merge($resources, $moduleResources);
         }
 
-        $resources = array_filter($resources, function ($resource) use ($excludedResources) {
+        $resources = array_filter($resources, function (string $resource) use ($excludedResources): bool {
             foreach ($excludedResources as $excluded) {
                 if (str_contains($resource, class_basename($excluded))) {
                     return false;
@@ -130,7 +130,7 @@ class ResourceDiscovery
         $modules = File::directories($modulesPath);
 
         foreach ($modules as $module) {
-            $moduleName = basename($module);
+            $moduleName = basename((string) $module);
             $moduleResourcePath = str_replace('{module}', $module, $resourcePath);
 
             if (is_dir($moduleResourcePath)) {

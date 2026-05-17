@@ -55,16 +55,12 @@ class GatekeeperServiceProvider extends PackageServiceProvider
         parent::packageRegistered();
 
         // Register the Gatekeeper singleton
-        $this->app->singleton(Gatekeeper::class, function ($app) {
-            return new Gatekeeper(
-                $app->make(PermissionCache::class)
-            );
-        });
+        $this->app->singleton(Gatekeeper::class, fn ($app): Gatekeeper => new Gatekeeper(
+            $app->make(PermissionCache::class)
+        ));
 
         // Bind the PermissionCache service
-        $this->app->singleton(PermissionCache::class, function ($app) {
-            return new PermissionCache;
-        });
+        $this->app->singleton(PermissionCache::class, fn ($app): PermissionCache => new PermissionCache);
     }
 
     /**
@@ -110,20 +106,20 @@ class GatekeeperServiceProvider extends PackageServiceProvider
     protected function registerCacheInvalidationEvents(): void
     {
         // Clear cache when role is updated
-        Event::listen('eloquent.saved: '.Role::class, function ($role) {
+        Event::listen('eloquent.saved: '.Role::class, function (Role $role): void {
             app(PermissionCache::class)->invalidateRole($role);
         });
 
-        Event::listen('eloquent.deleted: '.Role::class, function ($role) {
+        Event::listen('eloquent.deleted: '.Role::class, function (Role $role): void {
             app(PermissionCache::class)->invalidateRole($role);
         });
 
         // Clear all cache when permission is modified
-        Event::listen('eloquent.saved: '.Permission::class, function () {
+        Event::listen('eloquent.saved: '.Permission::class, function (): void {
             app(PermissionCache::class)->invalidateAll();
         });
 
-        Event::listen('eloquent.deleted: '.Permission::class, function () {
+        Event::listen('eloquent.deleted: '.Permission::class, function (): void {
             app(PermissionCache::class)->invalidateAll();
         });
     }
@@ -146,7 +142,7 @@ class GatekeeperServiceProvider extends PackageServiceProvider
     protected function registerGateCallbacks(): void
     {
         // Allow super admin to bypass all permission checks
-        Gate::before(function ($user, $ability) {
+        Gate::before(function ($user, $ability): ?true {
             if (! config('gatekeeper.super_admin.enabled', true)) {
                 return null;
             }
@@ -171,16 +167,14 @@ class GatekeeperServiceProvider extends PackageServiceProvider
     protected function registerPermissionGates(): void
     {
         // Only register gates after the application has booted
-        $this->app->booted(function () {
+        $this->app->booted(function (): void {
             try {
                 $permissions = Permission::all();
 
                 foreach ($permissions as $permission) {
-                    Gate::define($permission->name, function ($user) use ($permission) {
-                        return $user->hasPermissionTo($permission);
-                    });
+                    Gate::define($permission->name, fn ($user) => $user->hasPermissionTo($permission));
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Database might not be ready (migrations not run yet)
             }
         });

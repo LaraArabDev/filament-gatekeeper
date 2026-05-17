@@ -35,7 +35,7 @@ class ModuleDiscovery
 
         $directories = File::directories($modulesPath);
 
-        return array_map(fn ($dir) => basename($dir), $directories);
+        return array_map(basename(...), $directories);
     }
 
     /**

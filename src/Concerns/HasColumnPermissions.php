@@ -144,7 +144,7 @@ trait HasColumnPermissions
                 $columnName = $column->getName();
 
                 if (method_exists($column, 'visible')) {
-                    $column->visible(fn () => static::canViewColumn($columnName));
+                    $column->visible(fn (): bool => static::canViewColumn($columnName));
                 }
             }
 
@@ -160,7 +160,7 @@ trait HasColumnPermissions
      */
     public static function filterColumns(array $columns): array
     {
-        return array_filter($columns, function ($column) {
+        return array_filter($columns, function ($column): bool {
             if (method_exists($column, 'getName')) {
                 return static::canViewColumn($column->getName());
             }

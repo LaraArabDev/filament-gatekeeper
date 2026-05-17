@@ -29,7 +29,7 @@ class GatekeeperApiMiddleware
      */
     public function handle(Request $request, Closure $next, string $permission, ?string $guard = null): Response
     {
-        $guard = $guard ?? $this->detectGuard($request);
+        $guard ??= $this->detectGuard($request);
 
         $user = Auth::guard($guard)->user();
         if (! $user) {

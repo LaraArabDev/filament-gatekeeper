@@ -173,12 +173,10 @@ trait HasFieldPermissions
         $modelName = static::getFieldPermissionModelName();
 
         if (static::shouldBypassPermissions()) {
-            $configuredFields = array_merge(
+            return array_merge(
                 config('gatekeeper.field_permissions.*', []),
                 config("gatekeeper.field_permissions.{$modelName}", [])
             );
-
-            return $configuredFields;
         }
 
         $configuredFields = array_merge(
@@ -186,11 +184,11 @@ trait HasFieldPermissions
             config("gatekeeper.field_permissions.{$modelName}", [])
         );
 
-        if (empty($configuredFields)) {
+        if ($configuredFields === []) {
             return [];
         }
 
-        return array_filter($configuredFields, fn ($field) => static::canUpdateField($field));
+        return array_filter($configuredFields, static::canUpdateField(...));
     }
 
     /**
@@ -206,11 +204,11 @@ trait HasFieldPermissions
                 $fieldName = $component->getName();
 
                 if (method_exists($component, 'visible')) {
-                    $component->visible(fn () => static::canViewField($fieldName));
+                    $component->visible(fn (): bool => static::canViewField($fieldName));
                 }
 
                 if (method_exists($component, 'disabled')) {
-                    $component->disabled(fn () => ! static::canUpdateField($fieldName));
+                    $component->disabled(fn (): bool => ! static::canUpdateField($fieldName));
                 }
             }
 

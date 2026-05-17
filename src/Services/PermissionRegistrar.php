@@ -121,10 +121,10 @@ class PermissionRegistrar
 
         $guards = array_keys(array_filter(
             $guardsConfig,
-            fn ($guard) => is_array($guard) ? ($guard['enabled'] ?? true) : true
+            fn ($guard): mixed => is_array($guard) ? ($guard['enabled'] ?? true) : true
         ));
 
-        return empty($guards) ? ['web'] : $guards;
+        return $guards === [] ? ['web'] : $guards;
     }
 
     /**
@@ -156,7 +156,7 @@ class PermissionRegistrar
         $this->syncLog = [];
         $this->resourceModels = [];
 
-        DB::transaction(function () {
+        DB::transaction(function (): void {
             $this->syncModelPermissions();
             $this->syncResourcePermissions();
             $this->syncPagePermissions();
@@ -182,7 +182,7 @@ class PermissionRegistrar
         $this->syncLog = [];
         $this->resourceModels = [];
 
-        DB::transaction(function () use ($type) {
+        DB::transaction(function () use ($type): void {
             match ($type) {
                 'resources' => $this->syncResourcePermissions(),
                 'models' => $this->syncModelPermissions(),
@@ -244,10 +244,8 @@ class PermissionRegistrar
             'delete',
         ]);
 
-        $excludedLower = array_map('strtolower', $excludedModels);
-        $modelsToSync = array_filter($allModels, function ($model) use ($excludedLower) {
-            return ! in_array(strtolower($model), $excludedLower, true);
-        });
+        $excludedLower = array_map(strtolower(...), $excludedModels);
+        $modelsToSync = array_filter($allModels, fn (string $model): bool => ! in_array(strtolower($model), $excludedLower, true));
 
         foreach ($modelsToSync as $model) {
             foreach ($prefixes as $prefix) {
@@ -467,7 +465,7 @@ class PermissionRegistrar
 
             $discoveredFields = $this->fieldDiscovery->discoverForModel($modelClass);
 
-            if (! empty($discoveredFields)) {
+            if ($discoveredFields !== []) {
                 $configFields[$modelName] = $discoveredFields;
             }
         }
@@ -502,7 +500,7 @@ class PermissionRegistrar
 
             $discoveredColumns = $this->columnDiscovery->discoverForModel($modelClass);
 
-            if (! empty($discoveredColumns)) {
+            if ($discoveredColumns !== []) {
                 $configColumns[$modelName] = $discoveredColumns;
             }
         }
@@ -582,7 +580,7 @@ class PermissionRegistrar
         $modelSnake = $this->toSnakeCase($modelName);
 
         $query = Permission::where('type', Permission::TYPE_FIELD)
-            ->where(function ($q) use ($modelSnake) {
+            ->where(function ($q) use ($modelSnake): void {
                 $q->where('entity', $modelSnake)
                     ->orWhere('name', 'like', "%_{$modelSnake}_%_field");
             });
@@ -592,7 +590,7 @@ class PermissionRegistrar
         }
 
         if ($fields) {
-            $query->where(function ($q) use ($fields, $modelSnake) {
+            $query->where(function ($q) use ($fields, $modelSnake): void {
                 foreach ($fields as $field) {
                     $q->orWhere('name', 'like', "%_{$modelSnake}_{$field}_field");
                 }
@@ -638,7 +636,7 @@ class PermissionRegistrar
         $modelSnake = $this->toSnakeCase($modelName);
 
         $query = Permission::where('type', Permission::TYPE_COLUMN)
-            ->where(function ($q) use ($modelSnake) {
+            ->where(function ($q) use ($modelSnake): void {
                 $q->where('entity', $modelSnake)
                     ->orWhere('name', 'like', "%_{$modelSnake}_%_column");
             });
@@ -648,7 +646,7 @@ class PermissionRegistrar
         }
 
         if ($columns) {
-            $query->where(function ($q) use ($columns, $modelSnake) {
+            $query->where(function ($q) use ($columns, $modelSnake): void {
                 foreach ($columns as $column) {
                     $q->orWhere('name', 'like', "%_{$modelSnake}_{$column}_column");
                 }
@@ -682,7 +680,7 @@ class PermissionRegistrar
         $modelSnake = $this->toSnakeCase($modelName);
         $count = 0;
 
-        $query = Permission::where(function ($q) use ($modelSnake) {
+        $query = Permission::where(function ($q) use ($modelSnake): void {
             $q->where('entity', $modelSnake)
                 ->orWhere('name', 'like', "%_{$modelSnake}")
                 ->orWhere('name', 'like', "%_{$modelSnake}_%");

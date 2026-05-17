@@ -51,7 +51,7 @@ trait InteractsWithGatekeeperCache
     {
         $user = static::getAuthUser();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 

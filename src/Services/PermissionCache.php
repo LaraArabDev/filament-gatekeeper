@@ -44,7 +44,7 @@ class PermissionCache
         return $this->cache()->remember(
             $cacheKey,
             $this->ttl,
-            fn () => $this->buildPermissionMatrix($user)
+            fn (): array => $this->buildPermissionMatrix($user)
         );
     }
 
@@ -151,7 +151,7 @@ class PermissionCache
             if ($this->supportsTagging()) {
                 Cache::tags($this->tags)->flush();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
     }
 

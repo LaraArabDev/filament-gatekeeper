@@ -128,7 +128,7 @@ class Gatekeeper
     {
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -137,7 +137,7 @@ class Gatekeeper
         }
 
         if (str_contains($permission, '|')) {
-            $permissions = array_map('trim', explode('|', $permission));
+            $permissions = array_map(trim(...), explode('|', $permission));
 
             foreach ($permissions as $perm) {
                 if ($this->checkSinglePermission($user, $perm)) {
@@ -165,9 +165,7 @@ class Gatekeeper
         if (method_exists($user, 'hasPermissionTo')) {
             try {
                 return $user->hasPermissionTo($permission, $guard);
-            } catch (PermissionDoesNotExist $e) {
-                return false;
-            } catch (\Exception) {
+            } catch (PermissionDoesNotExist|\Exception) {
                 return false;
             }
         }
@@ -216,7 +214,7 @@ class Gatekeeper
      */
     public function shouldBypassPermissions(?Authenticatable $user = null): bool
     {
-        $user = $user ?? $this->user();
+        $user ??= $this->user();
 
         if (! $user || ! config('gatekeeper.super_admin.enabled', true)) {
             return false;
@@ -310,7 +308,7 @@ class Gatekeeper
     ): bool {
         try {
             $userId = $user->getAuthIdentifier();
-            $userClass = get_class($user);
+            $userClass = $user::class;
             $modelHasRolesTable = config('permission.table_names.model_has_roles', 'model_has_roles');
             $rolesTable = config('permission.table_names.roles', 'roles');
             $schema = DB::getSchemaBuilder();
@@ -346,9 +344,9 @@ class Gatekeeper
      */
     public function getPermissionMatrix(?Authenticatable $user = null): array
     {
-        $user = $user ?? $this->user();
+        $user ??= $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return [];
         }
 
@@ -366,7 +364,7 @@ class Gatekeeper
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -395,7 +393,7 @@ class Gatekeeper
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -424,7 +422,7 @@ class Gatekeeper
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -463,7 +461,7 @@ class Gatekeeper
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -492,7 +490,7 @@ class Gatekeeper
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return false;
         }
 
@@ -528,17 +526,15 @@ class Gatekeeper
     public function getVisibleFields(string $modelName): array
     {
         if ($this->shouldBypassPermissions()) {
-            $configuredFields = array_merge(
+            return array_merge(
                 config('gatekeeper.field_permissions.*', []),
                 config("gatekeeper.field_permissions.{$modelName}", [])
             );
-
-            return $configuredFields;
         }
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return [];
         }
 
@@ -547,7 +543,7 @@ class Gatekeeper
             config("gatekeeper.field_permissions.{$modelName}", [])
         );
 
-        if (empty($configuredFields)) {
+        if ($configuredFields === []) {
             return [];
         }
 
@@ -564,10 +560,10 @@ class Gatekeeper
             }
         }
 
-        if (empty($visibleFields)) {
+        if ($visibleFields === []) {
             $matrix = $this->getPermissionMatrix();
             $fields = $matrix[$modelName]['fields'] ?? [];
-            $visibleFields = array_keys(array_filter($fields, fn ($perms) => $perms['view'] ?? false));
+            $visibleFields = array_keys(array_filter($fields, fn (array $perms) => $perms['view'] ?? false));
         }
 
         return $visibleFields;
@@ -581,17 +577,15 @@ class Gatekeeper
     public function getVisibleColumns(string $modelName): array
     {
         if ($this->shouldBypassPermissions()) {
-            $configuredColumns = array_merge(
+            return array_merge(
                 config('gatekeeper.column_permissions.*', []),
                 config("gatekeeper.column_permissions.{$modelName}", [])
             );
-
-            return $configuredColumns;
         }
 
         $user = $this->user();
 
-        if (! $user) {
+        if (! $user instanceof Authenticatable) {
             return [];
         }
 
@@ -600,7 +594,7 @@ class Gatekeeper
             config("gatekeeper.column_permissions.{$modelName}", [])
         );
 
-        if (empty($configuredColumns)) {
+        if ($configuredColumns === []) {
             return [];
         }
 
@@ -629,10 +623,10 @@ class Gatekeeper
             }
         }
 
-        if (empty($visibleColumns)) {
+        if ($visibleColumns === []) {
             $matrix = $this->getPermissionMatrix();
             $columns = $matrix[$modelName]['columns'] ?? [];
-            $visibleColumns = array_keys(array_filter($columns, fn ($value) => $value === true));
+            $visibleColumns = array_keys(array_filter($columns, fn ($value): bool => $value === true));
         }
 
         return $visibleColumns;

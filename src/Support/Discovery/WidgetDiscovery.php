@@ -39,7 +39,7 @@ class WidgetDiscovery
             $widgets = array_merge($widgets, $moduleWidgets);
         }
 
-        $widgets = array_filter($widgets, function ($widget) use ($excludedWidgets) {
+        $widgets = array_filter($widgets, function (string $widget) use ($excludedWidgets): bool {
             foreach ($excludedWidgets as $excluded) {
                 if (str_contains($widget, class_basename($excluded))) {
                     return false;

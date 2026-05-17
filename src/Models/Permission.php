@@ -284,7 +284,7 @@ class Permission extends SpatiePermission
             }
 
             // Parse from name: first segment after action is model (e.g. view_user_email_field → User)
-            return str((string) $between[0])->studly()->toString();
+            return str($between[0])->studly()->toString();
         }
 
         // For resource permissions like "view_any_user" or "view_any_blog_post"
@@ -308,13 +308,13 @@ class Permission extends SpatiePermission
             }
         }
 
-        if (empty($modelParts)) {
+        if ($modelParts === []) {
             // Fallback: use the last part
             $modelParts = [end($parts)];
         }
 
         // Convert to PascalCase (e.g., ['blog', 'post'] -> 'BlogPost')
-        return implode('', array_map('ucfirst', $modelParts));
+        return implode('', array_map(ucfirst(...), $modelParts));
     }
 
     /**
@@ -469,7 +469,7 @@ class Permission extends SpatiePermission
         if ($entityKey !== 'other') {
             $name = preg_replace('/_'.preg_quote($entityKey, '/').'$/', '', $name);
         }
-        $name = preg_replace('/^(page_|widget_|field_|column_|action_|relation_)/', '', $name);
+        $name = preg_replace('/^(page_|widget_|field_|column_|action_|relation_)/', '', (string) $name);
 
         return $name !== '' ? str($name)->headline()->toString() : str($this->name)->headline()->toString();
     }
@@ -499,17 +499,17 @@ class Permission extends SpatiePermission
             ->distinct()
             ->orderBy('entity')
             ->pluck('entity')
-            ->mapWithKeys(fn (string $e) => [$e => str($e)->headline()->toString()])
+            ->mapWithKeys(fn (string $e): array => [$e => str($e)->headline()->toString()])
             ->toArray();
 
         $fromName = static::query()
             ->get()
-            ->map(fn (self $p) => $p->getEntityName())
+            ->map(fn (self $p): ?string => $p->getEntityName())
             ->filter()
             ->unique()
             ->sort()
             ->values()
-            ->mapWithKeys(fn ($name) => [strtolower(str_replace(' ', '_', (string) $name)) => (string) $name])
+            ->mapWithKeys(fn ($name): array => [strtolower(str_replace(' ', '_', (string) $name)) => (string) $name])
             ->toArray();
 
         return array_merge($fromColumn, $fromName);

@@ -43,7 +43,7 @@ class RoleForm
                         ->label(__('gatekeeper::messages.labels.select_all'))
                         ->helperText(__('gatekeeper::messages.helpers.select_all'))
                         ->live()
-                        ->afterStateUpdated(function ($state, callable $set) {
+                        ->afterStateUpdated(function ($state, callable $set): void {
                             if ($state) {
                                 $set('permissions', Permission::pluck('id')->toArray());
                             } else {
@@ -55,12 +55,10 @@ class RoleForm
             Tabs::make('Permissions')
                 ->columnSpanFull()
                 ->tabs(
-                    collect(static::getPermissionTypeConfig())->map(function (array $config, string $type) use ($guard) {
-                        return Tab::make($config['label'])
-                            ->icon($config['icon'])
-                            ->badge(Permission::forGuard($guard)->ofType($type)->count())
-                            ->schema(static::getGroupedPermissionsSection($type));
-                    })->values()->all()
+                    collect(static::getPermissionTypeConfig())->map(fn (array $config, string $type): Tab => Tab::make($config['label'])
+                        ->icon($config['icon'])
+                        ->badge(Permission::forGuard($guard)->ofType($type)->count())
+                        ->schema(static::getGroupedPermissionsSection($type)))->values()->all()
                 ),
         ]);
     }
@@ -142,7 +140,7 @@ class RoleForm
         $showEntityInTitle = in_array($type, static::getTypesWithEntityInTitle(), true);
 
         /** @var Collection<string, Collection> $grouped */
-        $grouped = $permissions->groupBy(fn (Permission $p) => $p->getEntityGroupKey());
+        $grouped = $permissions->groupBy(fn (Permission $p): string => $p->getEntityGroupKey());
         $grouped = $grouped->sortKeys(SORT_NATURAL);
 
         $sections = [];
@@ -183,7 +181,7 @@ class RoleForm
                     ->hiddenLabel()
                     ->relationship('permissions', 'id')
                     ->options(
-                        $perms->mapWithKeys(fn (Permission $p) => [
+                        $perms->mapWithKeys(fn (Permission $p): array => [
                             $p->id => static::formatPermissionLabel($p->name, $entityKey),
                         ])->toArray()
                     )
@@ -199,7 +197,7 @@ class RoleForm
             ->schema([
                 Forms\Components\Placeholder::make('no_permissions')
                     ->hiddenLabel()
-                    ->content(fn () => new HtmlString(
+                    ->content(fn (): HtmlString => new HtmlString(
                         '<div class="flex flex-col items-center justify-center py-8 text-center">
                             <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-warning-100 dark:bg-warning-500/20">
                                 <svg class="w-8 h-8 text-warning-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -259,10 +257,10 @@ class RoleForm
     /**
      * Get permission descriptions for tooltips.
      *
-     * @param  \Illuminate\Support\Collection<int, Permission>  $permissions
+     * @param  Collection<int, Permission>  $permissions
      * @return array<int, string>
      */
-    public static function getPermissionDescriptions(\Illuminate\Support\Collection $permissions): array
+    public static function getPermissionDescriptions(Collection $permissions): array
     {
         $descriptions = [];
 
@@ -293,8 +291,8 @@ class RoleForm
         $guards = config('gatekeeper.guards', ['web' => ['enabled' => true]]);
 
         return collect($guards)
-            ->filter(fn ($guard) => $guard['enabled'] ?? true)
-            ->mapWithKeys(fn ($guard, $name) => [$name => ucfirst($name)])
+            ->filter(fn ($guard): mixed => $guard['enabled'] ?? true)
+            ->mapWithKeys(fn ($guard, $name): array => [$name => ucfirst((string) $name)])
             ->toArray();
     }
 }

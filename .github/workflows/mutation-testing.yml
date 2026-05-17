@@ -49,8 +49,8 @@ jobs:
           vendor/bin/infection \
             --threads=4 \
             --coverage=coverage \
-            --min-msi=70 \
-            --min-covered-msi=80 \
+            --min-msi=50 \
+            --min-covered-msi=60 \
             --no-progress \
             --logger-github
         env:

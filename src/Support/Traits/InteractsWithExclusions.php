@@ -23,11 +23,11 @@ trait InteractsWithExclusions
      */
     protected function filterExclusions(array $items, array $exclusions): array
     {
-        if (empty($exclusions)) {
+        if ($exclusions === []) {
             return $items;
         }
 
-        return array_filter($items, function ($item) use ($exclusions) {
+        return array_filter($items, function (string $item) use ($exclusions): bool {
             foreach ($exclusions as $excluded) {
                 if (str_contains($item, class_basename($excluded))) {
                     return false;

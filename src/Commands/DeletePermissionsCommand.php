@@ -110,7 +110,7 @@ class DeletePermissionsCommand extends Command
             return -1;
         }
 
-        $fieldsToDelete = ! empty($fields) ? $fields : null;
+        $fieldsToDelete = $fields === [] ? null : $fields;
 
         $description = $fieldsToDelete
             ? 'field permissions for: '.implode(', ', $fieldsToDelete)
@@ -147,7 +147,7 @@ class DeletePermissionsCommand extends Command
             return -1;
         }
 
-        $columnsToDelete = ! empty($columns) ? $columns : null;
+        $columnsToDelete = $columns === [] ? null : $columns;
 
         $description = $columnsToDelete
             ? 'column permissions for: '.implode(', ', $columnsToDelete)

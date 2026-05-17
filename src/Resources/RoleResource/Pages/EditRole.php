@@ -17,7 +17,7 @@ class EditRole extends EditRecord
     {
         return [
             Actions\DeleteAction::make()
-                ->hidden(function () {
+                ->hidden(function (): bool {
                     $record = $this->record;
 
                     return $record instanceof Role && $record->isSuperAdmin();

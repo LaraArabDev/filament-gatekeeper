@@ -85,7 +85,7 @@ class FieldDiscovery
             return $this->discoveredFields[$modelName];
         }
 
-        $sources = $sources ?? $this->getConfiguredSources();
+        $sources ??= $this->getConfiguredSources();
         $fields = [];
 
         foreach ($sources as $source) {
@@ -294,12 +294,12 @@ class FieldDiscovery
         $fields = [];
 
         preg_match_all(
-            '/(?:TextInput|TextArea|Select|DatePicker|DateTimePicker|TimePicker|Toggle|Checkbox|Radio|FileUpload|RichEditor|MarkdownEditor|ColorPicker|KeyValue|Hidden|Repeater|Builder|TagsInput)::make\([\'"]([a-zA-Z_][a-zA-Z0-9_]*)[\'"]/',
+            '/(?:TextInput|TextArea|Select|DatePicker|DateTimePicker|TimePicker|Toggle|Checkbox|Radio|FileUpload|RichEditor|MarkdownEditor|ColorPicker|KeyValue|Hidden|Repeater|Builder|TagsInput)::make\([\'"]([a-zA-Z_]\w*)[\'"]/',
             $code,
             $matches
         );
 
-        if (! empty($matches[1])) {
+        if (isset($matches[1]) && $matches[1] !== []) {
             $fields = array_merge($fields, $matches[1]);
         }
 
@@ -319,7 +319,7 @@ class FieldDiscovery
     {
         $excluded = $this->getExcludedFields($modelName);
 
-        return array_filter($fields, fn ($field) => ! in_array($field, $excluded));
+        return array_filter($fields, fn (string $field): bool => ! in_array($field, $excluded));
     }
 
     /**

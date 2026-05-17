@@ -34,7 +34,7 @@ class GatekeeperResourceMiddleware
      */
     public function handle(Request $request, Closure $next, string $model, ?string $guard = null): Response
     {
-        $guard = $guard ?? $this->detectGuard($request);
+        $guard ??= $this->detectGuard($request);
         $permission = $this->resolvePermission($request, $model);
 
         if (! $permission) {

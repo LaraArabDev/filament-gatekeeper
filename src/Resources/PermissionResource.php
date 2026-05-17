@@ -106,8 +106,8 @@ class PermissionResource extends Resource
         $guards = config('gatekeeper.guards', ['web' => ['enabled' => true]]);
 
         return collect($guards)
-            ->filter(fn ($guard) => $guard['enabled'] ?? true)
-            ->mapWithKeys(fn ($guard, $name) => [$name => ucfirst($name)])
+            ->filter(fn ($guard): mixed => $guard['enabled'] ?? true)
+            ->mapWithKeys(fn ($guard, $name): array => [$name => ucfirst((string) $name)])
             ->toArray();
     }
 
@@ -223,7 +223,7 @@ class PermissionResource extends Resource
 
             Tables\Filters\SelectFilter::make('entity')
                 ->label(__('gatekeeper::messages.labels.entity'))
-                ->options(fn () => Permission::getDistinctEntityOptionsForFilter())
+                ->options(fn (): array => Permission::getDistinctEntityOptionsForFilter())
                 ->query(function (Builder $query, array $data): Builder {
                     $value = $data['value'] ?? null;
                     if ($value === null || $value === '') {

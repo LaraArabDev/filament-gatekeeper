@@ -42,7 +42,7 @@ class ModelDiscovery
             $models = array_merge($models, $moduleModels);
         }
 
-        $models = array_filter($models, function ($model) use ($excludedModels) {
+        $models = array_filter($models, function (string $model) use ($excludedModels): bool {
             foreach ($excludedModels as $excluded) {
                 if (str_contains($model, class_basename($excluded))) {
                     return false;
@@ -173,7 +173,7 @@ class ModelDiscovery
             }
 
             return $reflection->isSubclassOf(Model::class);
-        } catch (\ReflectionException $e) {
+        } catch (\ReflectionException) {
             return false;
         }
     }

@@ -96,7 +96,7 @@ trait HasRelationPermissions
             return $relationManagers;
         }
 
-        return array_filter($relationManagers, function ($relationManagerClass) {
+        return array_filter($relationManagers, function (string $relationManagerClass): bool {
             $relationName = static::getRelationNameFromClass($relationManagerClass);
 
             return static::canViewRelation($relationName);
@@ -159,6 +159,6 @@ trait HasRelationPermissions
         }
 
         // Filter by permission
-        return array_filter($configuredRelations, fn ($relation) => static::canViewRelation($relation));
+        return array_filter($configuredRelations, static::canViewRelation(...));
     }
 }

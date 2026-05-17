@@ -40,7 +40,7 @@ class PageDiscovery
             $pages = array_merge($pages, $modulePages);
         }
 
-        $pages = array_filter($pages, function ($page) use ($excludedPages) {
+        $pages = array_filter($pages, function (string $page) use ($excludedPages): bool {
             foreach ($excludedPages as $excluded) {
                 if (str_contains($page, class_basename($excluded))) {
                     return false;

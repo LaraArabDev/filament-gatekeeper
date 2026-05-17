@@ -77,7 +77,7 @@ class ColumnDiscovery
             return $this->discoveredColumns[$modelName];
         }
 
-        $sources = $sources ?? $this->getConfiguredSources();
+        $sources ??= $this->getConfiguredSources();
         $columns = [];
 
         foreach ($sources as $source) {
@@ -253,11 +253,9 @@ class ColumnDiscovery
             $matches
         );
 
-        if (! empty($matches[1])) {
-            foreach ($matches[1] as $match) {
-                $parts = explode('.', $match);
-                $columns[] = $parts[0];
-            }
+        foreach ($matches[1] as $match) {
+            $parts = explode('.', $match);
+            $columns[] = $parts[0];
         }
 
         return array_unique($columns);
@@ -276,7 +274,7 @@ class ColumnDiscovery
     {
         $excluded = $this->getExcludedColumns($modelName);
 
-        return array_filter($columns, fn ($column) => ! in_array($column, $excluded));
+        return array_filter($columns, fn (string $column): bool => ! in_array($column, $excluded));
     }
 
     /**
