@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Infection (Mutation Testing)
         run: |
-          vendor/bin/pest --coverage --coverage-xml=coverage/coverage-xml --log-junit=coverage/junit.xml
+          vendor/bin/phpunit --coverage-xml=coverage/coverage-xml --log-junit=coverage/junit.xml
           vendor/bin/infection \
             --threads=4 \
             --coverage=coverage \
