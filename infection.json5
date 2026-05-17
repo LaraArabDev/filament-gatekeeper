@@ -1,0 +1,16 @@
+{
+    "source": {
+        "directories": ["src"],
+        "excludes": ["stubs"]
+    },
+    "testFramework": "phpunit",
+    "testFrameworkOptions": "--coverage-xml=coverage/coverage-xml --log-junit=coverage/phpunit.junit.xml",
+    "coveragePath": "coverage",
+    "logs": {
+        "text": "infection.log",
+        "summary": "infection-summary.json"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

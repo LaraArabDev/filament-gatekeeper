@@ -43,12 +43,23 @@ jobs:
       - name: Install Infection
         run: composer require --dev infection/infection --no-interaction --no-progress
 
+      - name: Generate coverage for Infection
+        run: |
+          mkdir -p coverage
+          vendor/bin/phpunit \
+            --coverage-xml=coverage/coverage-xml \
+            --log-junit=coverage/phpunit.junit.xml
+        env:
+          XDEBUG_MODE: coverage
+
       - name: Run Infection (Mutation Testing)
         run: |
           vendor/bin/infection \
             --threads=4 \
             --min-msi=50 \
             --min-covered-msi=60 \
+            --coverage=coverage \
+            --skip-initial-tests \
             --no-progress
         env:
           XDEBUG_MODE: coverage
