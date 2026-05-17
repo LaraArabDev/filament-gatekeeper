@@ -51,7 +51,6 @@ jobs:
             --coverage=coverage \
             --min-msi=50 \
             --min-covered-msi=60 \
-            --no-progress \
-            --logger-github
+            --no-progress
         env:
           INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}

@@ -1,0 +1,21 @@
+{
+    "$schema": "https://infection.github.io/schema",
+    "source": {
+        "directories": ["src"],
+        "excludes": [
+            "Resources",
+            "stubs",
+            "GatekeeperPlugin.php",
+            "GatekeeperServiceProvider.php"
+        ]
+    },
+    "phpUnit": {
+        "customPath": "vendor/bin/pest"
+    },
+    "logs": {
+        "github": true
+    },
+    "mutators": {
+        "@default": true
+    }
+}
