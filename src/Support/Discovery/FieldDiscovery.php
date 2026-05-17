@@ -299,7 +299,7 @@ class FieldDiscovery
             $matches
         );
 
-        if (isset($matches[1]) && $matches[1] !== []) {
+        if ($matches[1] !== []) {
             $fields = array_merge($fields, $matches[1]);
         }
 
