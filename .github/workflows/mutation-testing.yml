@@ -45,12 +45,12 @@ jobs:
 
       - name: Run Infection (Mutation Testing)
         run: |
-          vendor/bin/phpunit --coverage-xml=coverage/coverage-xml --log-junit=coverage/junit.xml
           vendor/bin/infection \
             --threads=4 \
-            --coverage=coverage \
             --min-msi=50 \
             --min-covered-msi=60 \
             --no-progress
+        env:
+          XDEBUG_MODE: coverage
         env:
           INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}

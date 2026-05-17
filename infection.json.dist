@@ -9,6 +9,9 @@
             "GatekeeperServiceProvider.php"
         ]
     },
+    "phpUnit": {
+        "customPath": "vendor/bin/pest"
+    },
     "logs": {
         "github": true
     },
